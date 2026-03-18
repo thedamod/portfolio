@@ -61,10 +61,38 @@ const mdxComponents = {
 
 export const Route = createFileRoute('/blog/$slug')({
   component: BlogPost,
+  head: ({ loaderData }) => {
+    const data = (loaderData || {}) as BlogFrontmatter
+    const title = data?.title || 'Blog Post'
+    const tags = data?.tags || []
+    const ogImageUrl = `/api/og?title=${encodeURIComponent(title)}&tags=${encodeURIComponent(tags.join(','))}`
+    return {
+      meta: [
+        { title: `${title} | Abhiram` },
+        { property: 'og:title', content: title },
+        { property: 'og:image', content: ogImageUrl },
+        { property: 'og:type', content: 'article' },
+        { name: 'twitter:card', content: 'summary_large_image' },
+        { name: 'twitter:title', content: title },
+        { name: 'twitter:image', content: ogImageUrl },
+      ],
+    }
+  },
+  loader: ({ params }) => {
+    const decodedSlug = decodeURIComponent(params.slug)
+    const blogPath = Object.keys(mdxModules).find((path) => {
+      const fileName = path.split('/').pop()?.replace('.mdx', '') || ''
+      return fileName === decodedSlug
+    })
+    const blog = blogPath ? mdxModules[blogPath] : null
+    return blog?.frontmatter || {}
+  },
 })
 
 function BlogPost() {
   const { slug } = Route.useParams()
+  const loaderData = Route.useLoaderData()
+  const frontmatter = (loaderData || {}) as BlogFrontmatter
   const decodedSlug = decodeURIComponent(slug)
 
   const blogPath = Object.keys(mdxModules).find((path) => {
@@ -73,7 +101,6 @@ function BlogPost() {
   })
   const blog = blogPath ? mdxModules[blogPath] : null
   const Post = blog?.default
-  const frontmatter = blog?.frontmatter || {}
 
   if (!Post) {
     return (

@@ -23,7 +23,7 @@ export const heroCopy = {
 
 export const socialLinks = [
   { label: 'Github', href: 'https://github.com/thedamod' },
-  { label: 'Twitter', href: 'https://x.com/aether_d5896' },
+  { label: 'Twitter', href: 'https://x.com/thedamod' },
 ]
 
 export const skillGroups = {
