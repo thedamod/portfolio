@@ -246,12 +246,16 @@
   .ticker-row {
     display: flex;
     width: max-content;
-    gap: 1.25rem;
-    animation: ticker-pan 26s linear infinite;
+    will-change: transform;
+    backface-visibility: hidden;
   }
 
-  .ticker-row-reverse {
-    animation-direction: reverse;
+  .ticker-set {
+    display: flex;
+  }
+
+  .ticker-item {
+    margin-right: 1.25rem;
   }
 }
 

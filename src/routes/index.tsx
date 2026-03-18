@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { Calendar, Github, Twitter, Maximize2, Moon, Sun } from 'lucide-react'
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import { AnimatedQuote, MotionSection, RevealWords, StaggerGroup, StaggerItem } from '../components/portfolio-motion'
 import { smoothEase } from '../components/motion-utils'
 import { heroCopy, profile, projects, skillGroups, socialLinks, type Project } from '../content/portfolio'
@@ -221,7 +221,70 @@ function Index() {
 }
 
 function TickerRow({ label, skills, reverse }: { label: string, skills: string[], reverse?: boolean }) {
-  const tickerItems = [...skills, ...skills]
+  const [contentWidth, setContentWidth] = useState(0)
+  const [setCount, setSetCount] = useState(6)
+  const [offset, setOffset] = useState(0)
+  const [initialized, setInitialized] = useState(false)
+  const contentRef = useRef<HTMLDivElement>(null)
+  const animationRef = useRef<number | null>(null)
+  const lastTimeRef = useRef<number>(0)
+
+  useEffect(() => {
+    if (contentRef.current) {
+      const firstSet = contentRef.current.querySelector('[data-set="0"]')
+      if (firstSet) {
+        const width = firstSet.getBoundingClientRect().width
+        setContentWidth(width)
+        const viewportWidth = window.innerWidth
+        const neededSets = Math.ceil(viewportWidth / width) + 2
+        setSetCount(Math.max(neededSets, 4))
+        if (reverse) {
+          setOffset(-width)
+        }
+        setInitialized(true)
+      }
+    }
+  }, [skills, reverse])
+
+  useEffect(() => {
+    if (contentWidth === 0 || !initialized) return
+
+    const speed = 50
+    const animate = (timestamp: number) => {
+      if (lastTimeRef.current === 0) {
+        lastTimeRef.current = timestamp
+      }
+      const delta = timestamp - lastTimeRef.current
+      lastTimeRef.current = timestamp
+
+      const distance = (speed * delta) / 1000
+      setOffset((prev) => {
+        if (reverse) {
+          const next = prev + distance
+          if (next >= 0) {
+            return next - contentWidth
+          }
+          return next
+        } else {
+          const next = prev - distance
+          if (next <= -contentWidth) {
+            return next + contentWidth
+          }
+          return next
+        }
+      })
+
+      animationRef.current = requestAnimationFrame(animate)
+    }
+
+    animationRef.current = requestAnimationFrame(animate)
+
+    return () => {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current)
+      }
+    }
+  }, [contentWidth, reverse, initialized])
 
   return (
     <StaggerItem>
@@ -231,10 +294,18 @@ function TickerRow({ label, skills, reverse }: { label: string, skills: string[]
           <span className="h-px flex-1 bg-app-border" />
         </div>
         <div className="ticker-track py-1">
-          <div className={`ticker-row ${reverse ? 'ticker-row-reverse' : ''}`}>
-            {tickerItems.map((skill, index) => (
-              <span key={`${skill}-${index}`} className="text-sm whitespace-nowrap tracking-tight text-app-text-muted">
-                {skill}
+          <div
+            ref={contentRef}
+            className="ticker-row"
+            style={{ transform: `translate3d(${offset}px, 0, 0)` }}
+          >
+            {Array.from({ length: setCount }, (_, setIndex) => (
+              <span key={setIndex} data-set={setIndex} className="ticker-set">
+                {skills.map((skill, index) => (
+                  <span key={`${setIndex}-${index}`} className="ticker-item text-sm whitespace-nowrap tracking-tight text-app-text-muted">
+                    {skill}
+                  </span>
+                ))}
               </span>
             ))}
           </div>
