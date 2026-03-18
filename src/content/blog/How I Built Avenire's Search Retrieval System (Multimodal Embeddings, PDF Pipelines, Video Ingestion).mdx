@@ -1,0 +1,153 @@
+---
+title: "How I Built Avenire's Search Retrieval System (Multimodal Embeddings, PDF Pipelines, Video Ingestion)"
+date: "Mar 13, 2026"
+tags: ["Avenire", "RAG", "AI", "Engineering", "Search"]
+readTime: 10
+---
+
+The hardest part of Avenire's backend isn't the AI tutor. It's not the real-time streaming. It's not even the spaced repetition scheduler.
+
+It's making search actually work.
+
+When a student uploads three hundred pages of handouts, a semester of recorded lectures, and a pile of handwritten notes, and then asks "why does the photoelectric effect disprove the wave model of light?", they need an answer grounded in their specific materials. Not a generic explanation from the model's training. Their professor's explanation. Their notation. The diagram that appeared on slide 23 of the October 15th lecture.
+
+That's a retrieval problem. And retrieval is much harder than it looks.
+
+---
+
+## The naive version and why it fails
+
+The standard RAG (retrieval-augmented generation) pipeline looks like this:
+
+1. Chunk documents into pieces
+2. Embed each chunk with a vector model
+3. At query time, embed the query
+4. Find the nearest neighbor chunks by cosine similarity
+5. Stuff them into the LLM context
+
+This works tolerably well for clean text documents on narrow topics. It fails. Sometimes even badly when your input is heterogeneous: PDFs with complex layouts, transcripts with poor structure, videos where the visually displayed content is semantically disconnected from what the speaker says.
+
+In an educational context, heterogeneous input is the default. A physics course will have: textbook PDFs, lecture slides exported as PDFs, handwritten solutions, video lectures where the professor works through examples on a whiteboard while speaking. Making search work across all of this required building a different pipeline for each content type and then unifying them in the embedding space.
+
+---
+
+## The embedding model
+
+Everything else depends on the quality of the embedding. A bad embedding model means nearest-neighbor search finds the wrong things no matter how carefully you've engineered everything else.
+
+We're using Cohere's embedding model, specifically their v4 multimodal embeddings, which can embed both text and images into the same vector space. This is the key architectural decision that makes the whole thing work.
+
+When text and images share an embedding space, you can do things that a text-only model can't:
+
+- A query about "the orbital diagram for carbon" can retrieve both a text explanation of carbon's electron configuration _and_ a screenshot of the orbital diagram from a lecture slide, ranked by semantic relevance
+- A query posed as an image (a photograph of a problem from a textbook) can retrieve relevant lecture content even if the student didn't type a single word
+- Cross-modal connections "the image that goes with this concept" become addressable
+
+The practical implication is that we embed text chunks as text, diagram images as images, and video keyframes as images. All of them end up in the same Postgres table with pgvector indices, and similarity search works across all of them in a single query.
+
+---
+
+## PDF ingestion
+
+PDFs are deceptively hard. The format is ostensibly a document format, but in practice it's a page description language a set of instructions for a renderer, not a structured representation of content. The same PDF can be:
+
+- A text PDF (actual Unicode characters, selectable text)
+- A scanned PDF (rasterized images of pages with no underlying text)
+- A mixed PDF (text for some pages, scanned for others)
+- A PDF with mathematical notation rendered as paths (common in textbooks)
+- A multi-column academic paper that a naive text extractor linearizes in the wrong order
+
+Each case requires different handling.
+
+PDFs are deceptively hard. The format is ostensibly a document format, but in practice it's a page description language a set of instructions for a renderer, not a structured representation of content. The same PDF can be a clean text document, a scanned image with no underlying text, a math-heavy textbook where equations are rendered as vector paths, or a multi-column paper that a naive extractor linearizes in the wrong order.
+
+We tried to handle these cases with a traditional pipeline. Text PDFs through `pdf-parse`. Scanned PDFs through Tesseract OCR. Formula-heavy pages detected by path density heuristics and routed to the multimodal embedder. Semantic chunking that respected heading boundaries instead of cutting every 500 tokens.
+
+It worked. It also took an unacceptable amount of time on anything longer than a few pages, and math OCR in particular was a consistent weak point Tesseract was not designed for $LaTeX$-density content, and the error rate on anything involving integrals or summation notation was high enough to make the extracted text actively misleading.
+
+The solution was to stop treating PDF extraction as a text extraction problem and start treating it as a vision problem. We now render each PDF page to an image and pass it through an AI OCR model. The model reads the page as a human would, it sees the layout, understands that the multi-column structure means you read left column before right column, recognizes that the expression after the ∑ symbol is a subscript and not inline text, and outputs clean structured Markdown rather than a linearized character dump.
+
+The output quality is meaningfully better. A page of physics derivations comes back with the equations in readable LaTeX, the prose intact, and the figure captions correctly associated with their figures. A scanned handout comes back with the same quality as a born-digital PDF. We don't need separate code paths for "text PDF" vs "scanned PDF" vs "formula-heavy PDF" the model handles all three, and handles the mixed cases that the rule-based pipeline struggled with most.
+
+The chunking strategy still matters on the back end. We chunk the AI-extracted Markdown semantically: headings become boundaries, paragraphs are the base unit, and we keep problem-solution and theorem-proof pairs together rather than splitting them at a token count boundary. For lecture slides, each slide becomes a chunk. But the input to that chunker is now clean, structured text instead of the noise-laden output of traditional extraction which means the chunks are better, and the downstream retrieval is better too.
+
+---
+
+## Video ingestion pipeline
+
+This was the most technically interesting problem to solve, and the one I got wrong the most times.
+
+Video content has a specific structure that's different from text: there's what's being said (the audio transcript) and what's being shown (the visual content). For a lecture, these are often coupled but not identical. The professor might say "so the key insight here is this relationship" while pointing at a diagram the word "this" is semantically empty without the visual context.
+
+The pipeline:
+
+**1. Audio transcription**
+
+We use Groq's Whisper API for transcription. Groq's inference speed makes this practical a 90-minute lecture transcribes in roughly 30 seconds. Whisper returns word-level timestamps, which are critical for the next step.
+
+**2. Keyframe extraction**
+
+We extract video frames at a regular interval (one frame every 8 seconds by default, tunable per content type). We also use scene detection to capture frames at visual transitions moments when the slide changes or the camera cuts, which tend to be semantically significant.
+
+**3. Temporal alignment**
+
+Each keyframe gets a timestamp. The transcription has word-level timestamps. We align them: each keyframe is associated with the transcript window that was being spoken when that frame occurred. This gives us a chunk that pairs a visual representation with its accompanying audio.
+
+```typescript
+type VideoChunk = {
+  frameTimestamp: number        // seconds from start
+  imageData: Buffer             // the frame as JPEG
+  transcriptWindow: string      // words spoken ~±15s around the frame
+  contextWindow: string         // broader context (±60s)
+  source: {
+    videoId: string
+    courseId: string
+  }
+}
+```
+
+**4. Dual embedding**
+
+Each video chunk gets embedded twice: once as an image (the frame) and once as text (the transcript window). We store both vectors and at retrieval time we compute relevance against both, taking the max. This handles the case where the visual is relevant but the speaker is on a tangent, and vice versa.
+
+**5. The cold-start problem**
+
+Video ingestion is slow. A 90-minute lecture might produce 600+ keyframes. Processing each one involves an API call (for embeddings) and storage. We've built this as a background job queue using `BullMQ` with redis as the backing store. Jobs are chunked, retried on failure, and the ingestion status is streamed to the frontend so the student can see progress.
+
+---
+
+## Making retrieval actually good
+
+Embeddings and vector search give you a baseline. Making retrieval _good_ requires additional work on top.
+
+**Reranking.** After retrieving the top-K candidates by vector similarity, we rerank with Cohere's rerank API. The reranker is a cross-encoder, it sees the query and each candidate together, which gives it much better precision than the bi-encoder embedding model that generated the initial candidates. The retrieval pipeline is: vector search (fast, approximate) → rerank (slower, precise) → context injection.
+
+**Query expansion.** Student queries are often short and informal. "Why does entropy increase?" is a reasonable question that, as written, might not retrieve a chunk that talks about "the second law of thermodynamics and the statistical interpretation of Boltzmann." We use the LLM to expand the query before retrieval: generate 3-5 alternative phrasings, retrieve against all of them, deduplicate, rerank. This costs extra tokens but substantially improves recall on the short, informal queries that students actually write.
+
+**Hybrid search.** Pure vector search misses exact matches if a student types "VSPER theory" (misspelled), the embedding might not be similar enough to "VSEPR" chunks to retrieve them. We run BM25 in parallel with pgvector and merge the results. The hybrid approach consistently outperforms either alone, especially for domain-specific terminology.
+
+**Context assembly.** The final step before LLM injection is assembling the retrieved chunks into coherent context. We don't just concatenate we include metadata (source document, timestamp for video, page number for PDF), we order by recency if the query is time-sensitive, and we include surrounding chunks when the retrieved chunk is clearly a fragment of a larger argument. A theorem retrieved without its proof is often less useful than the theorem-proof pair.
+
+---
+
+## What the data says
+
+I can't publish quantitative benchmarks here (we don't have a standardized eval set yet), but the qualitative improvement from each layer is visible in usage patterns.
+
+Without reranking: students frequently complain that the retrieved content is related but not quite right, the system grabs the topic but misses the specific angle.
+
+With reranking: the first-pass relevance improves substantially. Students stop refining queries as much.
+
+With video keyframe embedding: questions about visual content ("what was on the board when she talked about orbital hybridization?") start working in a way they simply didn't before. This unlocks a class of queries that text-only retrieval can't address at all.
+
+With query expansion: short queries stop failing silently. The system is much more robust to the informal language that students naturally use.
+
+---
+
+## What's still hard
+
+Handwritten notes remain a genuine challenge. Handwriting recognition is much worse than OCR on printed text, and mathematical handwriting is particularly hard. Our current approach, treat handwritten pages as images and embed them with the multimodal model, works for retrieval (the model understands "this image shows a free body diagram") but the granularity is coarser than text-based chunking. You can retrieve the page but not the specific equation on the page.
+
+Cross-document reasoning - "how does what my professor said in the October lecture connect to what the textbook says on page 247?" - is currently handled by the LLM with retrieved context from both sources, but we're not doing explicit link-building between documents. That's a future direction: a knowledge graph layer on top of the vector index, built from the same embeddings.
+
+The pipeline described here is the one that ships. It's not the final form. But it's the one that makes search feel like it works - which, for a learning platform, is the minimum bar.

@@ -1,0 +1,78 @@
+---
+title: "What Building Avenire Taught Me About Learning Itself"
+date: "Mar 9, 2026"
+tags: ["Avenire", "Learning", "AI", "Education"]
+readTime: 6
+---
+
+There's a strange recursion to building a learning platform. You spend your days thinking about how people understand things, and somewhere in the middle of it, you start noticing the way you understand things. The scaffolding you're building for other people ends up building you back.
+
+I didn't expect that. I thought I was building software.
+
+---
+
+## The first thing I got wrong: I thought learning was input
+
+When I started designing Avenire's AI tutor, my first instinct was to optimize for throughput. Better explanations. Faster retrieval. Richer context. The assumption underneath all of it was that learning is essentially a delivery problem — if you can get high-quality information into someone's head efficiently enough, understanding follows.
+
+It doesn't.
+
+I know this now because I tried to learn from my own platform. I'd upload a lecture, the AI would summarize it beautifully, and I'd read the summary and feel like I understood. Then I'd close the tab and realize I couldn't reconstruct a single idea from scratch. The information had entered and left without leaving a mark.
+
+This is the illusion of explanatory depth. Hearing something explained well feels like understanding it. It isn't. Understanding is something you have to build yourself — the explanation is just scaffolding, and the moment you lean on the scaffolding instead of climbing it, you mistake the scaffold for the structure.
+
+The fix wasn't better AI. It was Socratic dialogue — asking questions instead of giving answers. Making the student construct the explanation. That's why Deep Tutor works the way it does: it asks before it tells. It forces you to retrieve before it supplies. The friction is the point.
+
+---
+
+## What spaced repetition actually revealed
+
+I've known about spaced repetition for years. I implemented FSRS (Free Spaced Repetition Scheduler) in Avenire because the algorithm is genuinely good and I wanted the flashcard system to be serious. What I didn't expect was what debugging it would teach me.
+
+When you implement a forgetting curve system, you have to model forgetting. You have to take the question "when will this person no longer remember this?" seriously as an engineering problem. And when you do that, you start to see memory not as a bucket you fill, but as a signal that degrades unless it's regularly retransmitted.
+
+The implication is brutal: almost everything you've ever "learned" is gone. Not inaccessible — gone. The neurons that held it have been repurposed. The only things that survive are the things you kept retrieving: the things you used, talked about, argued over, taught to someone else, applied to a problem.
+
+This isn't a depressing finding. It's a clarifying one. It tells you that the goal of studying is never coverage. It's never "I went through all the material." It's depth of encoding on the things that matter, and scheduled reinforcement. A student who covers 70% of the syllabus with FSRS will outperform one who covers 100% with linear review. That's not a guess — it's what the research says, and it's what our data is starting to confirm.
+
+---
+
+## The moment I understood what understanding actually is
+
+There's a moment in building any sufficiently complex feature where you realize you were wrong about what you were building.
+
+For me, it happened with the vector search. I was building a retrieval system that could find relevant content from a user's uploaded materials — lectures, PDFs, handwritten notes — and surface it during AI chat. The technical problem is well-understood: embed documents into high-dimensional space, embed the query, find the nearest neighbors.
+
+But here's the thing about embeddings: they capture _semantic similarity_, not surface-level word matching. When you ask "why does entropy increase?" and the retrieval system finds a paragraph from a thermodynamics lecture that talks about microstates and probability distributions — without the word "entropy" appearing once — something interesting is happening. The model has built a representation of the idea, not the words.
+
+That's what understanding is. Understanding is having a representation that connects — that finds the relevant piece not because the words match but because the _concepts_ are adjacent. When a student understands something, they've built an internal vector space where related ideas are near each other and unrelated ones are far. When they don't understand, they have isolated symbols with no neighborhood.
+
+Every feature I built after that realization was oriented around the same question: how do you get students to build richer neighborhoods? Flashcards build local clusters. The Socratic tutor forces you to trace paths between nodes. The notes editor is where the neighborhoods get explicit form — where you write out the connections rather than just sensing them.
+
+---
+
+## On the paradox of tools that do too much
+
+The most important design decision in Avenire wasn't technical. It was about restraint.
+
+The AI can do almost anything. It can write the summary, generate the flashcards, answer the question, explain the concept, provide the example. And every time you let it do that unchallenged, you rob the student of the one thing that actually builds understanding: effortful generation.
+
+There's a difference between a student who generates a flashcard from a lecture and a student who clicks a button to auto-generate flashcards. The first student has to decide what matters, what the core of the idea is, how to phrase it so it's testable. That metacognitive effort is itself learning. The second student just clicks.
+
+We built the auto-generation because users want it and it's genuinely useful. But the smarter move — the thing Deep Tutor tries to do — is make the AI a collaborator in the generation, not a replacement for it. "What do you think the key claim here is?" is a better prompt than "here are your flashcards."
+
+This is the thing building Avenire taught me that I didn't expect: the hard part of AI-assisted education is not making the AI smarter. It's figuring out when to make the AI say less.
+
+---
+
+## The JEE problem
+
+I'm also preparing for JEE while building this. That's its own recursion — using the platform I'm building to study for the exam that's in the back of my mind every time I design a feature.
+
+The self-consciousness is odd. I'll be grinding a problem set and notice that I'm hitting exactly the failure mode I've been thinking about architecturally — skipping steps because the reasoning feels obvious, not pausing to encode, moving to the next problem before the current one has really settled. Then I'll sit back and think: this is what the data looks like from the inside.
+
+JEE forces a kind of intellectual honesty that's hard to replicate. The problems don't care about your understanding of the big picture. They care about whether you can apply a specific piece of physics to a specific configuration you've never seen before. That's actually an extremely good test of whether your internal vector space is dense enough — whether your neighborhood of "electrostatics" connects to enough specific cases that you can navigate a novel one.
+
+Building Avenire has made me better at studying for JEE. Studying for JEE has made me build Avenire better.
+
+That's the recursion I didn't see coming. And honestly, it's the most interesting thing that's happened to me this year.

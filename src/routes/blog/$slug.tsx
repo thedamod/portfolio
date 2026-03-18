@@ -1,12 +1,15 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { motion } from 'framer-motion'
 import { ArrowLeft, Calendar } from 'lucide-react'
-import Post from '../../content/blog/schema-first-form-builder.mdx'
 import { MDXProvider } from '@mdx-js/react'
 import { MermaidDiagram } from '../../components/mdx/MermaidDiagram'
-import { MotionSection } from '../../components/portfolio-motion'
-import { smoothEase } from '../../components/motion-utils'
 import type { ComponentPropsWithoutRef, ReactNode } from 'react'
+
+type BlogFrontmatter = { title?: string; date?: string; tags?: string[] }
+
+const mdxModules = import.meta.glob('../../content/blog/*.mdx', { eager: true }) as Record<
+  string,
+  { default: React.ComponentType; frontmatter?: BlogFrontmatter }
+>
 
 const mdxComponents = {
   // rehype-pretty-code wraps the whole thing in a figure
@@ -61,34 +64,48 @@ export const Route = createFileRoute('/blog/$slug')({
 })
 
 function BlogPost() {
-  // const { slug } = Route.useParams()
+  const { slug } = Route.useParams()
+  const decodedSlug = decodeURIComponent(slug)
 
-  // For this clone, we'll just demonstrate rendering the MDX directly.
+  const blogPath = Object.keys(mdxModules).find((path) => {
+    const fileName = path.split('/').pop()?.replace('.mdx', '') || ''
+    return fileName === decodedSlug
+  })
+  const blog = blogPath ? mdxModules[blogPath] : null
+  const Post = blog?.default
+  const frontmatter = blog?.frontmatter || {}
+
+  if (!Post) {
+    return (
+      <main className="flex flex-col text-sm leading-relaxed pb-12">
+        <div className="w-full h-32 md:h-48 dot-bg shrink-0" />
+        <section className="flex flex-col">
+          <div className="dashed-h" />
+          <div className="py-12 text-center text-app-text-muted">Post not found</div>
+        </section>
+      </main>
+    )
+  }
+
   return (
     <main className="flex flex-col text-sm leading-relaxed pb-12">
-      {/* Decorative top dot grid */}
       <div className="w-full h-32 md:h-48 dot-bg shrink-0" />
 
-      <MotionSection className="flex flex-col">
+      <section className="flex flex-col">
         <div className="dashed-h" />
-        <motion.div
-          className="flex flex-col gap-6 py-6"
-          initial="hidden"
-          animate="visible"
-          variants={{ hidden: { opacity: 1 }, visible: { transition: { staggerChildren: 0.08, delayChildren: 0.08 } } }}
-        >
+        <div className="flex flex-col gap-6 py-6">
           <Link to="/blog" className="btn-secondary rounded-full self-start">
             <ArrowLeft className="w-4 h-4" />
             <span>Back to blogs</span>
           </Link>
 
-          <motion.div className="flex flex-col gap-3" variants={{ hidden: { opacity: 0, y: 12 }, visible: { opacity: 1, y: 0, transition: { duration: 0.3, ease: smoothEase } } }}>
-            <h1 className="text-3xl font-bold tracking-tight">Building a Schema-First Collaborative Form Builder</h1>
+          <div className="flex flex-col gap-3">
+            <h1 className="text-3xl font-bold tracking-tight">{frontmatter.title || slug}</h1>
             <div className="flex items-center gap-4 text-sm text-app-text-muted">
-              <span className="flex items-center gap-1.5"><Calendar className="w-4 h-4" /> Feb 2026</span>
+              <span className="flex items-center gap-1.5"><Calendar className="w-4 h-4" /> {frontmatter.date || 'Recent'}</span>
             </div>
-          </motion.div>
-        </motion.div>
+          </div>
+        </div>
         <div className="dashed-h" />
 
         <article className="blog-content prose max-w-none rounded-xl prose-p:leading-relaxed prose-headings:font-bold prose-headings:tracking-tight pt-6 pb-12">
@@ -96,9 +113,13 @@ function BlogPost() {
             <Post />
           </MDXProvider>
         </article>
-      </MotionSection>
 
-      {/* Decorative bottom dot grid */}
+        <div className="flex justify-between items-center text-sm text-app-text-muted pt-4 pb-8">
+          <span>- Abhiram</span>
+          <span>--- fin ---</span>
+        </div>
+      </section>
+
       <div className="w-full h-32 md:h-48 dot-bg shrink-0" />
     </main>
   )

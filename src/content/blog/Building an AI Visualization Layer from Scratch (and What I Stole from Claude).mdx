@@ -1,0 +1,144 @@
+---
+title: "Building an AI Visualization Layer from Scratch (and What I Stole from Claude)"
+date: "Mar 18, 2026"
+tags: ["Avenire", "AI", "Visualization", "Engineering", "Design"]
+readTime: 7
+---
+
+I want to be upfront about the theft.
+
+When you use Avenire and an AI response renders a diagram — a flowchart of a biological process, an interactive timeline, a graph of a physics relationship: a real-time visualization layer that streams alongside the AI's text response. The concept is not original to me. It's adapted from something I noticed Claude doing and decided to reverse-engineer.
+
+This is the story of how that happened.
+
+---
+
+## The thing I noticed
+
+I've been using Claude heavily while building Avenire, for architecture decisions, for drafting, for debugging, for research. At some point, I noticed it was doing something technically interesting: in certain contexts, it was generating SVG diagrams and interactive HTML widgets that appeared inline as it was responding, as streaming artifacts alongside the text.
+
+The diagrams weren't images. They were live code. The widgets were real HTML sliders that moved, buttons that fired, calculated outputs that updated. And they were appearing in the middle of a conversation, generated in real time, without breaking the flow of the response.
+
+I'm a developer. My immediate reaction was: how does this work, and can I build it?
+
+---
+
+## Why Avenire needed it
+
+Before I get into the implementation, the context matters.
+
+Avenire's AI chat is not just a chatbot. It has access to tool calls - functions the model can invoke to search your uploaded materials, generate flashcards, create notes, render graphs. The idea is that the AI is not just answering questions but actively manipulating your knowledge base on your behalf.
+
+The problem with purely text-based responses in this context is that learning is often a visual task. A student asking "explain how Newton's laws relate to each other" is not optimally served by three paragraphs of text. They're served by a diagram. A student asking "show me the trend in these data points" is not served by a table — they're served by a chart.
+
+If the AI can generate the visual alongside the explanation, in real time, the learning value goes up enormously. The visual isn't decoration. It's the explanation, rendered in a different modality.
+
+That's the case for a visualization layer. The question was how to build one.
+
+---
+
+## The architecture
+
+The core insight is that you can treat visual output as a special kind of streaming artifact. The model doesn't generate an image, it generates _code_ that renders an image. That code can be SVG, or HTML/CSS/JS, or a React component. What matters is that it streams in real-time and renders on the client as it arrives.
+
+The Vercel AI SDK made this tractable. The SDK has a concept of _data stream parts_ structured chunks that get multiplexed with the text stream. A response can contain both text parts and data parts, arriving interleaved. On the server, you write both to the stream:
+
+```typescript
+// In your Hono route, streaming a mixed response
+const stream = createDataStream()
+
+// Text goes here
+stream.writeText("Here's how the conservation of momentum works:\n\n")
+
+// Visual artifact goes here, alongside the text
+stream.writeData({
+  type: 'visualization',
+  id: crypto.randomUUID(),
+  code: generateMomentumDiagram(parameters),
+  language: 'svg'
+})
+
+stream.writeText("Notice how the total momentum vector (shown in teal) remains constant...")
+```
+
+On the client, you consume the stream and route each part type:
+
+```typescript
+const { data, text } = useChat({ ... })
+
+// data contains visualization artifacts
+// text contains the running text response
+// both update in real-time as the stream arrives
+```
+
+The visualization artifacts render in an iframe sandbox (for HTML/JS) or directly as inline SVG. The iframe approach is important: it gives the generated code a real DOM and JS execution context, which means interactive widgets sliders, buttons, computed outputs actually work.
+
+---
+
+## The design system problem
+
+The first naive implementation rendered visualizations that looked completely out of place. The text was clean and integrated; the diagrams looked like they were embedded from somewhere else. Wrong fonts. Wrong colors. Wrong spacing. The seam was visible.
+
+This is a harder problem than it sounds. The visualization layer needs to inherit the ambient design context - the same color palette, the same typography, the same aesthetic register as the surrounding interface, all without the generated code having explicit knowledge of those values.
+
+The solution is CSS variables. The host application defines a design token system - background colors, text colors, border radii, font stacks - as CSS variables on `:root`. The generated code references only those variables, never hardcoded values. When the iframe inherits the host CSS, the variables resolve automatically.
+
+```css
+/* Generated visualization code */
+rect.node {
+  fill: var(--color-background-secondary);
+  stroke: var(--color-border-tertiary);
+  rx: var(--border-radius-md);
+}
+
+text.label {
+  fill: var(--color-text-primary);
+  font-family: var(--font-sans);
+}
+```
+
+Dark mode comes for free. Responsive layout comes for free. Color scheme changes propagate instantly. The visualization looks like it belongs because it's built from the same atoms as everything else.
+
+---
+
+## What I actually stole from Claude
+
+I want to be specific, because vague allusions to "inspiration" are a kind of dishonesty.
+
+What I took from Claude's visualization system - after spending time thinking about how it worked - was three design principles:
+
+**1. Flat over rich.** Generated visuals should be flat: no gradients, no shadows, no textures. This is counterintuitive - richer visuals seem better. But gradients and shadows don't compose well with streaming. As SVG nodes arrive mid-render, shadowed elements flicker. Flat fills appear immediately, correctly, with no visual artifacts. Simplicity is a technical requirement that happens to also be a design virtue.
+
+**2. Color encodes meaning, not sequence.** A naive visualization generator assigns colors in order: first node gets blue, second gets amber, third gets red. This is meaningless - color becomes decoration rather than signal. The smarter approach is to let color encode category: all inputs are one color, all processes are another, all outputs are a third. The palette is smaller but every color choice is semantically intentional.
+
+**3. The widget shouldn't narrate itself.** Generated visuals shouldn't contain prose explanations, section headings, or context-setting text. That content belongs in the text stream, not the visual. The visual exists to show something the text can't. If the visual is repeating the text, one of them is doing the other's job badly.
+
+These seem like small things. They're actually load-bearing. Every visualization that feels integrated rather than bolted-on is following these rules.
+
+---
+
+## Where it's different
+
+The place where scribe diverges from the inspiration is in the educational domain specificity.
+
+Claude's visualizer is general-purpose - it has to work for business diagrams, technical architecture, data charts, explanatory graphics, interactive demos. The surface area is enormous, and the design has to be correspondingly neutral.
+
+Scribe can be opinionated. It's for students studying STEM topics. The visualizations it needs to produce well are: physics diagrams (free body diagrams, wave functions, circuit schematics), mathematics (function plots, geometric figures, proof trees), chemistry (molecular structures, reaction diagrams), biological process flows. That specificity means we can build domain-specific rendering quality rather than general-purpose adequacy.
+
+A physics-specific visualization layer can know that force vectors should have arrowheads at a specific angle ratio, that coordinate axes need specific tick mark conventions, that energy level diagrams have a canonical visual grammar. A general-purpose layer can't commit to any of that.
+
+The specificity is a feature, not a limitation. Being good at the things your users actually need is better than being mediocre at everything.
+
+---
+
+## The thing I didn't expect
+
+The unexpected outcome of building this is that it changed how I think about AI output in general.
+
+Text is a bottleneck. It's extraordinarily expressive, you can communicate almost anything in words, but it's not always the right medium for the thought. When a physics concept lives most naturally in a diagram, forcing it through prose loses something real. The vector arrows that would have made the force relationship immediately visible become "the force acts in the direction perpendicular to the surface and at a magnitude proportional to..." which is accurate but slower to understand.
+
+A mixed-modality AI response - text and visuals , each carrying the content it carries best - is closer to what actually happens when a good teacher explains something. They talk and draw simultaneously. The board matters as much as the words.
+
+Scribe is an attempt to build that. It's not done. But the version that exists is already changing how students in Avenire engage with AI explanations, and that's the signal I needed that it was worth building.
+
+I stole the concept from Claude. I'm okay with that. Good artists borrow, great artists steal, and the best engineers take what works and make it their own.
