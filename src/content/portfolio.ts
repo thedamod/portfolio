@@ -10,7 +10,7 @@ export type Project = {
 export const profile = {
   name: 'Abhiram Damodara',
   role: 'Founder and Student',
-  image: 'https://github.com/aether6430.png?size=256',
+  image: 'https://github.com/thedamod.png?size=256',
 }
 
 export const heroCopy = {
@@ -22,7 +22,7 @@ export const heroCopy = {
 }
 
 export const socialLinks = [
-  { label: 'Github', href: 'https://github.com/aether6430' },
+  { label: 'Github', href: 'https://github.com/thedamod' },
   { label: 'Twitter', href: 'https://x.com/aether_d5896' },
 ]
 
