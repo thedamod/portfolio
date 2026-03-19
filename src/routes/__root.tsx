@@ -73,7 +73,7 @@ function NotFoundComponent() {
                   <span className="flex items-center gap-1">
                     <Calendar className="w-3 h-3" /> {blog.date || 'Recent'}
                   </span>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 overflow-hidden min-w-0">
                     {(blog.tags || []).map((tag: string) => (
                       <span key={tag} className={blogTagClass}>
                         {tag}
