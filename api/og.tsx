@@ -1,14 +1,12 @@
 import { ImageResponse } from '@vercel/og'
-import type { VercelRequest } from '@vercel/node'
 
 export const config = {
   runtime: 'edge',
 }
 
-export default function handler(request: VercelRequest) {
+export default function handler(request: Request) {
   try {
-    const url = request.url || 'http://localhost'
-    const { searchParams } = new URL(url)
+    const { searchParams } = new URL(request.url)
     const title = searchParams.get('title')?.slice(0, 100) || 'Blog Post'
     const tags = searchParams.get('tags')?.split(',').filter(Boolean) || []
 
@@ -88,7 +86,7 @@ export default function handler(request: VercelRequest) {
     )
   } catch (e: any) {
     console.log(`${e.message}`)
-    return new Response(`Failed to generate the image`, {
+    return new Response('Failed to generate the image', {
       status: 500,
     })
   }
