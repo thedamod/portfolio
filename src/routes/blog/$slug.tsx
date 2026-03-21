@@ -1,15 +1,23 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { createFileRoute, Link, notFound } from '@tanstack/react-router'
 import { ArrowLeft, Calendar } from 'lucide-react'
 import { MDXProvider } from '@mdx-js/react'
 import { MermaidDiagram } from '../../components/mdx/MermaidDiagram'
 import type { ComponentPropsWithoutRef, ReactNode } from 'react'
 
 type BlogFrontmatter = { title?: string; date?: string; tags?: string[] }
+type BlogModule = { default: React.ComponentType; frontmatter?: BlogFrontmatter }
 
-const mdxModules = import.meta.glob('../../content/blog/*.mdx', { eager: true }) as Record<
-  string,
-  { default: React.ComponentType; frontmatter?: BlogFrontmatter }
->
+const mdxModules = import.meta.glob('../../content/blog/*.mdx', { eager: true }) as Record<string, BlogModule>
+
+function findBlogBySlug(slug: string) {
+  const decodedSlug = decodeURIComponent(slug)
+  const blogPath = Object.keys(mdxModules).find((path) => {
+    const fileName = path.split('/').pop()?.replace('.mdx', '') || ''
+    return fileName === decodedSlug
+  })
+
+  return blogPath ? mdxModules[blogPath] : null
+}
 
 const mdxComponents = {
   // rehype-pretty-code wraps the whole thing in a figure
@@ -79,13 +87,13 @@ export const Route = createFileRoute('/blog/$slug')({
     }
   },
   loader: ({ params }) => {
-    const decodedSlug = decodeURIComponent(params.slug)
-    const blogPath = Object.keys(mdxModules).find((path) => {
-      const fileName = path.split('/').pop()?.replace('.mdx', '') || ''
-      return fileName === decodedSlug
-    })
-    const blog = blogPath ? mdxModules[blogPath] : null
-    return blog?.frontmatter || {}
+    const blog = findBlogBySlug(params.slug)
+
+    if (!blog) {
+      throw notFound()
+    }
+
+    return blog.frontmatter || {}
   },
 })
 
@@ -93,25 +101,11 @@ function BlogPost() {
   const { slug } = Route.useParams()
   const loaderData = Route.useLoaderData()
   const frontmatter = (loaderData || {}) as BlogFrontmatter
-  const decodedSlug = decodeURIComponent(slug)
-
-  const blogPath = Object.keys(mdxModules).find((path) => {
-    const fileName = path.split('/').pop()?.replace('.mdx', '') || ''
-    return fileName === decodedSlug
-  })
-  const blog = blogPath ? mdxModules[blogPath] : null
+  const blog = findBlogBySlug(slug)
   const Post = blog?.default
 
   if (!Post) {
-    return (
-      <main className="flex flex-col text-sm leading-relaxed pb-12">
-        <div className="w-full h-32 md:h-48 dot-bg shrink-0" />
-        <section className="flex flex-col">
-          <div className="dashed-h" />
-          <div className="py-12 text-center text-app-text-muted">Post not found</div>
-        </section>
-      </main>
-    )
+    throw notFound()
   }
 
   return (
