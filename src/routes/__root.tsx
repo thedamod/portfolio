@@ -6,6 +6,7 @@ import 'katex/dist/katex.min.css'
 import { CursorTrail } from '../components/portfolio-motion'
 import { ThemeContext } from '../context/theme'
 import { smoothEase } from '../components/motion-utils'
+import { Analytics } from '@vercel/analytics/react'
 
 type BlogFrontmatter = { title?: string, date?: string, tags?: string[] }
 const mdxModules = import.meta.glob('../content/blog/*.mdx', { eager: true }) as Record<string, { frontmatter?: BlogFrontmatter }>
@@ -102,6 +103,7 @@ export const Route = createRootRoute({
           <Outlet />
         </div>
       </div>
+      <Analytics />
     </ThemeProvider>
   ),
 })
