@@ -5,6 +5,9 @@ tags: ["Avenire", "AI", "Visualization", "Engineering", "Design"]
 readTime: 7
 ---
 
+import { CSSVarDemo } from "@/components/blog/CSSVarDemo"
+import { DesignPrinciplesToggle } from "@/components/blog/DesignPrinciplesToggle"
+
 I want to be upfront about the theft.
 
 When you use Avenire and an AI response renders a diagram — a flowchart of a biological process, an interactive timeline, a graph of a physics relationship: a real-time visualization layer that streams alongside the AI's text response. The concept is not original to me. It's adapted from something I noticed Claude doing and decided to reverse-engineer.
@@ -99,6 +102,8 @@ text.label {
 
 Dark mode comes for free. Responsive layout comes for free. Color scheme changes propagate instantly. The visualization looks like it belongs because it's built from the same atoms as everything else.
 
+<CSSVarDemo />
+
 ---
 
 ## What I actually stole from Claude
@@ -114,6 +119,8 @@ What I took from Claude's visualization system - after spending time thinking ab
 **3. The widget shouldn't narrate itself.** Generated visuals shouldn't contain prose explanations, section headings, or context-setting text. That content belongs in the text stream, not the visual. The visual exists to show something the text can't. If the visual is repeating the text, one of them is doing the other's job badly.
 
 These seem like small things. They're actually load-bearing. Every visualization that feels integrated rather than bolted-on is following these rules.
+
+<DesignPrinciplesToggle />
 
 ---
 

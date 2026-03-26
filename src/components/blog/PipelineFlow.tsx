@@ -18,7 +18,7 @@ export function PipelineFlow({
   const activeInfo = activeStep?.description ?? activeGap?.description ?? null;
  
   return (
-    <div className="my-8 rounded-xl border border-app-border bg-app-surface-2/50 p-6 font-mono text-sm">
+    <div className="my-8 rounded-xl border border-app-border bg-app-surface-2 p-6 font-mono text-sm">
       <p className="mb-4 text-xs uppercase tracking-widest text-app-text-subtle">
         Ingestion pipeline — click a node
       </p>
@@ -33,7 +33,7 @@ export function PipelineFlow({
                 className={`rounded-md border px-3 py-1.5 transition-all duration-150 ${
                   active === step.id
                     ? "border-app-heading bg-app-heading text-app-bg"
-                    : "border-app-border bg-app-surface-2 text-app-heading hover:border-app-heading/50"
+                    : "border-app-border bg-app-surface-2 text-app-heading hover:bg-app-heading hover:text-app-bg hover:border-app-heading"
                 }`}
               >
                 {step.label}
@@ -74,7 +74,7 @@ export function PipelineFlow({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -4 }}
             transition={{ duration: 0.15 }}
-            className="mt-4 rounded-md border border-app-border/50 bg-app-surface-2/60 px-4 py-3 text-sm text-app-text-muted"
+            className="mt-4 rounded-md border border-app-border/50 bg-app-surface-2 px-4 py-3 text-sm text-app-text-muted"
           >
             <span className="font-semibold text-app-heading">
               {active}:{" "}
@@ -86,4 +86,3 @@ export function PipelineFlow({
     </div>
   );
 }
-

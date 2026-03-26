@@ -299,11 +299,19 @@
   }
 
   .btn-secondary {
-    @apply inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg bg-app-surface-2 text-app-text-muted hover:bg-app-surface-hover transition-colors;
+    @apply inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg bg-app-surface-2 text-app-text-muted transition-colors;
   }
 
   .pill {
     @apply inline-flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-full bg-app-surface text-app-text transition-colors;
+  }
+
+  .btn-primary:hover,
+  .btn-secondary:hover,
+  .pill:hover {
+    background-color: var(--color-app-heading);
+    color: var(--color-app-bg);
+    border-color: var(--color-app-heading);
   }
 
   .quote-mark {

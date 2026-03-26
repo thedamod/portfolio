@@ -67,7 +67,7 @@ export function HybridSearchDemo() {
             className={`rounded-md border px-3 py-1.5 text-sm transition-all duration-150 ${
               scenario === i
                 ? "border-app-heading bg-app-heading text-app-bg"
-                : "border-app-border bg-app-surface text-app-heading hover:border-app-heading/50"
+                : "border-app-border bg-app-surface text-app-heading hover:bg-app-heading hover:text-app-bg hover:border-app-heading"
             }`}>
             {sc.label}
           </button>
@@ -84,7 +84,7 @@ export function HybridSearchDemo() {
             className={`rounded-md border px-3 py-1 text-xs font-mono transition-all duration-150 ${
               tab === t
                 ? "border-app-heading bg-app-heading text-app-bg"
-                : "border-app-border bg-app-surface text-app-text-muted hover:text-app-heading"
+                : "border-app-border bg-app-surface text-app-text-muted hover:bg-app-heading hover:text-app-bg hover:border-app-heading"
             }`}>
             {t === "vector" ? "pgvector" : t === "bm25" ? "BM25" : "hybrid ✓"}
           </button>

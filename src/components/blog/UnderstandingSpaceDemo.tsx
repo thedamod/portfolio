@@ -37,7 +37,7 @@ export function UnderstandingSpaceDemo() {
             className={`rounded-md border px-3 py-1.5 text-sm transition-all duration-150 ${
               mode === m
                 ? "border-app-heading bg-app-heading text-app-bg"
-                : "border-app-border bg-app-surface text-app-heading hover:border-app-heading/50"
+                : "border-app-border bg-app-surface text-app-heading hover:bg-app-heading hover:text-app-bg hover:border-app-heading"
             }`}>
             {m === "dense" ? "understands" : "memorised"}
           </button>
@@ -45,6 +45,7 @@ export function UnderstandingSpaceDemo() {
       </div>
 
       <svg viewBox="0 0 340 220" className="w-full rounded-md border border-app-border bg-app-surface p-2">
+        <rect x="0" y="0" width="340" height="220" fill="var(--color-app-surface)" />
         {/* Edges */}
         {nodes.flatMap((node, i) =>
           node.connected.filter((j) => j > i).map((j) => (

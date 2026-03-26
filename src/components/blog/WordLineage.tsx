@@ -92,6 +92,7 @@ export function WordLineage() {
 
         {/* Orbit diagram */}
         <svg viewBox="0 0 200 200" className="w-full">
+          <rect x="0" y="0" width="200" height="200" fill="var(--color-app-surface)" />
           {/* Orbit ring */}
           <circle cx="100" cy="100" r="72" fill="none" stroke="var(--color-app-border)" strokeWidth="0.8" strokeDasharray="3 4" />
           {/* Center */}

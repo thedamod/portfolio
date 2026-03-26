@@ -118,7 +118,7 @@ export function DesignPrinciplesToggle() {
             className={`rounded-md border px-3 py-1.5 text-sm transition-all duration-150 ${
               active === p.id
                 ? "border-app-heading bg-app-heading text-app-bg"
-                : "border-app-border bg-app-surface text-app-heading hover:border-app-heading/50"
+                : "border-app-border bg-app-surface text-app-heading hover:bg-app-heading hover:text-app-bg hover:border-app-heading"
             }`}
           >
             {p.label}
