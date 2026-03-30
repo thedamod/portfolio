@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { Calendar } from 'lucide-react'
 import 'katex/dist/katex.min.css'
+import { Toaster } from 'sonner'
 
 const katexFonts = `
 /* Override KaTeX default fonts to load from CDN with font-display: swap */
@@ -126,6 +127,7 @@ export const Route = createRootRoute({
         <div className="relative z-10">
           <Outlet />
         </div>
+        <Toaster richColors position="top-center" />
       </div>
     </ThemeProvider>
   ),

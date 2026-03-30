@@ -2,10 +2,15 @@ import { createFileRoute, Link } from '@tanstack/react-router'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { Calendar, Github, Twitter, Maximize2, Moon, Sun, ArrowRight } from 'lucide-react'
 import { useContext, useEffect, useRef, useState } from 'react'
+import { toast } from 'sonner'
 import { AnimatedQuote, MotionSection, RevealWords, StaggerGroup, StaggerItem } from '../components/portfolio-motion'
 import { smoothEase } from '../components/motion-utils'
 import { heroCopy, profile, projects, skillGroups, socialLinks, type Project } from '../content/portfolio'
 import { ThemeContext } from '../context/theme'
+
+const showAvenireDownToast = () => {
+  toast.error('Avenire is currently down. We are working on it.')
+}
 
 export const Route = createFileRoute('/')({
   head: () => ({
@@ -131,8 +136,10 @@ function Index() {
             </motion.p>
             <motion.a
               href={heroCopy.liveUrl}
-              target="_blank"
-              rel="noreferrer"
+              onClick={(event) => {
+                event.preventDefault()
+                showAvenireDownToast()
+              }}
               className="inline-flex w-fit items-center gap-2 text-xs uppercase tracking-[0.22em] text-app-text-muted hover:text-app-heading transition-colors"
               variants={{ hidden: { opacity: 0, y: 14 }, visible: { opacity: 1, y: 0, transition: { duration: 0.3, ease: smoothEase } } }}
             >
@@ -433,17 +440,25 @@ function ProjectModal({ project, onClose }: { project: Project, onClose: () => v
             {project.liveUrl ? (
               <div className="space-y-3">
                 <div className="relative aspect-[4/3] overflow-hidden rounded-lg bg-app-surface-2 project-modal-item">
-                  <iframe
-                    src={project.liveUrl}
-                    title={`${project.title} preview`}
-                    className="absolute inset-0 h-full w-full border-0"
-                    loading="lazy"
-                  />
+                  {project.liveUrl.includes('avenire.space') ? (
+                    <div className="absolute inset-0 flex items-center justify-center p-6 text-center text-sm text-app-text-muted">
+                      Preview unavailable while the site is down.
+                    </div>
+                  ) : (
+                    <iframe
+                      src={project.liveUrl}
+                      title={`${project.title} preview`}
+                      className="absolute inset-0 h-full w-full border-0"
+                      loading="lazy"
+                    />
+                  )}
                 </div>
                 <a
                   href={project.liveUrl}
-                  target="_blank"
-                  rel="noreferrer"
+                  onClick={(event) => {
+                    event.preventDefault()
+                    showAvenireDownToast()
+                  }}
                   className="inline-flex w-fit items-center gap-2 text-xs uppercase tracking-[0.22em] text-app-text-muted hover:text-app-heading transition-colors"
                 >
                   Open preview <span aria-hidden="true">↗</span>
