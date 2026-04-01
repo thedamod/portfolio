@@ -2,13 +2,14 @@ import { createFileRoute, Link } from '@tanstack/react-router'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { Calendar, Github, Twitter, Maximize2, Moon, Sun, ArrowRight } from 'lucide-react'
 import { useContext, useEffect, useRef, useState } from 'react'
-import { toast } from 'sonner'
 import { AnimatedQuote, MotionSection, RevealWords, StaggerGroup, StaggerItem } from '../components/portfolio-motion'
 import { smoothEase } from '../components/motion-utils'
+import { getRecentBlogs } from '../content/blog-metadata'
 import { heroCopy, profile, projects, skillGroups, socialLinks, type Project } from '../content/portfolio'
 import { ThemeContext } from '../context/theme'
 
-const showAvenireDownToast = () => {
+const showAvenireDownToast = async () => {
+  const { toast } = await import('sonner')
   toast.error('Avenire is currently down. We are working on it.')
 }
 
@@ -42,16 +43,7 @@ function Index() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null)
   const blogCardClass = 'group flex flex-col gap-2 p-4 -mx-4 rounded-xl hover:bg-app-surface-hover transition-colors interact-hover'
   const blogTagClass = 'pill px-2 py-0.5 text-[10px]'
-
-  type BlogFrontmatter = { title?: string, date?: string, tags?: string[] }
-  const mdxModules = import.meta.glob('../content/blog/*.mdx', { eager: true }) as Record<string, { frontmatter?: BlogFrontmatter }>
-  const recentBlogs = Object.entries(mdxModules)
-    .map(([path, module]) => {
-      const slug = path.split('/').pop()?.replace('.mdx', '') || ''
-      const frontmatter = module.frontmatter || {}
-      return { slug, ...frontmatter }
-    })
-    .slice(0, 3)
+  const recentBlogs = getRecentBlogs(3)
 
   useEffect(() => {
     if (!selectedProject) {
@@ -86,6 +78,11 @@ function Index() {
               <img
                 src={profile.image}
                 alt="Profile"
+                width="120"
+                height="120"
+                loading="eager"
+                fetchPriority="high"
+                decoding="async"
                 className="w-28 h-28 md:w-30 md:h-30 rounded-xl object-cover object-center border border-app-border shadow-app-image"
               />
               <div className="pb-1">

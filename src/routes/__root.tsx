@@ -1,46 +1,20 @@
 import { createRootRoute, Outlet, Link } from '@tanstack/react-router'
-import React, { useEffect, useState } from 'react'
+import React, { Suspense, lazy, useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { Calendar } from 'lucide-react'
-import 'katex/dist/katex.min.css'
-import { Toaster } from 'sonner'
-
-const katexFonts = `
-/* Override KaTeX default fonts to load from CDN with font-display: swap */
-@font-face { font-family: 'KaTeX_Main'; src: url('https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/fonts/katex-main-regular.woff2') format('woff2'); font-weight: normal; font-style: normal; font-display: swap; }
-@font-face { font-family: 'KaTeX_Main'; src: url('https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/fonts/katex-main-bold.woff2') format('woff2'); font-weight: bold; font-style: normal; font-display: swap; }
-@font-face { font-family: 'KaTeX_Main'; src: url('https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/fonts/katex-main-italic.woff2') format('woff2'); font-weight: normal; font-style: italic; font-display: swap; }
-@font-face { font-family: 'KaTeX_Main'; src: url('https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/fonts/katex-main-bolditalic.woff2') format('woff2'); font-weight: bold; font-style: italic; font-display: swap; }
-@font-face { font-family: 'KaTeX_Math'; src: url('https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/fonts/katex-math-italic.woff2') format('woff2'); font-weight: normal; font-style: italic; font-display: swap; }
-@font-face { font-family: 'KaTeX_Math'; src: url('https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/fonts/katex-math-bold-italic.woff2') format('woff2'); font-weight: bold; font-style: italic; font-display: swap; }
-@font-face { font-family: 'KaTeX_Size1'; src: url('https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/fonts/katex-size1-regular.woff2') format('woff2'); font-weight: normal; font-style: normal; font-display: swap; }
-@font-face { font-family: 'KaTeX_Size2'; src: url('https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/fonts/katex-size2-regular.woff2') format('woff2'); font-weight: normal; font-style: normal; font-display: swap; }
-@font-face { font-family: 'KaTeX_Size3'; src: url('https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/fonts/katex-size3-regular.woff2') format('woff2'); font-weight: normal; font-style: normal; font-display: swap; }
-@font-face { font-family: 'KaTeX_Size4'; src: url('https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/fonts/katex-size4-regular.woff2') format('woff2'); font-weight: normal; font-style: normal; font-display: swap; }
-@font-face { font-family: 'KaTeX_Caligraphic'; src: url('https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/fonts/katex-caligraphic-regular.woff2') format('woff2'); font-weight: normal; font-style: normal; font-display: swap; }
-@font-face { font-family: 'KaTeX_Caligraphic'; src: url('https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/fonts/katex-caligraphic-bold.woff2') format('woff2'); font-weight: bold; font-style: normal; font-display: swap; }
-@font-face { font-family: 'KaTeX_Fraktur'; src: url('https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/fonts/katex-fraktur-regular.woff2') format('woff2'); font-weight: normal; font-style: normal; font-display: swap; }
-@font-face { font-family: 'KaTeX_Fraktur'; src: url('https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/fonts/katex-fraktur-bold.woff2') format('woff2'); font-weight: bold; font-style: normal; font-display: swap; }
-@font-face { font-family: 'KaTeX_SansSerif'; src: url('https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/fonts/katex-sansserif-regular.woff2') format('woff2'); font-weight: normal; font-style: normal; font-display: swap; }
-@font-face { font-family: 'KaTeX_SansSerif'; src: url('https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/fonts/katex-sansserif-bold.woff2') format('woff2'); font-weight: bold; font-style: normal; font-display: swap; }
-@font-face { font-family: 'KaTeX_SansSerif'; src: url('https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/fonts/katex-sansserif-italic.woff2') format('woff2'); font-weight: normal; font-style: italic; font-display: swap; }
-@font-face { font-family: 'KaTeX_SansSerif'; src: url('https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/fonts/katex-sansserif-bolditalic.woff2') format('woff2'); font-weight: bold; font-style: italic; font-display: swap; }
-@font-face { font-family: 'KaTeX_Script'; src: url('https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/fonts/katex-script-regular.woff2') format('woff2'); font-weight: normal; font-style: normal; font-display: swap; }
-@font-face { font-family: 'KaTeX_Script'; src: url('https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/fonts/katex-script-bold.woff2') format('woff2'); font-weight: bold; font-style: normal; font-display: swap; }
-@font-face { font-family: 'KaTeX_Typewriter'; src: url('https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/fonts/katex-typewriter-regular.woff2') format('woff2'); font-weight: normal; font-style: normal; font-display: swap; }
-`
-import { CursorTrail } from '../components/portfolio-motion'
+import { getSortedBlogs } from '../content/blog-metadata'
 import { ThemeContext } from '../context/theme'
 import { smoothEase } from '../components/motion-utils'
 
-type BlogFrontmatter = { title?: string, date?: string, tags?: string[] }
-const mdxModules = import.meta.glob('../content/blog/*.mdx', { eager: true }) as Record<string, { frontmatter?: BlogFrontmatter }>
-const allBlogs = Object.entries(mdxModules)
-  .map(([path, module]) => {
-    const slug = path.split('/').pop()?.replace('.mdx', '') || ''
-    const frontmatter = module.frontmatter || {}
-    return { slug, ...frontmatter }
-  })
+const allBlogs = getSortedBlogs()
+const DeferredCursorTrail = lazy(async () => {
+  const module = await import('../components/cursor-trail')
+  return { default: module.CursorTrail }
+})
+const DeferredToaster = lazy(async () => {
+  const module = await import('sonner')
+  return { default: module.Toaster }
+})
 
 function NotFoundComponent() {
   const blogCardClass = 'group flex flex-col gap-2 p-4 -mx-4 rounded-xl hover:bg-app-surface-hover transition-colors interact-hover'
@@ -120,18 +94,47 @@ export const Route = createRootRoute({
   notFoundComponent: NotFoundComponent,
   component: () => (
     <ThemeProvider>
-      <CursorTrail />
-      <style>{katexFonts}</style>
       <div className="min-h-screen selection:bg-app-accent/30 selection:text-brand max-w-2xl mx-auto px-6 dashed-v-container relative isolate">
         <div className="grain-overlay" />
         <div className="relative z-10">
           <Outlet />
         </div>
-        <Toaster richColors position="top-center" />
+        <ClientEnhancements />
       </div>
     </ThemeProvider>
   ),
 })
+
+function ClientEnhancements() {
+  const [ready, setReady] = useState(false)
+
+  useEffect(() => {
+    const schedule = window.requestIdleCallback ?? ((callback: IdleRequestCallback) => window.setTimeout(callback, 1))
+    const cancel = window.cancelIdleCallback ?? window.clearTimeout
+    const handle = schedule(() => {
+      setReady(true)
+    })
+
+    return () => {
+      cancel(handle)
+    }
+  }, [])
+
+  if (!ready) {
+    return null
+  }
+
+  return (
+    <>
+      <Suspense fallback={null}>
+        <DeferredCursorTrail />
+      </Suspense>
+      <Suspense fallback={null}>
+        <DeferredToaster richColors position="top-center" />
+      </Suspense>
+    </>
+  )
+}
 
 function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setTheme] = useState<'dark' | 'light'>(() => {
