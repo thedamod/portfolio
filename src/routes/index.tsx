@@ -133,6 +133,17 @@ function Index() {
             >
               {heroCopy.liveLabel} <span aria-hidden="true">↗</span>
             </motion.a>
+            <motion.div
+              variants={{ hidden: { opacity: 0, y: 14 }, visible: { opacity: 1, y: 0, transition: { duration: 0.3, ease: smoothEase } } }}
+            >
+              <Link
+                to="/stories/draft"
+                viewTransition={{ types: ['route-forward'] }}
+                className="inline-flex w-fit items-center gap-2 text-xs uppercase tracking-[0.2em] text-app-text-muted hover:text-app-heading transition-colors"
+              >
+                While you are at it check out my story <span aria-hidden="true">↗</span>
+              </Link>
+            </motion.div>
           </motion.div>
 
           <motion.div

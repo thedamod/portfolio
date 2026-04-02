@@ -1,4 +1,4 @@
-import { createRootRoute, Outlet, Link } from '@tanstack/react-router'
+import { createRootRoute, Outlet, Link, useLocation } from '@tanstack/react-router'
 import React, { Suspense, lazy, useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { Calendar } from 'lucide-react'
@@ -94,16 +94,27 @@ export const Route = createRootRoute({
   notFoundComponent: NotFoundComponent,
   component: () => (
     <ThemeProvider>
-      <div className="min-h-screen selection:bg-app-accent/30 selection:text-brand max-w-2xl mx-auto px-6 dashed-v-container relative isolate">
+      <RootShell>
         <div className="grain-overlay" />
         <div className="relative z-10">
           <Outlet />
         </div>
         <ClientEnhancements />
-      </div>
+      </RootShell>
     </ThemeProvider>
   ),
 })
+
+function RootShell({ children }: { children: React.ReactNode }) {
+  const { pathname } = useLocation()
+  const shellWidthClass = pathname.startsWith('/stories/') ? 'max-w-4xl' : 'max-w-2xl'
+
+  return (
+    <div className={`min-h-screen selection:bg-app-accent/30 selection:text-brand mx-auto px-6 dashed-v-container relative isolate ${shellWidthClass}`}>
+      {children}
+    </div>
+  )
+}
 
 function ClientEnhancements() {
   const [ready, setReady] = useState(false)

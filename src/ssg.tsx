@@ -17,6 +17,7 @@ const blogModules = import.meta.glob('./content/blog/*.mdx', { eager: true }) as
   string,
   { frontmatter?: BlogFrontmatter }
 >
+const storyModules = import.meta.glob('./content/Stories/*.md', { eager: true }) as Record<string, unknown>
 
 export function getPrerenderRoutes() {
   const blogRoutes = Object.keys(blogModules).map((path) => {
@@ -24,7 +25,12 @@ export function getPrerenderRoutes() {
     return `/blog/${slug}`
   })
 
-  return ['/', '/blog', ...blogRoutes]
+  const storyRoutes = Object.keys(storyModules).map((path) => {
+    const slug = path.split('/').pop()?.replace('.md', '') || ''
+    return `/stories/${slug}`
+  })
+
+  return ['/', '/blog', ...blogRoutes, ...storyRoutes]
 }
 
 function getEntryChunk(manifest: Manifest) {
