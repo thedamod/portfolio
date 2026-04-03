@@ -1,0 +1,231 @@
+---
+title: "How Avenire Knows When You're Wrong Before You Do"
+date: "2026-04-03"
+description: "A deep dive into the misconception detection engine powering Apollo — from passive session inference to real-time signal interception."
+tags: ["engineering", "ai", "learning-science"]
+---
+
+import {
+  SignalSources,
+  MasteryCalculator,
+  DecayVisualizer,
+  RealTimeDemo,
+  PipelineStepper,
+} from "@/components/blog/Misconceptions";
+
+Every tutoring system eventually has to answer an uncomfortable question:
+*what do you do when the student is confidently wrong?*
+
+Wrong answers are easy. Confusion is easy. But a student who has built a
+coherent — yet subtly broken — mental model is the hard case. They'll get some
+questions right. They'll explain things back to you fluently. And then they'll
+fail on the one edge case their model doesn't cover.
+
+This is what a **misconception** actually is. Not ignorance. A wrong-but-internally-consistent belief.
+
+Apollo, Avenire's tutoring layer, is built around detecting these. Here's exactly how it works.
+
+---
+
+## The four sources of signal
+
+Misconceptions flow into the system from four distinct places. Each has different
+confidence characteristics, different recall properties, and different failure modes.
+
+<SignalSources />
+
+A few things worth noting across sources:
+
+- **Manual capture** has the highest precision but the lowest recall. Students are
+  notoriously bad at noticing their own blind spots — that's the problem we're solving.
+- **FSRS signals** ($\text{conf} = 0.6$) are intentionally conservative. Two consecutive
+  Again ratings on the same card might mean a misconception, or might just mean a hard card.
+- **Session inference** is the most interesting: it's cheap, runs post-session, and
+  is double-gated by both a confidence threshold and a regex heuristic on the raw transcript.
+
+---
+
+## The upsert model
+
+All four sources write through the same upsert path, keyed on:
+
+$$(\text{workspaceId},\ \text{userId},\ \text{subject},\ \text{topic},\ \text{concept})$$
+
+| Field | On conflict |
+|---|---|
+| `active` | Set to `true` |
+| `confidence` | $\max(\text{existing},\ \text{new})$ |
+| `evidenceCount` | Incremented |
+| `lastSeenAt` | Updated |
+| `resolvedAt` | Cleared |
+| `source` | Overwritten |
+
+The reactivation behavior on conflict is intentional. A student who appeared to
+fix a misconception and resurfaces confusion about the same concept weeks later
+is exactly the signal we want to catch. Resolution isn't permanent.
+
+---
+
+## Confidence decay
+
+Misconceptions decay on each positive review signal. The update is:
+
+$$\text{confidence}_{\text{new}} = \text{confidence}_{\text{old}} - \delta, \quad \delta \in [0.02,\ 0.5]$$
+
+When confidence falls below a resolution threshold $\tau$:
+
+$$\text{confidence}_{\text{new}} < \tau \implies \text{auto-resolve}$$
+
+The defaults are $\delta = 0.08$ and $\tau = 0.20$, meaning a misconception that
+receives ~9 consecutive positive signals will quietly resolve itself with no manual
+intervention. Below is a live simulation — apply positive review events and watch
+the misconceptions decay toward resolution.
+
+<DecayVisualizer />
+
+---
+
+## Concept mastery scoring
+
+Active misconceptions feed directly into the concept mastery score. This is
+entirely deterministic — no LLM involved:
+
+$$
+\text{score} = \underbrace{\min\!\left(\frac{\bar{s}}{20},\ 1\right)}_{\text{stability}}
+\times \underbrace{\frac{p}{n}}_{\text{performance}}
+- \underbrace{\min(0.3,\ \text{neg})}_{\text{neg penalty}}
+- \underbrace{\min\!\left(0.5,\ \max(c \cdot 0.06,\ \sigma \cdot 0.12)\right)}_{\text{misconception penalty}}
+$$
+
+Where:
+- $\bar{s}$ = average FSRS stability across cards for this concept (days to 90% recall)
+- $p/n$ = positive review count / total review count
+- $c$ = active misconception count
+- $\sigma$ = sum of active misconception confidence scores
+
+The misconception penalty term is what makes this interesting. A student can
+have strong stability and a good positive review ratio and still score poorly
+because of what they *believe*, not just what they remember.
+
+<MasteryCalculator />
+
+Try maxing out misconception count and confidence — watch how quickly the score
+collapses even when review performance is excellent. That's the point.
+
+---
+
+## The feedback loop into chat
+
+Before every Apollo response, three things are injected into the system prompt:
+
+1. **Recent session summary** — `summaryText` from the most recent session on the
+   current subject, giving soft conversational continuity across sessions
+2. **Active misconception context** — all active misconceptions for the current
+   subject, formatted as private tutoring notes (never surfaced to the student directly)
+3. **Student profile** — strong/weak subjects, `avg_session_length_mins`,
+   `cards_due_today`, activity over the last 7 days
+
+The base prompt instructs Apollo to *treat active misconceptions as private tutoring
+context* — use them to shape explanations, not to call out the student.
+
+<PipelineStepper />
+
+---
+
+## The new layer: real-time signal detection
+
+Everything described so far is *retrospective* — it reconstructs understanding from
+completed sessions. There's a meaningful gap between when confusion surfaces in a
+message and when the system acts on it.
+
+The new insertion point runs **immediately after message ingestion**, before the
+main model call begins:
+
+```ts
+async function onNewMessage(message: UIMessage) {
+  const embedding = await embed(message.content)
+
+  const signals = await Promise.race([
+    detectSignals({
+      embedding,
+      activeMisconceptions,
+      recentMessages: history.slice(-3),
+    }),
+    sleep(800).then(() => null), // hard timeout — never block the stream
+  ])
+
+  if (signals?.score > INTERVENTION_THRESHOLD) {
+    enqueueIntervention(signals) // soft inject into this response only
+  }
+}
+```
+
+Crucially, `enqueueIntervention` does **not** write to the misconception table.
+The per-message signal is too noisy for persistence — a single confused-sounding
+phrasing isn't evidence. It injects a one-shot flag into the system prompt for
+the *current response only*. Persistence still flows through the session-close path.
+
+### Why Cerebras or Groq
+
+The classifier doesn't need to be smart. It needs to be *fast*. Llama 3.1 8B
+at 2–3k tokens/second adds sub-100ms latency on a short context window — effectively
+invisible. The 8B is sufficient for binary classification with a tight JSON schema;
+the 70B buys nothing here.
+
+Cerebras specifically has near-zero cold start and extremely consistent latency —
+better p99 characteristics than Groq for short-context inputs.
+
+### Hybrid detection strategy
+
+Running the classifier on every message is wasteful. The efficient path:
+
+$$\text{cosine}(\text{embed}(m),\ \text{embed}(\mu_i)) > \theta_{\text{fast}} \implies \text{run classifier}$$
+
+Where $\theta_{\text{fast}} \approx 0.65$ is a loose pre-filter. Only messages
+that land near known misconception territory in embedding space pay the classifier
+cost. Off-topic messages never trigger it at all.
+
+The classifier returns tight structured JSON (using `response_format: { type: "json_object" }`):
+
+```ts
+{
+  isConfusion: boolean
+  relatedMisconceptionId?: string  // matches existing misconception, if any
+  newConceptSignal?: string        // new concept if not already tracked
+  confidence: number               // [0, 1]
+  interventionType: "soft" | "none"
+}
+```
+
+<RealTimeDemo />
+
+Try the "Off-topic" scenario — notice how it never reaches the classifier at all.
+The cosine pre-filter handles it in a single vector comparison.
+
+---
+
+## What's still hard
+
+**Subject drift within a session.** A student asking about kinematics who pivots
+mid-session to electrostatics. The misconception context loaded at session start
+is pointing at the wrong subject. The real-time detector may catch this, but the
+session summary will only credit one dominant subject.
+
+**Misconception vs difficulty.** The FSRS signal fires after two consecutive Again
+ratings, but some cards are just hard. The $c = 0.6$ confidence floor and the
+`evidenceCount` threshold partially address this, but a student grinding a
+legitimately difficult derivation will accumulate false signals over time.
+
+**Source provenance loss on upsert.** When a misconception is re-observed, the
+`source` field is overwritten with the latest observation's source. A manually-captured
+misconception that resurfaces via `fsrs_signal` silently loses its provenance.
+Minor now — meaningful if you ever want to analyze signal quality per source.
+
+---
+
+The system isn't perfect. But the goal was never to perfectly classify understanding.
+It was to give Apollo enough context that its *next response* is meaningfully better
+than a stateless one. On that measure, it works.
+
+The real-time layer closes the last gap: the window between when confusion happens
+and when the system knows about it.

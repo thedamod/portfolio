@@ -1,6 +1,6 @@
 import { createLazyFileRoute, Link } from '@tanstack/react-router'
 import { Calendar, ArrowLeft, Clock } from 'lucide-react'
-import { getSortedBlogs } from '../../content/blog-metadata'
+import { getSortedBlogs, formatDate } from '../../content/blog-metadata'
 
 export const Route = createLazyFileRoute('/blog/')({
   component: BlogList,
@@ -43,7 +43,7 @@ function BlogList() {
             >
               <h3 className="text-base font-semibold group-hover:underline line-clamp-2">{blog.title || blog.slug}</h3>
               <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-app-text-subtle">
-                <span className="flex items-center gap-1"><Calendar className="w-3 h-3" /> {blog.date || 'Recent'}</span>
+                <span className="flex items-center gap-1"><Calendar className="w-3 h-3" /> {formatDate(blog.date)}</span>
                 <span className="flex items-center gap-1"><Clock className="w-3 h-3" /> {blog.readTime}m</span>
                 <div className="flex items-center gap-2 overflow-hidden min-w-0">
                   {(blog.tags || []).map((tag: string) => (

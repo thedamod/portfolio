@@ -9,6 +9,13 @@ export type BlogMetadata = {
 
 export const blogMetadata: BlogMetadata[] = [
   {
+    slug: 'misconception-engine',
+    title: "How Avenire Knows When You're Wrong Before You Do",
+    date: '2026-04-03',
+    tags: ['engineering', 'ai', 'learning-science'],
+    description: "A deep dive into the misconception detection engine powering Apollo — from passive session inference to real-time signal interception.",
+  },
+  {
     slug: 'algorithm-that-never-forgets',
     title: 'The Algorithm That Never Forgets',
     date: '2026-03-29',
@@ -19,37 +26,37 @@ export const blogMetadata: BlogMetadata[] = [
   {
     slug: 'retrieval-infrastructure',
     title: 'How Apollo Searches Your Mind',
-    date: 'Mar 26, 2026',
+    date: '2026-03-26',
     tags: ['engineering', 'avenire', 'retrieval', 'postgres'],
   },
   {
     slug: 'ai-visualization-layer',
     title: 'Building an AI Visualization Layer from Scratch (and What I Stole from Claude)',
-    date: 'Mar 18, 2026',
+    date: '2026-03-18',
     tags: ['Avenire', 'AI', 'Visualization', 'Engineering', 'Design'],
   },
   {
     slug: 'search-retrieval-system',
     title: "How I Built Avenire's Search Retrieval System (Multimodal Embeddings, PDF Pipelines, Video Ingestion)",
-    date: 'Mar 13, 2026',
+    date: '2026-03-13',
     tags: ['Avenire', 'RAG', 'AI', 'Engineering', 'Search'],
   },
   {
     slug: 'learning-itself',
     title: 'What Building Avenire Taught Me About Learning Itself',
-    date: 'Mar 9, 2026',
+    date: '2026-03-09',
     tags: ['Avenire', 'Learning', 'AI', 'Education'],
   },
   {
     slug: 'naming-avenire',
     title: "Why I Named My Startup Avenire — A Word That Doesn't Exist in English",
-    date: 'Mar 5, 2026',
+    date: '2026-03-05',
     tags: ['Avenire', 'Startups', 'Naming', 'Philosophy'],
   },
   {
     slug: 'study-tool-jee',
     title: "Why I'm Building a Study Tool While Preparing for the Hardest Exam of My Life",
-    date: 'Mar 1, 2026',
+    date: '2026-03-01',
     tags: ['Avenire', 'Learning', 'JEE', 'Startups'],
   },
 ]
@@ -69,4 +76,8 @@ export function getRecentBlogs(limit = 3) {
 
 export function getBlogBySlug(slug: string) {
   return blogMetadata.find((blog) => blog.slug === slug)
+}
+
+export function formatDate(date: string): string {
+  return new Date(date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
 }

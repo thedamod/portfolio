@@ -3,6 +3,7 @@ import { ArrowLeft, Calendar } from 'lucide-react'
 import { MDXProvider } from '@mdx-js/react'
 import { lazy, Suspense, useMemo, type ComponentPropsWithoutRef, type ReactNode } from 'react'
 import { MermaidDiagram } from '../../components/mdx/MermaidDiagram'
+import { formatDate } from '../../content/blog-metadata'
 import 'katex/dist/katex.min.css'
 
 type BlogFrontmatter = { title?: string; date?: string; tags?: string[]; description?: string }
@@ -154,7 +155,7 @@ function BlogPost() {
           <div className="flex flex-col gap-3">
             <h1 className="text-3xl font-bold tracking-tight">{frontmatter.title || slug}</h1>
             <div className="flex items-center gap-4 text-sm text-app-text-muted">
-              <span className="flex items-center gap-1.5"><Calendar className="w-4 h-4" /> {frontmatter.date || 'Recent'}</span>
+              <span className="flex items-center gap-1.5"><Calendar className="w-4 h-4" /> {formatDate(frontmatter.date || '')}</span>
             </div>
           </div>
         </div>
