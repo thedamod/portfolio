@@ -76,7 +76,6 @@ function Index() {
                 width="120"
                 height="120"
                 loading="eager"
-                fetchPriority="high"
                 decoding="async"
                 className="w-28 h-28 md:w-30 md:h-30 rounded-xl object-cover object-center border border-app-border shadow-app-image"
               />
@@ -175,7 +174,7 @@ function Index() {
         <div className="dashed-h" />
         <h2 className="text-xl font-bold py-6">Projects</h2>
         <div className="dashed-h" />
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-6">
           {projects.map((project) => (
             <ProjectCard key={project.title} project={project} onDetailsClick={() => setSelectedProject(project)} />
           ))}

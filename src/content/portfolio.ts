@@ -47,6 +47,20 @@ export const projects: Project[] = [
     liveUrl: 'https://avenire.space',
   },
   {
+    title: 'Chromium Tools',
+    image: 'https://picsum.photos/seed/chromium-tools/1200/900',
+    summary:
+      'A browser-based utility suite for file and text transforms. Each tool is focused so the workflow stays quick and easy to reach.',
+    details: [
+      'Image ↔ Base64 conversion for quick asset handling.',
+      'Image to ICO output for app and favicon workflows.',
+      'Markdown to PDF for document export.',
+      'Image converter, compressor, and regex DSL tools.',
+    ],
+    tags: ['Browser', 'Utilities', 'Transforms'],
+    liveUrl: 'https://tools.damod.space',
+  },
+  {
     title: 'Autonomous Rover',
     image: 'https://manasr.dev/_next/image?url=%2Fbg6.png&w=3840&q=75',
     summary: 'A custom smart rover designed to operate independently with environmental awareness, telemetry, and live obstacle detection.',
