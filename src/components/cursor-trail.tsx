@@ -18,9 +18,6 @@ export function CursorTrail() {
       return
     }
 
-    document.documentElement.classList.add('cursor-none')
-    document.body.classList.add('cursor-none')
-
     const move = (event: PointerEvent) => {
       x.set(event.clientX)
       y.set(event.clientY)
@@ -60,8 +57,6 @@ export function CursorTrail() {
       window.removeEventListener('pointermove', move)
       window.removeEventListener('pointerover', over)
       window.removeEventListener('pointerout', out)
-      document.documentElement.classList.remove('cursor-none')
-      document.body.classList.remove('cursor-none')
     }
   }, [isFinePointer, reduceMotion, x, y])
 

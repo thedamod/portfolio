@@ -66,13 +66,6 @@
     --color-app-code-dark-bg: #22272e;
   }
 
-  html.cursor-none,
-  body.cursor-none,
-  html.cursor-none *,
-  body.cursor-none * {
-    cursor: none !important;
-  }
-
   a,
   button {
     cursor: pointer;
