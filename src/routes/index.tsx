@@ -375,7 +375,7 @@ function ProjectRow({
         layout
         disabled={isSelected}
         aria-hidden={isSelected}
-        className="relative z-10 group flex w-full items-center gap-4 rounded-xl p-3 text-left transition-colors hover:bg-app-surface-hover disabled:pointer-events-none disabled:opacity-0"
+        className="relative z-10 group flex w-full items-start sm:items-center gap-4 rounded-xl p-3 text-left transition-colors hover:bg-app-surface-hover disabled:pointer-events-none disabled:opacity-0"
       >
         <div className="flex min-w-0 flex-1 flex-col gap-1">
           <motion.div layout className="flex items-center gap-2">
@@ -391,7 +391,7 @@ function ProjectRow({
             {project.summary}
           </motion.p>
         </div>
-        <motion.div layout className="flex shrink-0 flex-wrap gap-2">
+        <motion.div layout className="hidden sm:flex shrink-0 flex-wrap gap-2">
           {project.tags.map((tag) => (
             <motion.span layout key={tag} className="text-[10px] uppercase tracking-[0.18em] text-app-text-subtle">
               {tag}
@@ -469,18 +469,12 @@ function ProjectModal({ project, onClose }: { project: Project, onClose: () => v
             {project.liveUrl ? (
               <div className="space-y-3">
                 <div className="relative w-full max-w-4xl aspect-[16/10] overflow-hidden rounded-lg bg-app-surface-2 project-modal-item">
-                  {project.liveUrl.includes('avenire.space') ? (
-                    <div className="absolute inset-0 flex items-center justify-center p-6 text-center text-sm text-app-text-muted">
-                      Preview unavailable while the site is down.
-                    </div>
-                  ) : (
-                    <iframe
-                      src={project.liveUrl}
-                      title={`${project.title} preview`}
-                      className="absolute inset-0 h-full w-full border-0"
-                      loading="lazy"
-                    />
-                  )}
+                  <iframe
+                    src={project.liveUrl}
+                    title={`${project.title} preview`}
+                    className="absolute inset-0 h-full w-full border-0"
+                    loading="lazy"
+                  />
                 </div>
                 <a
                   href={project.liveUrl}
