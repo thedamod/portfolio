@@ -1,5 +1,6 @@
 export type Project = {
   title: string
+  icon: string
   image: string
   summary: string
   details: string[]
@@ -35,7 +36,8 @@ export const skillGroups = {
 export const projects: Project[] = [
   {
     title: 'Avenire',
-    image: 'https://manasr.dev/_next/image?url=%2Fbg5.png&w=3840&q=75',
+    icon: '/projects/icons/avenire.svg',
+    image: '/projects/backgrounds/banner1.png',
     summary: 'An interactive learning platform that replaces static notes with living explanations. Students can manipulate graphs, probe formulas, and get contextual reasoning instead of a dead-end answer.',
     details: [
       'AI guided explanations with step-by-step reasoning.',
@@ -48,7 +50,8 @@ export const projects: Project[] = [
   },
   {
     title: 'Chromium Tools',
-    image: 'https://picsum.photos/seed/chromium-tools/1200/900',
+    icon: '/projects/icons/tools.svg',
+    image: '/projects/backgrounds/banner1.png',
     summary:
       'A browser-based utility suite for file and text transforms. Each tool is focused so the workflow stays quick and easy to reach.',
     details: [
@@ -62,7 +65,8 @@ export const projects: Project[] = [
   },
   {
     title: 'Autonomous Rover',
-    image: 'https://manasr.dev/_next/image?url=%2Fbg6.png&w=3840&q=75',
+    icon: '/projects/icons/rover.svg',
+    image: '/projects/backgrounds/banner1.png',
     summary: 'A custom smart rover designed to operate independently with environmental awareness, telemetry, and live obstacle detection.',
     details: [
       'Internet connected control and telemetry.',
@@ -71,5 +75,18 @@ export const projects: Project[] = [
       'Custom frontend dashboard for live interaction.',
     ],
     tags: ['Hardware', 'Control', 'Systems'],
+  },
+  {
+    title: 'Arcaine',
+    icon: '/projects/icons/arcaine.svg',
+    image: '/projects/backgrounds/banner1.png',
+    summary: 'A research model in progress focused on puzzles and cryptographic challenges, built as a fun exploration of reasoning strategies and solver behavior.',
+    details: [
+      'Designed to tackle puzzle-style and cryptography challenge prompts.',
+      'Training and eval loop centered on structured reasoning traces.',
+      'Experimenting with generalization across different puzzle families.',
+      'Companion paper in progress documenting architecture and findings.',
+    ],
+    tags: ['ML', 'Research', 'Cryptography'],
   },
 ]

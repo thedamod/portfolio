@@ -7,10 +7,6 @@ import { ThemeContext } from '../context/theme'
 import { smoothEase } from '../components/motion-utils'
 
 const allBlogs = getSortedBlogs()
-const DeferredCursorTrail = lazy(async () => {
-  const module = await import('../components/cursor-trail')
-  return { default: module.CursorTrail }
-})
 const DeferredToaster = lazy(async () => {
   const module = await import('sonner')
   return { default: module.Toaster }
@@ -137,9 +133,6 @@ function ClientEnhancements() {
 
   return (
     <>
-      <Suspense fallback={null}>
-        <DeferredCursorTrail />
-      </Suspense>
       <Suspense fallback={null}>
         <DeferredToaster richColors position="top-center" />
       </Suspense>

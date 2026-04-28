@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
-import { Calendar, Github, Twitter, Maximize2, Moon, Sun, ArrowRight } from 'lucide-react'
+import { AnimatePresence, motion } from 'framer-motion'
+import { Calendar, Github, Twitter, Moon, Sun, ArrowRight } from 'lucide-react'
 import { useContext, useEffect, useRef, useState } from 'react'
 import { AnimatedQuote, MotionSection, RevealWords, StaggerGroup, StaggerItem } from '../components/portfolio-motion'
 import { smoothEase } from '../components/motion-utils'
@@ -174,13 +174,20 @@ function Index() {
         <div className="dashed-h" />
         <h2 className="text-xl font-bold py-6">Projects</h2>
         <div className="dashed-h" />
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-6">
+        <StaggerGroup className="flex flex-col gap-1 pt-6">
           {projects.map((project) => (
-            <ProjectCard key={project.title} project={project} onDetailsClick={() => setSelectedProject(project)} />
+            <ProjectRow
+              key={project.title}
+              project={project}
+              isSelected={selectedProject?.title === project.title}
+              onSelect={() => setSelectedProject(project)}
+            />
           ))}
-        </div>
+        </StaggerGroup>
         <div className="flex justify-center mt-6">
-          <a href="#" className="btn-secondary rounded-full">View all ↗</a>
+          <Link to="/projects" viewTransition={{ types: ['route-forward'] }} className="btn-secondary rounded-full">
+            View all ↗
+          </Link>
         </div>
       </MotionSection>
 
@@ -350,54 +357,57 @@ function TickerRow({ label, skills, reverse }: { label: string, skills: string[]
   )
 }
 
-function ProjectCard({ project, onDetailsClick }: { project: Project, onDetailsClick: () => void }) {
-  const reduceMotion = useReducedMotion()
-
+function ProjectRow({
+  project,
+  isSelected,
+  onSelect,
+}: {
+  project: Project
+  isSelected: boolean
+  onSelect: () => void
+}) {
   return (
-    <motion.article
-      className="group flex h-full flex-col gap-3 rounded-2xl border border-transparent bg-transparent p-0"
-      whileHover={reduceMotion ? undefined : { y: -4 }}
-      transition={{ duration: 0.25, ease: smoothEase }}
-    >
-      <div className="relative aspect-[4/3] overflow-hidden rounded-xl border border-app-border/80 bg-transparent">
-        <motion.div className="project-preview-glow absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-        <motion.img
-          src={project.image}
-          alt={project.title}
-          className="w-full h-full object-cover"
-          whileHover={reduceMotion ? undefined : { scale: 1.02 }}
-          transition={{ duration: 0.4, ease: smoothEase }}
-        />
-      </div>
-      <div className="flex h-full flex-col gap-2">
-                <h3 className="font-bold text-base text-app-heading">{project.title}</h3>
-                <p
-          className="text-app-text-muted text-sm leading-relaxed"
-          style={{
-            display: '-webkit-box',
-            WebkitBoxOrient: 'vertical',
-            WebkitLineClamp: 3,
-            overflow: 'hidden',
-          }}
-        >
-          {project.summary}
-        </p>
-        <div className="mt-auto flex flex-wrap gap-2 pt-1">
-          {project.tags.map((tag) => (
-            <span key={tag} className="text-[10px] uppercase tracking-[0.18em] text-app-text-subtle">
-              {tag}
-            </span>
-          ))}
+    <StaggerItem>
+      <motion.button
+        type="button"
+        onClick={onSelect}
+        layoutId={!isSelected ? `project-trigger-${project.title}` : undefined}
+        layout
+        disabled={isSelected}
+        aria-hidden={isSelected}
+        className="relative z-10 group flex w-full items-center gap-4 rounded-xl p-3 text-left transition-colors hover:bg-app-surface-hover disabled:pointer-events-none disabled:opacity-0"
+      >
+        <div className="flex min-w-0 flex-1 flex-col gap-1">
+          <motion.div layout className="flex items-center gap-2">
+            <ProjectIcon icon={project.icon} title={project.title} />
+            <motion.h3
+              layout
+              className="font-bold text-base text-app-heading"
+            >
+              {project.title}
+            </motion.h3>
+          </motion.div>
+          <motion.p layout className="text-xs text-app-text-muted truncate">
+            {project.summary}
+          </motion.p>
         </div>
-        <button
-          type="button"
-          onClick={onDetailsClick}
-          className="text-xs text-app-text-muted flex items-center gap-1 hover:text-app-accent-soft transition-colors self-start mt-1"
-        >
-          View details <Maximize2 className="w-3 h-3" />
-        </button>
-      </div>
-    </motion.article>
+        <motion.div layout className="flex shrink-0 flex-wrap gap-2">
+          {project.tags.map((tag) => (
+            <motion.span layout key={tag} className="text-[10px] uppercase tracking-[0.18em] text-app-text-subtle">
+              {tag}
+            </motion.span>
+          ))}
+        </motion.div>
+      </motion.button>
+    </StaggerItem>
+  )
+}
+
+function ProjectIcon({ icon, title }: { icon: string, title: string }) {
+  return (
+    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-app-border/80 bg-app-surface-2 text-app-text-muted">
+      <img src={icon} alt={`${title} icon`} className="h-4 w-4 object-contain" />
+    </div>
   )
 }
 
@@ -427,17 +437,38 @@ function ProjectModal({ project, onClose }: { project: Project, onClose: () => v
         onClick={onClose}
       />
       <motion.div
-        className="relative w-full max-w-6xl max-h-[88vh] overflow-hidden rounded-lg bg-app-bg shadow-2xl project-modal-surface"
-        initial={{ y: 20, scale: 0.985, opacity: 0 }}
-        animate={{ y: 0, scale: 1, opacity: 1 }}
-        exit={{ y: 16, scale: 0.985, opacity: 0 }}
-        transition={{ duration: 0.28, ease: smoothEase }}
+        className="relative z-[80] w-full max-w-6xl max-h-[88vh] overflow-hidden rounded-lg bg-app-bg shadow-2xl project-modal-surface"
+        layoutId={`project-trigger-${project.title}`}
+        layout
+        transition={{ layout: { duration: 0.22, ease: smoothEase } }}
       >
-        <div className="grid max-h-[88vh] lg:grid-cols-[1.1fr_0.9fr]">
-          <div className="flex max-h-[88vh] flex-col gap-4 overflow-y-auto p-6 sm:p-8 lg:p-8">
+        <motion.div layout className="grid max-h-[88vh] lg:grid-cols-[1.1fr_0.9fr]">
+          <motion.div layout className="flex max-h-[88vh] flex-col gap-6 overflow-y-auto p-6 sm:p-8 lg:p-8 lg:col-span-2">
+            <motion.div layout className="flex items-start justify-between gap-4">
+              <div className="min-w-0">
+                <p className="text-[10px] uppercase tracking-[0.24em] text-app-text-subtle">Selected project</p>
+                <motion.div layout className="mt-3 flex items-center gap-3">
+                  <ProjectIcon icon={project.icon} title={project.title} />
+                  <motion.h3 layout className="text-3xl font-bold tracking-tight text-app-heading">
+                    {project.title}
+                  </motion.h3>
+                </motion.div>
+                <motion.p layout className="mt-4 text-sm leading-7 text-app-text-muted">
+                  {project.summary}
+                </motion.p>
+              </div>
+              <button
+                type="button"
+                onClick={onClose}
+                className="rounded-full border border-app-modal-border bg-app-surface-2 px-3 py-2 text-xs text-app-text-muted transition-colors hover:bg-app-surface-hover hover:text-app-heading"
+              >
+                Close
+              </button>
+            </motion.div>
+
             {project.liveUrl ? (
               <div className="space-y-3">
-                <div className="relative aspect-[4/3] overflow-hidden rounded-lg bg-app-surface-2 project-modal-item">
+                <div className="relative w-full max-w-4xl aspect-[16/10] overflow-hidden rounded-lg bg-app-surface-2 project-modal-item">
                   {project.liveUrl.includes('avenire.space') ? (
                     <div className="absolute inset-0 flex items-center justify-center p-6 text-center text-sm text-app-text-muted">
                       Preview unavailable while the site is down.
@@ -464,26 +495,6 @@ function ProjectModal({ project, onClose }: { project: Project, onClose: () => v
                 <div className="absolute inset-0 bg-gradient-to-t from-app-bg/55 via-app-bg/10 to-transparent" />
               </div>
             )}
-          </div>
-
-          <div className="flex max-h-[88vh] flex-col gap-6 overflow-y-auto p-6 sm:p-8 lg:p-10">
-            <div className="flex items-start justify-between gap-4">
-              <div>
-                <p className="text-[10px] uppercase tracking-[0.24em] text-app-text-subtle">Selected project</p>
-                <h3 className="mt-3 text-3xl font-bold tracking-tight text-app-heading">{project.title}</h3>
-              </div>
-              <button
-                type="button"
-                onClick={onClose}
-                className="rounded-full border border-app-modal-border bg-app-surface-2 px-3 py-2 text-xs text-app-text-muted transition-colors hover:bg-app-surface-hover hover:text-app-heading"
-              >
-                Close
-              </button>
-            </div>
-
-            <p className="text-sm leading-7 text-app-text-muted">
-              {project.summary}
-            </p>
 
             <ol className="list-decimal space-y-3 border-t border-app-border pl-5 pt-5 text-sm leading-6 text-app-text-muted marker:text-app-accent-soft">
               {project.details.map((item) => (
@@ -493,15 +504,15 @@ function ProjectModal({ project, onClose }: { project: Project, onClose: () => v
               ))}
             </ol>
 
-            <div className="flex flex-wrap gap-2 border-t border-app-border pt-5">
+            <motion.div layout className="flex flex-wrap gap-2 border-t border-app-border pt-5">
               {project.tags.map((tag) => (
-                <span key={tag} className="pill rounded-full border border-app-accent-soft/25 bg-app-surface-2 text-app-accent-soft">
+                <motion.span layout key={tag} className="pill rounded-full border border-app-accent-soft/25 bg-app-surface-2 text-app-accent-soft">
                   {tag}
-                </span>
+                </motion.span>
               ))}
-            </div>
-          </div>
-        </div>
+            </motion.div>
+          </motion.div>
+        </motion.div>
       </motion.div>
     </motion.div>
   )
