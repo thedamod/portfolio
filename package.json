@@ -4,13 +4,13 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
-    "postbuild": "node scripts/prerender.mjs",
+    "dev": "astro dev",
+    "build": "astro build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "astro preview"
   },
   "dependencies": {
+    "@astrojs/react": "^5.0.4",
     "@mdx-js/react": "^3.1.1",
     "@mdx-js/rollup": "^3.1.0",
     "@tailwindcss/typography": "^0.5.19",
@@ -24,6 +24,7 @@
     "@wterm/dom": "^0.3.0",
     "@wterm/ghostty": "^0.3.0",
     "@wterm/react": "^0.3.0",
+    "astro": "^6.2.1",
     "beautiful-mermaid": "^1.0.2",
     "clsx": "^2.1.1",
     "framer-motion": "^12.38.0",

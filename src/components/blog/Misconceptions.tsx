@@ -157,7 +157,7 @@ function Slider({ label, sublabel, min, max, step, value, display, onChange, acc
           [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:cursor-pointer
           [&::-webkit-slider-thumb]:transition-transform [&::-webkit-slider-thumb]:hover:scale-125"
         style={{
-          // @ts-ignore
+          // @ts-expect-error custom slider thumb color variable
           "--thumb-color": accent,
           background: `linear-gradient(to right, ${accent} 0%, ${accent} ${((value - min) / (max - min)) * 100}%, var(--color-app-border) ${((value - min) / (max - min)) * 100}%, var(--color-app-border) 100%)`,
         }}

@@ -1,0 +1,28 @@
+---
+import '../index.css'
+import { App } from '../App'
+
+const { title = 'Abhiram | Student | Founder', description = 'Student, physics enthusiast, and full-stack engineer building Avenire.space.' } = Astro.props
+---
+
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <title>{title}</title>
+    <link rel="icon" href="/projects/icons/avenire.svg" sizes="any" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <script is:inline>
+      const storedTheme = window.localStorage.getItem('theme')
+      const theme = storedTheme === 'light' || storedTheme === 'dark' ? storedTheme : 'dark'
+      document.documentElement.classList.toggle('dark', theme === 'dark')
+      document.body?.classList.toggle('dark', theme === 'dark')
+    </script>
+  </head>
+  <body class="dark">
+    <App client:only="react" />
+  </body>
+</html>

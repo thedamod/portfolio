@@ -1,0 +1,15 @@
+---
+import AppShell from '../../layouts/AppShell.astro'
+import { blogMetadata, getBlogBySlug } from '../../content/blog-metadata'
+
+export function getStaticPaths() {
+  return blogMetadata.map((blog) => ({
+    params: { slug: blog.slug },
+    props: { blog },
+  }))
+}
+
+const blog = Astro.props.blog ?? getBlogBySlug(Astro.params.slug ?? '')
+---
+
+<AppShell title={`${blog?.title ?? 'Blog Post'} | Abhiram`} description={blog?.description ?? `Read ${blog?.title ?? 'Blog Post'} by Abhiram.`} />

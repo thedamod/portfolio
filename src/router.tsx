@@ -45,6 +45,14 @@ export function createAppRouter(options?: { history?: RouterHistory }) {
   })
 }
 
+export type AppRouter = ReturnType<typeof createAppRouter>
+
+declare module '@tanstack/react-router' {
+  interface Register {
+    router: AppRouter
+  }
+}
+
 export function createServerRouter(url: string) {
   return createAppRouter({
     history: createMemoryHistory({
@@ -52,4 +60,3 @@ export function createServerRouter(url: string) {
     }),
   })
 }
-

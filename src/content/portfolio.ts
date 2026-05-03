@@ -36,7 +36,7 @@ export const skillGroups = {
 export const projects: Project[] = [
   {
     title: 'Avenire',
-    icon: '/avenire.svg',
+    icon: '/projects/icons/avenire.svg',
     image: '/projects/backgrounds/banner1.png',
     summary: 'An interactive learning platform that replaces static notes with living explanations. Students can manipulate graphs, probe formulas, and get contextual reasoning instead of a dead-end answer.',
     details: [

@@ -23,9 +23,6 @@
     "paths": {
       "@/*": [
         "src/*"
-      ],
-      "beautiful-mermaid": [
-        "./src/types/beautiful-mermaid.d.ts"
       ]
     }
   },

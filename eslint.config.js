@@ -6,7 +6,7 @@ import tseslint from 'typescript-eslint'
 import { defineConfig, globalIgnores } from 'eslint/config'
 
 export default defineConfig([
-  globalIgnores(['dist', 'vite.config.js', 'test-*.mjs']),
+  globalIgnores(['dist', '.astro', 'vite.config.js', 'test-*.mjs']),
   js.configs.recommended,
   ...tseslint.configs.recommended,
   {
