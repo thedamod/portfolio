@@ -348,21 +348,44 @@
     white-space: nowrap;
   }
 
-  .hand-link::after {
-    content: "";
-    position: absolute;
-    left: -0.08em;
-    right: -0.1em;
-    bottom: 0.03em;
-    height: 0.36em;
-    z-index: -1;
-    opacity: 0.65;
-    background:
-      radial-gradient(80% 75% at 45% 70%, color-mix(in srgb, var(--color-app-accent) 42%, transparent) 0 58%, transparent 62%),
-      linear-gradient(100deg, transparent 0 5%, color-mix(in srgb, var(--color-app-accent) 44%, transparent) 12% 88%, transparent 95%);
-    clip-path: polygon(0 45%, 10% 24%, 29% 36%, 48% 20%, 68% 38%, 86% 25%, 100% 44%, 98% 76%, 71% 68%, 47% 82%, 24% 66%, 3% 78%);
-    transform: rotate(-0.7deg);
+  .hand-link {
+    position: relative;
+    color: var(--color-app-heading);
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+    display: inline-block;
   }
+
+  .hand-link-svg {
+    position: absolute;
+    left: 0;
+    top: 88%;
+    width: 100%;
+    height: 9px;
+    pointer-events: none;
+    stroke: var(--color-app-text-muted);
+    stroke-width: 0.6;
+    fill: none;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    transition: all 600ms cubic-bezier(0.7, 0, 0.3, 1);
+    animation: scribble 600ms cubic-bezier(0.8, 1, 0.7, 1) forwards;
+  }
+
+  .hand-link:hover .hand-link-svg {
+    stroke: var(--color-app-heading);
+    stroke-width: 0.8;
+    stroke-dashoffset: 0;
+    transition: all 300ms cubic-bezier(0.8, 1, 0.7, 1);
+  }
+
+  @keyframes scribble {
+    from { stroke-dashoffset: 1; }
+    to { stroke-dashoffset: 0; }
+  }
+
+  /* Word animations removed */
 
   .home-intro-shell {
     padding-top: clamp(2rem, 6vh, 3.5rem);

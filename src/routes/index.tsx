@@ -15,12 +15,12 @@ export const Route = createFileRoute('/')({
       { title: 'Abhiram | Student | Founder' },
       {
         name: 'description',
-        content: 'Portfolio, writing, and experiments from Abhiram across engineering, product, and search systems.',
+        content: 'Student, physics enthusiast, and full-stack engineer building Avenire.space. Currently exploring ML, crypto puzzles, and building rovers.',
       },
       { property: 'og:title', content: 'Abhiram | Student | Founder' },
       {
         property: 'og:description',
-        content: 'Portfolio, writing, and experiments from Abhiram across engineering, product, and search systems.',
+        content: 'Student, physics enthusiast, and full-stack engineer building Avenire.space. Currently exploring ML, crypto puzzles, and building rovers.',
       },
       { property: 'og:type', content: 'website' },
       { property: 'og:image', content: getOgImageUrl('Abhiram | Student | Founder', ['Portfolio', 'Avenire']) },
@@ -28,7 +28,7 @@ export const Route = createFileRoute('/')({
       { name: 'twitter:title', content: 'Abhiram | Student | Founder' },
       {
         name: 'twitter:description',
-        content: 'Portfolio, writing, and experiments from Abhiram across engineering, product, and search systems.',
+        content: 'Student, physics enthusiast, and full-stack engineer building Avenire.space. Currently exploring ML, crypto puzzles, and building rovers.',
       },
       { name: 'twitter:image', content: getOgImageUrl('Abhiram | Student | Founder', ['Portfolio', 'Avenire']) },
     ],
@@ -111,20 +111,55 @@ function Index() {
           >
             <motion.div variants={{ hidden: { opacity: 0, y: 14 }, visible: { opacity: 1, y: 0, transition: { duration: 0.3, ease: smoothEase } } }}>
               <p>
-                Hey, I'm <span className="hand-link">{profile.name}</span>, a software engineer who finds beauty in clarity, the art of simplifying complexity, and the intersection of <em className="text-app-heading">design</em> and <em className="text-app-heading">code</em>.
+                Hey, I'm{' '}
+                <span className="hand-link group/link relative">
+                  {profile.name}
+                  <svg className="hand-link-svg" viewBox="0 0 140 9" aria-hidden="true">
+                    <path d="M.426 1.973C4.144 1.567 17.77-.514 21.443 1.48 24.296 3.026 24.844 4.627 27.5 7c3.075 2.748 6.642-4.141 10.066-4.688 7.517-1.2 13.237 5.425 17.59 2.745C58.5 3 60.464-1.786 66 2c1.996 1.365 3.174 3.737 5.286 4.41 5.423 1.727 25.34-7.981 29.14-1.294c5.5 2.5 12.5 3.0 18.5 1.5c6.5-1.5 15.5-3.0 22.5-1.0" pathLength="1" />
+                  </svg>
+                </span>
+                , a student who loves{' '}
+                <em className="text-app-heading">physics</em> and builds things at the intersection of{' '}
+                <em className="text-app-heading">machine learning</em> and{' '}
+                <em className="text-app-heading">engineering</em>.
               </p>
             </motion.div>
             <motion.p variants={{ hidden: { opacity: 0, y: 14 }, visible: { opacity: 1, y: 0, transition: { duration: 0.3, ease: smoothEase } } }}>
-              I've worked across product, UI, and systems as a <em className="text-app-heading">full-stack engineer</em>, and I'm currently building <span className="hand-link">Avenire</span>. I'm a gym rat, a <em className="text-app-heading">Next.js</em> lover, and a search systems nerd.
+              I'm a <em className="text-app-heading">full-stack engineer</em> and founder building{' '}
+              <span className="hand-link group/link relative">
+                <a href="https://avenire.space" className="text-app-heading font-semibold">Avenire</a>
+                <svg className="hand-link-svg" viewBox="0 0 140 9" aria-hidden="true">
+                  <path d="M.426 1.973C4.144 1.567 17.77-.514 21.443 1.48 24.296 3.026 24.844 4.627 27.5 7c3.075 2.748 6.642-4.141 10.066-4.688 7.517-1.2 13.237 5.425 17.59 2.745C58.5 3 60.464-1.786 66 2c1.996 1.365 3.174 3.737 5.286 4.41 5.423 1.727 25.34-7.981 29.14-1.294c5.5 2.5 12.5 3.0 18.5 1.5c6.5-1.5 15.5-3.0 22.5-1.0" pathLength="1" />
+                </svg>
+              </span>{' '}
+              — a learning platform I genuinely believe in. Currently reading the <em className="text-app-heading">Deep Residual Learning</em> paper by ResNet and post-training a model to get better at <em className="text-app-heading">crypto puzzles</em>.
             </motion.p>
             <motion.p variants={{ hidden: { opacity: 0, y: 14 }, visible: { opacity: 1, y: 0, transition: { duration: 0.3, ease: smoothEase } } }}>
-              You can reach me at <a className="hand-link" href={socialLinks[1]?.href}>@thedamod</a> and via <a className="hand-link" href="mailto:abhiram@damod.space">email</a> or see my code on <a className="hand-link" href={socialLinks[0]?.href}>GitHub</a>.
+              When I'm not coding, I'm building a <em className="text-app-heading">rover</em>, geeking out over <em className="text-app-heading">Koenigseggs</em>, or playing the{' '}
+              <span className="word-guitar inline-block" style={{ animationDelay: '3.1s' }}>guitar</span>.
             </motion.p>
-            <motion.p
-              className="-mt-2 text-sm"
-              variants={{ hidden: { opacity: 0, y: 14 }, visible: { opacity: 1, y: 0, transition: { duration: 0.3, ease: smoothEase } } }}
-            >
-              While you are here, read <Link to="/stories/draft" viewTransition={{ types: ['route-forward'] }} className="hand-link">The weight of the soul</Link>.
+            <motion.p variants={{ hidden: { opacity: 0, y: 14 }, visible: { opacity: 1, y: 0, transition: { duration: 0.3, ease: smoothEase } } }}>
+              You can reach me at{' '}
+              <span className="hand-link group/link relative">
+                <a href={socialLinks[1]?.href} className="text-app-heading font-semibold">@thedamod</a>
+                <svg className="hand-link-svg" viewBox="0 0 140 9" aria-hidden="true">
+                  <path d="M.426 1.973C4.144 1.567 17.77-.514 21.443 1.48 24.296 3.026 24.844 4.627 27.5 7c3.075 2.748 6.642-4.141 10.066-4.688 7.517-1.2 13.237 5.425 17.59 2.745C58.5 3 60.464-1.786 66 2c1.996 1.365 3.174 3.737 5.286 4.41 5.423 1.727 25.34-7.981 29.14-1.294c5.5 2.5 12.5 3.0 18.5 1.5c6.5-1.5 15.5-3.0 22.5-1.0" pathLength="1" />
+                </svg>
+              </span>{' '}
+              and via{' '}
+              <span className="hand-link group/link relative">
+                <a href="mailto:abhiram@damod.space" className="text-app-heading font-semibold">email</a>
+                <svg className="hand-link-svg" viewBox="0 0 140 9" aria-hidden="true">
+                  <path d="M.426 1.973C4.144 1.567 17.77-.514 21.443 1.48 24.296 3.026 24.844 4.627 27.5 7c3.075 2.748 6.642-4.141 10.066-4.688 7.517-1.2 13.237 5.425 17.59 2.745C58.5 3 60.464-1.786 66 2c1.996 1.365 3.174 3.737 5.286 4.41 5.423 1.727 25.34-7.981 29.14-1.294c5.5 2.5 12.5 3.0 18.5 1.5c6.5-1.5 15.5-3.0 22.5-1.0" pathLength="1" />
+                </svg>
+              </span>{' '}
+              or see my code on{' '}
+              <span className="hand-link group/link relative">
+                <a href={socialLinks[0]?.href} className="text-app-heading font-semibold">GitHub</a>
+                <svg className="hand-link-svg" viewBox="0 0 140 9" aria-hidden="true">
+                  <path d="M.426 1.973C4.144 1.567 17.77-.514 21.443 1.48 24.296 3.026 24.844 4.627 27.5 7c3.075 2.748 6.642-4.141 10.066-4.688 7.517-1.2 13.237 5.425 17.59 2.745C58.5 3 60.464-1.786 66 2c1.996 1.365 3.174 3.737 5.286 4.41 5.423 1.727 25.34-7.981 29.14-1.294c5.5 2.5 12.5 3.0 18.5 1.5c6.5-1.5 15.5-3.0 22.5-1.0" pathLength="1" />
+                </svg>
+              </span>.
             </motion.p>
           </motion.div>
         </div>
