@@ -15,8 +15,8 @@ function BlogList() {
   const blogTagClass = 'pill px-2 py-0.5 text-[10px]'
 
   return (
-    <main className="flex flex-col text-sm leading-relaxed pb-12">
-      <div className="w-full h-32 md:h-48 dot-bg shrink-0" />
+    <main className="flex flex-col text-sm leading-relaxed pb-12 scroll-top-mask">
+      <div className="w-full h-10 md:h-14 dot-bg shrink-0" />
 
       <section className="flex flex-col">
         <div className="dashed-h" />
@@ -56,7 +56,7 @@ function BlogList() {
         </div>
       </section>
 
-      <div className="w-full h-32 md:h-48 dot-bg shrink-0 mt-12" />
+      <div className="w-full h-10 md:h-14 dot-bg shrink-0 mt-10" />
     </main>
   )
 }

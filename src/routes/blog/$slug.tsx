@@ -1,5 +1,6 @@
 import { createFileRoute, notFound } from '@tanstack/react-router'
 import { getBlogBySlug } from '../../content/blog-metadata'
+import { getOgImageUrl } from '../../lib/og'
 
 type BlogFrontmatter = { title?: string; date?: string; tags?: string[]; description?: string }
 
@@ -9,7 +10,7 @@ export const Route = createFileRoute('/blog/$slug')({
     const title = data?.title || 'Blog Post'
     const tags = data?.tags || []
     const description = data?.description || `Read ${title} by Abhiram.`
-    const ogImageUrl = `/api/og?title=${encodeURIComponent(title)}&tags=${encodeURIComponent(tags.join(','))}`
+    const ogImageUrl = getOgImageUrl(title, tags)
     return {
       meta: [
         { title: `${title} | Abhiram` },

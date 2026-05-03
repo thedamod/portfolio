@@ -1,6 +1,6 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import path from 'node:path'
-import { createServer } from 'vite'
+import { createLogger, createServer } from 'vite'
 
 const root = process.cwd()
 const distDir = path.join(root, 'dist')
@@ -8,11 +8,23 @@ const manifestPath = path.join(distDir, '.vite', 'manifest.json')
 
 async function main() {
   const manifest = JSON.parse(await readFile(manifestPath, 'utf8'))
+  const logger = createLogger('error')
+  const originalError = logger.error
+  logger.error = (message, options) => {
+    if (String(message).includes('WebSocket server error')) {
+      return
+    }
+
+    originalError(message, options)
+  }
+
   const vite = await createServer({
     root,
     appType: 'custom',
     logLevel: 'error',
+    customLogger: logger,
     server: {
+      host: '127.0.0.1',
       middlewareMode: true,
       hmr: false,
     },
