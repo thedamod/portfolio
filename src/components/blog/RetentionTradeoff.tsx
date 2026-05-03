@@ -86,7 +86,7 @@ export function RetentionTradeoff() {
       </div>
 
       {highlighted && (
-        <div className="bg-app-surface border border-app-border rounded p-4 grid grid-cols-3 gap-4">
+        <div className="bg-app-surface border border-app-border rounded p-4 grid grid-cols-1 gap-4 sm:grid-cols-3">
           <div>
             <div className="text-[10px] uppercase tracking-widest text-app-text-subtle mb-1">Retention</div>
             <div className="text-2xl font-bold leading-tight text-app-heading">{Math.round(highlighted.retention * 100)}%</div>

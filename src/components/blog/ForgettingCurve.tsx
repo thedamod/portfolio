@@ -17,6 +17,10 @@ export function ForgettingCurve() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
+    const style = getComputedStyle(document.documentElement);
+    const textSubtle = style.getPropertyValue('--color-app-text-subtle').trim() || "#a1a1aa";
+    const brandColor = style.getPropertyValue('--color-brand').trim() || "#abc4ff";
+
     const W = canvas.width;
     const H = canvas.height;
     const PAD = { top: 16, right: 16, bottom: 32, left: 40 };
@@ -34,15 +38,15 @@ export function ForgettingCurve() {
       ctx.moveTo(PAD.left, y);
       ctx.lineTo(PAD.left + plotW, y);
       ctx.stroke();
-      ctx.fillStyle = "#64748b";
-      ctx.font = "10px monospace";
+      ctx.fillStyle = textSubtle;
+      ctx.font = "10px var(--font-mono, monospace)";
       ctx.textAlign = "right";
       ctx.fillText(`${100 - i * 25}%`, PAD.left - 4, y + 4);
     }
 
     // Axes labels
-    ctx.fillStyle = "#64748b";
-    ctx.font = "10px monospace";
+    ctx.fillStyle = textSubtle;
+    ctx.font = "10px var(--font-mono, monospace)";
     ctx.textAlign = "center";
     for (const d of [0, 7, 14, 21, 30]) {
       const x = PAD.left + (d / DAYS) * plotW;
@@ -66,8 +70,8 @@ export function ForgettingCurve() {
       ctx.setLineDash([]);
     };
 
-    // Passive review curve (fixed low stability)
-    drawCurve(1.5, "rgba(239,68,68,0.6)", [4, 3]);
+    // Passive review curve (fixed low stability) - using orange from theme
+    drawCurve(1.5, "rgba(217, 115, 13, 0.6)", [4, 3]);
 
     // FSRS-style: multiple reviews boost stability
     // Simulate 3 reviews at days 1, 4, 12
@@ -75,7 +79,7 @@ export function ForgettingCurve() {
     let currentStab = stability;
     let lastReviewDay = 0;
 
-    ctx.strokeStyle = "#abc4ff";
+    ctx.strokeStyle = brandColor;
     ctx.lineWidth = 2.5;
     ctx.beginPath();
     let inPath = false;
@@ -97,7 +101,7 @@ export function ForgettingCurve() {
     ctx.stroke();
 
     // Review markers
-    ctx.fillStyle = "#abc4ff";
+    ctx.fillStyle = brandColor;
     for (const rd of reviews) {
       const x = PAD.left + (rd / DAYS) * plotW;
       ctx.beginPath();
@@ -106,18 +110,18 @@ export function ForgettingCurve() {
     }
 
     // Legend
-    ctx.font = "9px monospace";
+    ctx.font = "9px var(--font-mono, monospace)";
     ctx.setLineDash([4, 3]);
-    ctx.strokeStyle = "rgba(239,68,68,0.6)";
+    ctx.strokeStyle = "rgba(217, 115, 13, 0.6)";
     ctx.lineWidth = 1.5;
     ctx.beginPath(); ctx.moveTo(PAD.left, H - 14); ctx.lineTo(PAD.left + 16, H - 14); ctx.stroke();
     ctx.setLineDash([]);
-    ctx.fillStyle = "rgba(239,68,68,0.7)";
+    ctx.fillStyle = "rgba(217, 115, 13, 0.7)";
     ctx.fillText("passive review", PAD.left + 48, H - 11);
-    ctx.strokeStyle = "#abc4ff";
+    ctx.strokeStyle = brandColor;
     ctx.lineWidth = 2;
     ctx.beginPath(); ctx.moveTo(PAD.left + 100, H - 14); ctx.lineTo(PAD.left + 116, H - 14); ctx.stroke();
-    ctx.fillStyle = "#abc4ff";
+    ctx.fillStyle = brandColor;
     ctx.fillText("spaced repetition (FSRS)", PAD.left + 176, H - 11);
 
   }, [stability]);

@@ -49,9 +49,9 @@ export function IntervalCalculator() {
   }, [firstRating, target, numReviews]);
 
   const ratingColors: Record<string, string> = {
-    again: "#ef4444",
-    hard: "#f97316",
-    good: "#22c55e",
+    again: "var(--color-widget-danger)",
+    hard: "var(--color-widget-warning)",
+    good: "var(--color-widget-success)",
     easy: "var(--color-app-accent)",
   };
 
@@ -73,7 +73,7 @@ export function IntervalCalculator() {
                 onClick={() => setFirstRating(r)}
                 className={`px-3 py-1.5 text-xs tracking-wider capitalize transition-all duration-150 cursor-pointer font-mono rounded ${
                   firstRating === r
-                    ? "text-white border-none"
+                    ? "text-app-bg border-none"
                     : "bg-transparent text-app-text-subtle border border-app-border hover:bg-app-surface-hover"
                 }`}
                 style={{
@@ -93,7 +93,7 @@ export function IntervalCalculator() {
           </span>
           <input type="range" min={0.7} max={0.99} step={0.01} value={target}
             onChange={(e) => setTarget(Number(e.target.value))}
-            className="accent-red-500" />
+            className="accent-app-accent" />
         </label>
 
         <label className="flex flex-col gap-1">

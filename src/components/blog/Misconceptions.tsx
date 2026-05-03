@@ -52,10 +52,10 @@ const SOURCES = [
 type Color = (typeof SOURCES)[number]["color"];
 
 const COLOR_MAP: Record<Color, { bar: string; badge: string; text: string; border: string }> = {
-  blue:   { bar: "bg-blue-400",   badge: "bg-blue-500/10 text-blue-400",   text: "text-blue-400",   border: "border-blue-500/40" },
-  purple: { bar: "bg-violet-400", badge: "bg-violet-500/10 text-violet-400", text: "text-violet-400", border: "border-violet-500/40" },
-  amber:  { bar: "bg-amber-400",  badge: "bg-amber-500/10 text-amber-400",  text: "text-amber-400",  border: "border-amber-500/40" },
-  green:  { bar: "bg-emerald-400",badge: "bg-emerald-500/10 text-emerald-400",text: "text-emerald-400",border: "border-emerald-500/40" },
+  blue:   { bar: "bg-app-accent", badge: "bg-app-accent/10 text-app-accent", text: "text-app-accent", border: "border-app-accent/35" },
+  purple: { bar: "bg-app-accent-soft", badge: "bg-app-accent-soft/10 text-app-accent-soft", text: "text-app-accent-soft", border: "border-app-accent-soft/35" },
+  amber:  { bar: "bg-app-heading", badge: "bg-app-heading/10 text-app-heading", text: "text-app-heading", border: "border-app-heading/25" },
+  green:  { bar: "bg-app-text-muted", badge: "bg-app-text-muted/10 text-app-text-muted", text: "text-app-text-muted", border: "border-app-text-muted/30" },
 };
 
 export function SignalSources() {
@@ -159,7 +159,7 @@ function Slider({ label, sublabel, min, max, step, value, display, onChange, acc
         style={{
           // @ts-ignore
           "--thumb-color": accent,
-          background: `linear-gradient(to right, ${accent} 0%, ${accent} ${((value - min) / (max - min)) * 100}%, rgba(255,255,255,0.1) ${((value - min) / (max - min)) * 100}%, rgba(255,255,255,0.1) 100%)`,
+          background: `linear-gradient(to right, ${accent} 0%, ${accent} ${((value - min) / (max - min)) * 100}%, var(--color-app-border) ${((value - min) / (max - min)) * 100}%, var(--color-app-border) 100%)`,
         }}
       />
     </div>
@@ -167,9 +167,9 @@ function Slider({ label, sublabel, min, max, step, value, display, onChange, acc
 }
 
 function scoreColor(s: number) {
-  if (s > 0.65) return "#70c490";
-  if (s > 0.35) return "#f0b060";
-  return "#e06060";
+  if (s > 0.65) return "var(--color-widget-success)";
+  if (s > 0.35) return "var(--color-widget-warning)";
+  return "var(--color-widget-danger)";
 }
 
 function scoreLabel(s: number) {
@@ -198,8 +198,8 @@ export function MasteryCalculator() {
   const components = [
     { label: "Stability", value: stabilityComp, sign: "+", color: "var(--color-app-heading)" },
     { label: "Performance", value: perfComp, sign: "×", color: "var(--color-app-heading)" },
-    { label: "Neg penalty", value: negPenalty, sign: "−", color: "#f0b060" },
-    { label: "Misc penalty", value: miscPenalty, sign: "−", color: "#e06060" },
+    { label: "Neg penalty", value: negPenalty, sign: "−", color: "var(--color-widget-warning)" },
+    { label: "Misc penalty", value: miscPenalty, sign: "−", color: "var(--color-widget-danger)" },
   ];
 
   return (
@@ -208,7 +208,7 @@ export function MasteryCalculator() {
         Interactive — Mastery Score Calculator
       </p>
 
-      <div className="grid gap-5 md:grid-cols-[1fr_200px]">
+      <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_200px]">
         {/* Sliders */}
         <div className="flex flex-col gap-4">
           <Slider
@@ -234,7 +234,7 @@ export function MasteryCalculator() {
             value={negRaw}
             display={negPenalty.toFixed(2)}
             onChange={setNegRaw}
-            accent="#f0b060"
+            accent="var(--color-widget-warning)"
           />
           <Slider
             label="Active misconceptions"
@@ -243,7 +243,7 @@ export function MasteryCalculator() {
             value={miscCount}
             display={`${miscCount}`}
             onChange={setMiscCount}
-            accent="#e06060"
+            accent="var(--color-widget-danger)"
           />
           <Slider
             label="Misconception confidence"
@@ -252,7 +252,7 @@ export function MasteryCalculator() {
             value={miscScore}
             display={miscScore.toFixed(2)}
             onChange={setMiscScore}
-            accent="#e06060"
+            accent="var(--color-widget-danger)"
           />
         </div>
 
@@ -327,10 +327,10 @@ const RESOLVE_THRESHOLD = 0.2;
 const DELTA = 0.08;
 
 function confidenceColor(conf: number, resolved: boolean) {
-  if (resolved) return "#555";
-  if (conf > 0.7) return "#e06060";
-  if (conf > 0.4) return "#f0b060";
-  return "#70c490";
+  if (resolved) return "var(--color-app-text-subtle)";
+  if (conf > 0.7) return "var(--color-widget-danger)";
+  if (conf > 0.4) return "var(--color-widget-warning)";
+  return "var(--color-widget-success)";
 }
 
 export function DecayVisualizer() {
@@ -379,12 +379,12 @@ export function DecayVisualizer() {
                 <div className="flex items-center gap-2">
                   <span
                     className="font-mono text-xs transition-colors duration-300"
-                    style={{ color: m.resolved ? "#555" : "var(--color-app-heading)" }}
+                    style={{ color: m.resolved ? "var(--color-app-text-subtle)" : "var(--color-app-heading)" }}
                   >
                     {m.name}
                   </span>
                   {m.resolved && (
-                    <span className="font-mono text-[9px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400">
+                    <span className="font-mono text-[9px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-app-text-muted/10 text-app-text-muted">
                       resolved
                     </span>
                   )}
@@ -513,9 +513,9 @@ const STAGE_LABELS: Record<Event["stage"], string> = {
 };
 
 const SIGNAL_STYLES = {
-  hot:  { bg: "bg-red-500/10",     text: "text-red-400",     dot: "bg-red-400",     label: "intervention injected" },
-  warm: { bg: "bg-amber-500/10",   text: "text-amber-400",   dot: "bg-amber-400",   label: "soft watch injected"   },
-  cold: { bg: "bg-emerald-500/10", text: "text-emerald-400", dot: "bg-emerald-400", label: "no intervention"       },
+  hot:  { bg: "bg-app-heading/10", text: "text-app-heading", dot: "bg-app-heading", label: "intervention injected" },
+  warm: { bg: "bg-app-accent/10", text: "text-app-accent", dot: "bg-app-accent", label: "soft watch injected" },
+  cold: { bg: "bg-app-text-muted/10", text: "text-app-text-muted", dot: "bg-app-text-muted", label: "no intervention" },
 };
 
 let _id = 0;
@@ -690,8 +690,8 @@ const STEPS: Step[] = [
 
 const BADGE_STYLES = {
   new: "bg-app-heading/10 text-app-heading border-app-heading/20",
-  llm: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
-  det: "bg-amber-500/10 text-amber-400 border-amber-500/20",
+  llm: "bg-app-text-muted/10 text-app-text-muted border-app-text-muted/20",
+  det: "bg-app-accent/10 text-app-accent border-app-accent/20",
 };
 
 export function PipelineStepper() {

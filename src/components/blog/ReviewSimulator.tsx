@@ -51,9 +51,9 @@ const TARGET = 0.9;
 
 const RATING_LABELS: Record<Rating, string> = { 1: "Again", 2: "Hard", 3: "Good", 4: "Easy" };
 const RATING_COLORS: Record<Rating, string> = {
-  1: "#ef4444",
-  2: "#f97316",
-  3: "#22c55e",
+  1: "var(--color-widget-danger)",
+  2: "var(--color-widget-warning)",
+  3: "var(--color-widget-success)",
   4: "var(--color-app-accent)",
 };
 
@@ -212,7 +212,7 @@ export function ReviewSimulator() {
         )}
       </div>
 
-      <div className="grid grid-cols-4 gap-2 mb-4">
+      <div className="grid grid-cols-2 gap-2 mb-4 sm:grid-cols-4">
         {([1, 2, 3, 4] as Rating[]).map((rating) => {
           const preview = previewIntervals.find(p => p.rating === rating)!;
           return (

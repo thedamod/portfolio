@@ -22,28 +22,28 @@ const PIPELINE_STEPS = [
     label: "Vector search (pgvector)",
     detail: "Top-K candidates by cosine similarity",
     note: "Fast approximate nearest-neighbor search across all chunks — text, PDF pages, video keyframes — in the same embedding space.",
-    color: "#6ee7b7",
+    color: "var(--color-widget-info)",
   },
   {
     id: "bm25",
     label: "BM25 (hybrid)",
     detail: "Lexical match runs in parallel",
     note: "Catches exact-match cases that vector search misses: specific identifiers, course codes, terminology the embedding model compressed away.",
-    color: "#fcd34d",
+    color: "var(--color-widget-warning)",
   },
   {
     id: "rerank",
     label: "Rerank (Cohere)",
     detail: "Cross-encoder scores query ↔ each candidate together",
     note: "The bi-encoder embedding gives you fast candidates. The reranker gives you precision — it sees query and chunk simultaneously, not as independent vectors.",
-    color: "#f9a8d4",
+    color: "var(--color-widget-purple)",
   },
   {
     id: "assemble",
     label: "Context assembly",
     detail: "Add source metadata, surrounding chunks, ordering",
     note: "A theorem without its proof is often less useful. Source and page number anchor the student to the right material.",
-    color: "#d8b4fe",
+    color: "var(--color-widget-pink)",
   },
   {
     id: "llm",
@@ -57,6 +57,19 @@ const PIPELINE_STEPS = [
 export function RetrievalPipeline() {
   const [active, setActive] = useState(0);
   const current = PIPELINE_STEPS[active];
+
+  // Helper to resolve CSS variable colors
+  const resolveColor = (colorVar: string): string => {
+    if (colorVar.startsWith('var(')) {
+      const match = colorVar.match(/var\(--([^,)]+)(?:,\s*([^)]+))?\)/);
+      if (match) {
+        const cssVar = `--${match[1]}`;
+        const fallback = match[2] || undefined;
+        return getComputedStyle(document.documentElement).getPropertyValue(cssVar).trim() || fallback || colorVar;
+      }
+    }
+    return colorVar;
+  };
 
   return (
     <div className="my-8 rounded-xl border border-app-border/60 bg-app-surface-2 p-6">
@@ -95,7 +108,7 @@ export function RetrievalPipeline() {
           transition={{ duration: 0.15 }}
           className="space-y-2">
           <div className="flex items-center gap-2">
-            <div className="h-2 w-2 rounded-full" style={{ backgroundColor: current.color }} />
+            <div className="h-2 w-2 rounded-full" style={{ backgroundColor: resolveColor(current.color) }} />
             <span className="font-mono text-sm font-semibold text-app-heading">{current.label}</span>
           </div>
           <p className="font-mono text-xs text-app-text-muted border border-app-border/40 rounded px-3 py-2 bg-app-surface/60">

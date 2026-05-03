@@ -2,9 +2,9 @@
 import { useState } from "react";
 
 const THEMES = {
-  dark:  { bg: "#0f172a", surface: "#1e293b", border: "#334155", text: "#e2e8f0", accent: "#abc4ff" },
-  light: { bg: "#f8fafc", surface: "#ffffff", border: "#e2e8f0", text: "#0f172a", accent: "#4f46e5" },
-  sepia: { bg: "#fdf6e3", surface: "#eee8d5", border: "#d3c8a0", text: "#3d3323", accent: "#cb4b16" },
+  dark:  { bg: "#141414", surface: "#181818", border: "#202020", text: "rgba(255,255,255,0.82)", accent: "#abc4ff" },
+  light: { bg: "#ffffff", surface: "#fafafa", border: "rgba(55,53,47,0.09)", text: "#37352f", accent: "#abc4ff" },
+  sepia: { bg: "#f4f1eb", surface: "#ebe7df", border: "#d5cec1", text: "#37352f", accent: "#abc4ff" },
 };
 
 export function CSSVarDemo() {

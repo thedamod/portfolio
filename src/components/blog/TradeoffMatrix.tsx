@@ -10,9 +10,9 @@ const WEEK_SCENARIOS = [
 ];
 
 const BAR_COLORS = {
-  jee: "#6ee7b7",
+  jee: "var(--color-widget-success)",
   build: "var(--color-brand)",
-  novel: "#f9a8d4",
+  novel: "var(--color-widget-pink)",
 };
 
 export function TradeoffMatrix() {

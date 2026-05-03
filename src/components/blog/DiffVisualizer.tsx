@@ -60,9 +60,9 @@ const STEPS = [
  
 const statusStyles: Record<ChunkStatus, string> = {
   unchanged: "border-app-border bg-app-surface-2 text-app-text-muted",
-  dirty: "border-yellow-500/60 bg-yellow-500/10 text-yellow-300",
-  deleted: "border-red-500/60 bg-red-500/10 text-red-400 line-through opacity-60",
-  new: "border-green-500/60 bg-green-500/10 text-green-400",
+  dirty: "border-app-accent/45 bg-app-accent/10 text-app-accent",
+  deleted: "border-app-text-subtle/45 bg-app-text-subtle/10 text-app-text-subtle line-through opacity-60",
+  new: "border-app-heading/35 bg-app-heading/10 text-app-heading",
 };
  
 const statusLabel: Record<ChunkStatus, string> = {
@@ -164,4 +164,3 @@ export function DiffVisualizer({
     </div>
   );
 }
-

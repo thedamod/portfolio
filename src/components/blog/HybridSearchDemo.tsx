@@ -103,7 +103,10 @@ export function HybridSearchDemo() {
               className="rounded-md border border-app-border bg-app-surface/70 px-3 py-2">
               <div className="mb-1 flex items-center justify-between">
                 <span className="text-xs text-app-text-muted font-mono">{r.source}</span>
-                <span className={`text-xs font-mono font-semibold ${r.score > 0.8 ? "text-emerald-400" : r.score > 0.5 ? "text-yellow-400" : "text-red-400/70"}`}>
+                <span
+                  className="text-xs font-mono font-semibold"
+                  style={{ color: r.score > 0.8 ? "var(--color-widget-success)" : r.score > 0.5 ? "var(--color-widget-warning)" : "var(--color-widget-danger)" }}
+                >
                   {r.score > 0 ? r.score.toFixed(2) : "—"}
                 </span>
               </div>

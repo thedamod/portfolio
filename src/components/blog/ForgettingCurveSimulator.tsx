@@ -106,10 +106,10 @@ export function ForgettingCurveSimulator() {
         <line
           x1={PAD.left} y1={retentionLine}
           x2={PAD.left + innerW} y2={retentionLine}
-          stroke="#ef4444" strokeWidth={1.5} strokeDasharray="5,3" opacity={0.7}
+          stroke="var(--color-widget-danger)" strokeWidth={1.5} strokeDasharray="5,3" opacity={0.7}
         />
         <text x={PAD.left + innerW - 4} y={retentionLine - 5} textAnchor="end"
-          fontSize={8} fill="#ef4444" fontFamily="var(--font-mono)">
+          fontSize={8} fill="var(--color-widget-danger)" fontFamily="var(--font-mono)">
           {Math.round(targetRetention * 100)}% target
         </text>
 
@@ -130,10 +130,10 @@ export function ForgettingCurveSimulator() {
         {reviews.map((rv, i) => (
           <g key={i}>
             <line x1={toX(rv)} y1={PAD.top} x2={toX(rv)} y2={PAD.top + innerH}
-              stroke="#22c55e" strokeWidth={1.5} strokeDasharray="4,3" opacity={0.5} />
-            <circle cx={toX(rv)} cy={toY(targetRetention)} r={4} fill="#22c55e" opacity={0.8} />
+              stroke="var(--color-widget-success)" strokeWidth={1.5} strokeDasharray="4,3" opacity={0.5} />
+            <circle cx={toX(rv)} cy={toY(targetRetention)} r={4} fill="var(--color-widget-success)" opacity={0.8} />
             <text x={toX(rv)} y={PAD.top + 10} textAnchor="middle" fontSize={7}
-              fill="#22c55e" fontFamily="var(--font-mono)">↑{rv}d</text>
+              fill="var(--color-widget-success)" fontFamily="var(--font-mono)">↑{rv}d</text>
           </g>
         ))}
 
@@ -143,7 +143,7 @@ export function ForgettingCurveSimulator() {
         <line x1={PAD.left} y1={PAD.top + innerH} x2={PAD.left + innerW} y2={PAD.top + innerH} stroke="var(--color-app-border-strong)" strokeWidth={1.5} />
       </svg>
 
-      <div className="grid grid-cols-2 gap-5 mt-4">
+      <div className="grid grid-cols-1 gap-5 mt-4 sm:grid-cols-2">
         <label className="flex flex-col gap-1">
           <span className="text-xs uppercase tracking-widest text-app-text-subtle">
             Stability (S) — {stability} days
@@ -159,7 +159,7 @@ export function ForgettingCurveSimulator() {
           </span>
           <input type="range" min={0.7} max={0.99} step={0.01} value={targetRetention}
             onChange={(e) => { setTargetRetention(Number(e.target.value)); setReviews([]); }}
-            className="w-full accent-red-500" />
+            className="w-full accent-app-accent" />
         </label>
       </div>
 
