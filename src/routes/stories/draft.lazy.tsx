@@ -28,7 +28,7 @@ function StoryDraftPage() {
 
   return (
     <main className="flex flex-col text-sm leading-relaxed pb-12">
-      <div className="w-full h-32 md:h-48 dot-bg shrink-0" />
+      <div className="w-full h-10 md:h-14 dot-bg shrink-0" />
 
       <section className="flex flex-col">
         <div className="dashed-h" />
@@ -63,7 +63,7 @@ function StoryDraftPage() {
         </div>
       </section>
 
-      <div className="w-full h-32 md:h-48 dot-bg shrink-0" />
+      <div className="w-full h-10 md:h-14 dot-bg shrink-0" />
     </main>
   )
 }

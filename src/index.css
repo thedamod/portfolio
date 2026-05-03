@@ -3,16 +3,16 @@
 
 @theme {
   --color-brand: #abc4ff;
-  --color-app-bg: #ffffff;
-  --color-app-surface: #ffffff;
-  --color-app-surface-2: #f4f4f5;
-  --color-app-surface-hover: #fafafa;
-  --color-app-text: #52525c;
-  --color-app-text-muted: #71717a;
-  --color-app-text-subtle: #a1a1aa;
-  --color-app-heading: #111827;
-  --color-app-border: #e4e4e7;
-  --color-app-border-strong: #d4d4d8;
+  --color-app-bg: #eeeeec;
+  --color-app-surface: #e6e5e1;
+  --color-app-surface-2: #deddd8;
+  --color-app-surface-hover: #d8d7d1;
+  --color-app-text: #575955;
+  --color-app-text-muted: #747671;
+  --color-app-text-subtle: #92948e;
+  --color-app-heading: #262824;
+  --color-app-border: #d0d1ca;
+  --color-app-border-strong: #c0c1b8;
   --color-app-inverse: #ffffff;
   --color-app-overlay: #09090b;
   --color-app-accent: #abc4ff;
@@ -23,15 +23,25 @@
   --color-app-modal-border: #c4d2ff;
   --color-app-modal-item: #f4f4f5;
   --color-app-shadow: #000000;
-  --color-app-code-bg: #ffffff;
-  --color-app-code-dark-bg: #22272e;
+  --color-app-code-bg: #e6e5e1;
+  --color-app-code-dark-bg: #181818;
+  --color-widget-danger: #b85f5f;
+  --color-widget-warning: #b0895d;
+  --color-widget-success: #6f9b87;
+  --color-widget-info: #7384ac;
+  --color-widget-pink: #a97995;
+  --color-widget-purple: #8a78aa;
 
-  --font-sans: "Arial", "Helvetica", sans-serif;
+  --font-sans: "Satoshi", "Arial", "Helvetica", sans-serif;
   --font-mono: "ui-monospace", "SFMono-Regular", "Menlo", "Monaco", "Consolas", monospace;
   --font-display: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
 }
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
     background-color: var(--color-app-bg);
     color: var(--color-app-text);
@@ -42,28 +52,34 @@
   }
 
   .dark {
-    --color-app-bg: #09090b;
-    --color-app-surface: #09090b;
-    --color-app-surface-2: #18181b;
-    --color-app-surface-hover: #18181b;
-    --color-app-text: #a1a1aa;
-    --color-app-text-muted: #a1a1aa;
-    --color-app-text-subtle: #71717a;
-    --color-app-heading: #fafafa;
-    --color-app-border: #27272a;
-    --color-app-border-strong: #3f3f46;
+    --color-app-bg: #141414;
+    --color-app-surface: #181818;
+    --color-app-surface-2: #1f1f1f;
+    --color-app-surface-hover: #252525;
+    --color-app-text: rgba(255, 255, 255, 0.62);
+    --color-app-text-muted: rgba(255, 255, 255, 0.48);
+    --color-app-text-subtle: rgba(255, 255, 255, 0.32);
+    --color-app-heading: rgba(255, 255, 255, 0.82);
+    --color-app-border: #202020;
+    --color-app-border-strong: #303030;
     --color-app-inverse: #ffffff;
     --color-app-overlay: #09090b;
     --color-app-accent: #abc4ff;
-    --color-app-accent-soft: #abc4ff;
+    --color-app-accent-soft: #7d8fb8;
     --color-app-shadow: #09090b;
     --color-app-modal-backdrop: #050607f0;
     --color-app-modal-surface: #09090b;
     --color-app-modal-surface-strong: #18181b;
     --color-app-modal-border: #4e5d8c;
     --color-app-modal-item: #18181b;
-    --color-app-code-bg: #22272e;
-    --color-app-code-dark-bg: #22272e;
+    --color-app-code-bg: #181818;
+    --color-app-code-dark-bg: #181818;
+    --color-widget-danger: #b66b67;
+    --color-widget-warning: #b69a64;
+    --color-widget-success: #6f9d89;
+    --color-widget-info: #abc4ff;
+    --color-widget-pink: #b1849d;
+    --color-widget-purple: #9a8fbd;
   }
 
   a,
@@ -157,30 +173,9 @@
 
 @layer utilities {
   .dot-bg {
-    background-image: radial-gradient(var(--color-app-border) 1px, transparent 0);
-    background-size: 16px 16px;
-    background-position: -8px -8px;
-  }
-
-  .grain-overlay {
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 0;
-    opacity: 0;
-    mix-blend-mode: soft-light;
-    background-image:
-      radial-gradient(circle at 20% 20%, color-mix(in srgb, var(--color-app-inverse) 16%, transparent) 0 1px, transparent 1px),
-      radial-gradient(circle at 80% 30%, color-mix(in srgb, var(--color-app-inverse) 14%, transparent) 0 1px, transparent 1px),
-      radial-gradient(circle at 40% 70%, color-mix(in srgb, var(--color-app-inverse) 12%, transparent) 0 1px, transparent 1px),
-      radial-gradient(circle at 70% 80%, color-mix(in srgb, var(--color-app-inverse) 14%, transparent) 0 1px, transparent 1px);
-    background-size: 160px 160px;
-    filter: contrast(150%) brightness(115%);
-    animation: grain-drift 16s steps(10) infinite;
-  }
-
-  .dark .grain-overlay {
-    opacity: 0.08;
+    background-image: radial-gradient(color-mix(in srgb, var(--color-app-border-strong) 68%, transparent) 0.9px, transparent 1.2px);
+    background-size: 12px 12px;
+    background-position: -6px -6px;
   }
 
   .dashed-h {
@@ -192,6 +187,12 @@
     right: 50%;
     margin-left: -50vw;
     margin-right: -50vw;
+  }
+
+  .dashed-h-local {
+    height: 1px;
+    background-image: repeating-linear-gradient(to right, var(--color-app-border) 0%, var(--color-app-border) 4px, transparent 4px, transparent 16px);
+    width: 100%;
   }
 
   .dashed-v-container {
@@ -206,12 +207,12 @@
     bottom: 0;
     width: 2px;
     background-image:
-      radial-gradient(circle at 50% 8px, color-mix(in srgb, var(--color-app-accent-soft) 55%, transparent) 0 1.5px, transparent 2px),
-      radial-gradient(circle at 50% calc(100% - 8px), color-mix(in srgb, var(--color-app-accent-soft) 35%, transparent) 0 1.5px, transparent 2px),
-      repeating-linear-gradient(to bottom, var(--color-app-border) 0%, var(--color-app-border) 4px, transparent 4px, transparent 16px);
+      radial-gradient(circle at 50% 8px, color-mix(in srgb, var(--color-app-accent-soft) 42%, transparent) 0 1px, transparent 1.5px),
+      radial-gradient(circle at 50% calc(100% - 8px), color-mix(in srgb, var(--color-app-accent-soft) 25%, transparent) 0 1px, transparent 1.5px),
+      repeating-linear-gradient(to bottom, var(--color-app-border) 0%, var(--color-app-border) 3px, transparent 3px, transparent 16px);
     pointer-events: none;
     z-index: -10;
-    opacity: 0.9;
+    opacity: 0.55;
   }
 
   .dashed-v-container::before {
@@ -242,6 +243,10 @@
   .project-preview-glow {
     background-image:
       radial-gradient(circle at center, color-mix(in srgb, var(--color-app-accent-soft) 12%, transparent), color-mix(in srgb, var(--color-app-inverse) 5%, transparent) 35%, transparent 72%);
+  }
+
+  .project-icon-img {
+    color: var(--color-app-accent);
   }
 
   .cursor-ring-interactive {
@@ -334,29 +339,241 @@
   }
 }
 
+@layer components {
+  .hand-link {
+    position: relative;
+    color: var(--color-app-heading);
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .hand-link::after {
+    content: "";
+    position: absolute;
+    left: -0.08em;
+    right: -0.1em;
+    bottom: 0.03em;
+    height: 0.36em;
+    z-index: -1;
+    opacity: 0.65;
+    background:
+      radial-gradient(80% 75% at 45% 70%, color-mix(in srgb, var(--color-app-accent) 42%, transparent) 0 58%, transparent 62%),
+      linear-gradient(100deg, transparent 0 5%, color-mix(in srgb, var(--color-app-accent) 44%, transparent) 12% 88%, transparent 95%);
+    clip-path: polygon(0 45%, 10% 24%, 29% 36%, 48% 20%, 68% 38%, 86% 25%, 100% 44%, 98% 76%, 71% 68%, 47% 82%, 24% 66%, 3% 78%);
+    transform: rotate(-0.7deg);
+  }
+
+  .home-intro-shell {
+    padding-top: clamp(2rem, 6vh, 3.5rem);
+    padding-bottom: clamp(1.5rem, 4vh, 2.5rem);
+  }
+
+  .audio-card {
+    background:
+      linear-gradient(180deg, color-mix(in srgb, var(--color-app-surface-2) 88%, transparent), color-mix(in srgb, var(--color-app-surface) 94%, transparent));
+    border: 1px solid color-mix(in srgb, var(--color-app-border-strong) 42%, transparent);
+    box-shadow: 0 14px 34px color-mix(in srgb, var(--color-app-shadow) 14%, transparent);
+  }
+
+  .toc-rail {
+    color: var(--color-app-text-muted);
+  }
+
+  .toc-link {
+    position: relative;
+    display: block;
+    padding: 0.28rem 0 0.28rem 1.9rem;
+    font-size: 0.78rem;
+    font-weight: 650;
+    color: var(--color-app-text-muted);
+    transform: translateX(0);
+    transition: color 180ms ease, transform 180ms ease;
+  }
+
+  .toc-link::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: var(--toc-line-width, 1rem);
+    height: 1px;
+    background: currentColor;
+    opacity: 0.32;
+    transform: translateY(-50%) scaleX(0.72);
+    transform-origin: left;
+    transition: opacity 180ms ease, transform 180ms ease, width 180ms ease;
+  }
+
+  .toc-link:hover,
+  .toc-link[data-active="true"] {
+    color: var(--color-app-heading);
+    transform: translateX(0.18rem);
+  }
+
+  .toc-link[data-active="true"]::before {
+    opacity: 0.88;
+    transform: translateY(-50%) scaleX(1);
+  }
+}
+
+/* Progressive scroll mask for top of content-heavy pages */
+.scroll-top-mask {
+  position: relative;
+}
+
+.scroll-top-mask::before {
+  content: '';
+  position: sticky;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 48px;
+  background: linear-gradient(to bottom, var(--color-app-bg) 0%, transparent 100%);
+  pointer-events: none;
+  z-index: 10;
+  display: block;
+}
+
+.dark .scroll-top-mask::before {
+  background: linear-gradient(to bottom, var(--color-app-bg) 0%, transparent 100%);
+}
+
+/* Apply to blog content and other long-form pages */
+.blog-content,
+article[class*="prose"],
+main > section:has(article),
+main:has(.blog-content) {
+  scroll-margin-top: 48px;
+}
+
+/* Scroll mask for the main blog post page */
+main:has(.blog-content) {
+  position: relative;
+}
+
+/* Fade-in animation for content */
+@keyframes content-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.content-fade-in {
+  animation: content-fade-in 0.4s ease-out forwards;
+}
+
+/* Homepage text styling - elegant underlines and text effects */
+.home-heading {
+  position: relative;
+  display: inline-block;
+}
+
+.home-heading::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(to right, var(--color-app-accent), transparent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.home-heading:hover::after {
+  transform: scaleX(1);
+}
+
+/* Elegant link underline */
+a.elegant-link {
+  position: relative;
+  text-decoration: none;
+}
+
+a.elegant-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+a.elegant-link:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* Gradient text effect for highlights */
+.gradient-text {
+  background: linear-gradient(135deg, var(--color-app-heading) 0%, var(--color-app-accent) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
 code[data-theme*=" "],
 code[data-theme*=" "] span {
   color: var(--shiki-light);
-  background-color: var(--shiki-light-bg);
+  background-color: transparent !important;
 }
 
 .dark code[data-theme*=" "],
 .dark code[data-theme*=" "] span {
   color: var(--shiki-dark);
-  background-color: var(--shiki-dark-bg);
+  background-color: transparent !important;
 }
 
 figure[data-rehype-pretty-code-figure] {
   @apply relative;
+  max-width: 100%;
+  overflow: hidden;
 }
 
-  figure[data-rehype-pretty-code-figure] pre {
-  @apply overflow-x-auto py-4 rounded-xl bg-app-surface-2 my-6;
-  background-color: var(--color-app-code-bg);
+figure[data-rehype-pretty-code-figure] pre {
+  @apply overflow-x-auto py-4 rounded-lg my-6;
+  background-color: var(--color-app-code-bg) !important;
+  max-width: 100%;
+  border: 1px solid var(--color-app-border);
 }
 
 .dark figure[data-rehype-pretty-code-figure] pre {
-  background-color: var(--color-app-code-dark-bg);
+  background-color: var(--color-app-code-dark-bg) !important;
+}
+
+/* Prevent widgets and content from bleeding */
+.blog-content canvas,
+.blog-content svg,
+.blog-content iframe {
+  max-width: 100%;
+  height: auto;
+}
+
+.blog-content table {
+  width: max-content;
+  min-width: 100%;
+}
+
+/* Widget container styles */
+.blog-content > div[class*="my-"],
+.blog-content > div[class*="mx-auto"] {
+  max-width: 100%;
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: visible;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-app-border-strong) transparent;
 }
 
 .blog-content {
@@ -380,11 +597,24 @@ figure[data-rehype-pretty-code-figure] {
   --tw-prose-table-head-bg: var(--color-app-surface-2);
   --tw-prose-table-row-bg: var(--color-app-surface);
   --tw-prose-table-row-odd-bg: var(--color-app-surface);
+  min-width: 0;
+  overflow-x: visible;
+}
+
+.blog-content .katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.5rem 0;
+}
+
+.blog-content .katex {
+  font-size: 1.1em;
 }
 
 figure[data-rehype-pretty-code-figure] code {
   @apply grid min-w-full;
   counter-reset: line;
+  background-color: transparent !important;
 }
 
 figure[data-rehype-pretty-code-figure] code>[data-line] {
@@ -394,27 +624,6 @@ figure[data-rehype-pretty-code-figure] code>[data-line] {
 :root {
   --shiki-light-bg: var(--color-app-code-bg);
   --shiki-dark-bg: var(--color-app-code-dark-bg);
-}
-
-@keyframes grain-drift {
-  0% {
-    transform: translate3d(0, 0, 0);
-  }
-  20% {
-    transform: translate3d(-2%, 1%, 0);
-  }
-  40% {
-    transform: translate3d(1%, -2%, 0);
-  }
-  60% {
-    transform: translate3d(3%, 1%, 0);
-  }
-  80% {
-    transform: translate3d(-1%, 3%, 0);
-  }
-  100% {
-    transform: translate3d(0, 0, 0);
-  }
 }
 
 @keyframes ticker-pan {

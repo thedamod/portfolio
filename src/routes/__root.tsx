@@ -91,7 +91,6 @@ export const Route = createRootRoute({
   component: () => (
     <ThemeProvider>
       <RootShell>
-        <div className="grain-overlay" />
         <div className="relative z-10">
           <Outlet />
         </div>
@@ -103,10 +102,11 @@ export const Route = createRootRoute({
 
 function RootShell({ children }: { children: React.ReactNode }) {
   const { pathname } = useLocation()
-  const shellWidthClass = pathname.startsWith('/stories/') ? 'max-w-4xl' : 'max-w-2xl'
+  const shellWidthClass = pathname.startsWith('/stories/') ? 'max-w-4xl' : pathname.startsWith('/blog/') ? 'max-w-6xl' : 'max-w-2xl'
+  const railClass = pathname.startsWith('/blog/') ? '' : 'dashed-v-container'
 
   return (
-    <div className={`min-h-screen selection:bg-app-accent/30 selection:text-brand mx-auto px-6 dashed-v-container relative isolate ${shellWidthClass}`}>
+    <div className={`min-h-screen selection:bg-app-accent/30 selection:text-brand mx-auto px-6 relative isolate ${railClass} ${shellWidthClass}`}>
       {children}
     </div>
   )

@@ -1,12 +1,13 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { AnimatePresence, motion } from 'framer-motion'
-import { Calendar, Github, Twitter, Moon, Sun, ArrowRight } from 'lucide-react'
+import { Calendar, Moon, Sun, ArrowRight } from 'lucide-react'
 import { useContext, useEffect, useRef, useState } from 'react'
-import { AnimatedQuote, MotionSection, RevealWords, StaggerGroup, StaggerItem } from '../components/portfolio-motion'
+import { AnimatedQuote, MotionSection, StaggerGroup, StaggerItem } from '../components/portfolio-motion'
 import { smoothEase } from '../components/motion-utils'
 import { getRecentBlogs } from '../content/blog-metadata'
-import { heroCopy, profile, projects, skillGroups, socialLinks, type Project } from '../content/portfolio'
+import { profile, projects, skillGroups, socialLinks, type Project } from '../content/portfolio'
 import { ThemeContext } from '../context/theme'
+import { getOgImageUrl } from '../lib/og'
 
 export const Route = createFileRoute('/')({
   head: () => ({
@@ -22,12 +23,14 @@ export const Route = createFileRoute('/')({
         content: 'Portfolio, writing, and experiments from Abhiram across engineering, product, and search systems.',
       },
       { property: 'og:type', content: 'website' },
+      { property: 'og:image', content: getOgImageUrl('Abhiram | Student | Founder', ['Portfolio', 'Avenire']) },
       { name: 'twitter:card', content: 'summary_large_image' },
       { name: 'twitter:title', content: 'Abhiram | Student | Founder' },
       {
         name: 'twitter:description',
         content: 'Portfolio, writing, and experiments from Abhiram across engineering, product, and search systems.',
       },
+      { name: 'twitter:image', content: getOgImageUrl('Abhiram | Student | Founder', ['Portfolio', 'Avenire']) },
     ],
   }),
   component: Index,
@@ -55,13 +58,12 @@ function Index() {
 
   return (
     <main className="flex flex-col text-sm leading-relaxed">
-      <div className="w-full h-32 md:h-48 dot-bg shrink-0" />
+      <div className="w-full h-10 md:h-14 dot-bg shrink-0" />
 
-      <MotionSection className="flex flex-col">
-        <div className="dashed-h" />
-        <div className="flex flex-col gap-8 py-8">
-          <motion.div
-            className="flex flex-col md:flex-row md:items-end md:justify-between gap-6"
+      <MotionSection className="home-intro-shell flex flex-col justify-start">
+        <div className="flex flex-col gap-9">
+          <motion.header
+            className="flex items-start justify-between gap-6"
             initial="hidden"
             animate="visible"
             variants={{
@@ -69,46 +71,37 @@ function Index() {
               visible: { transition: { staggerChildren: 0.12, delayChildren: 0.08 } },
             }}
           >
-            <motion.div className="flex items-end gap-5 md:gap-8" variants={{ hidden: { opacity: 0, y: 18 }, visible: { opacity: 1, y: 0, transition: { duration: 0.3, ease: smoothEase } } }}>
+            <motion.div className="flex items-center gap-4" variants={{ hidden: { opacity: 0, y: 14 }, visible: { opacity: 1, y: 0, transition: { duration: 0.3, ease: smoothEase } } }}>
               <img
                 src={profile.image}
-                alt="Profile"
-                width="120"
-                height="120"
+                alt={profile.name}
+                width="48"
+                height="48"
                 loading="eager"
                 decoding="async"
-                className="w-28 h-28 md:w-30 md:h-30 rounded-xl object-cover object-center border border-app-border shadow-app-image"
+                className="h-12 w-12 rounded-lg border border-app-border object-cover object-center shadow-app-image"
               />
-              <div className="pb-1">
-                <motion.h1
-                  className="font-mono text-[clamp(2.4rem,5.2vw,3.8rem)] leading-[0.95] tracking-[-0.06em] text-app-heading"
-                  variants={{ hidden: { opacity: 0, y: 18 }, visible: { opacity: 1, y: 0, transition: { duration: 0.32, ease: smoothEase } } }}
-                >
-                  {profile.name}
-                </motion.h1>
-                <motion.p
-                  className="mt-2 text-app-text-muted tracking-[0.12em] uppercase text-[0.7rem]"
-                  variants={{ hidden: { opacity: 0, y: 12 }, visible: { opacity: 1, y: 0, transition: { duration: 0.3, ease: smoothEase } } }}
-                >
-                  {profile.role}
-                </motion.p>
+              <div>
+                <h1 className="text-base font-semibold leading-tight text-app-heading">{profile.name}</h1>
+                <p className="mt-1 text-sm text-app-text-muted">{profile.role}</p>
               </div>
             </motion.div>
-            <motion.div className="flex items-center gap-4" variants={{ hidden: { opacity: 0, y: 12 }, visible: { opacity: 1, y: 0, transition: { duration: 0.3, ease: smoothEase } } }}>
+            <motion.nav className="flex items-center gap-5 text-sm font-semibold text-app-heading" variants={{ hidden: { opacity: 0, y: 12 }, visible: { opacity: 1, y: 0, transition: { duration: 0.3, ease: smoothEase } } }}>
+              <Link to="/" className="hover:text-app-text transition-colors">Home</Link>
+              <a href="#crafts" className="hover:text-app-text transition-colors">Crafts</a>
+              <Link to="/blog" viewTransition={{ types: ['route-forward'] }} className="hover:text-app-text transition-colors">Writing</Link>
               <button
                 onClick={toggleTheme}
-                className="p-2 rounded-full hover:bg-app-surface-2 transition-colors"
+                className="rounded-full p-1.5 text-app-text-muted hover:bg-app-surface-2 hover:text-app-heading transition-colors"
                 aria-label="Toggle theme"
               >
                 {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
               </button>
-            </motion.div>
-          </motion.div>
-
-          <div className="dashed-h" />
+            </motion.nav>
+          </motion.header>
 
           <motion.div
-            className="flex flex-col gap-4 max-w-xl"
+            className="flex max-w-[38rem] flex-col gap-6 text-[0.95rem] leading-7 text-app-text-muted"
             initial="hidden"
             animate="visible"
             variants={{
@@ -117,60 +110,29 @@ function Index() {
             }}
           >
             <motion.div variants={{ hidden: { opacity: 0, y: 14 }, visible: { opacity: 1, y: 0, transition: { duration: 0.3, ease: smoothEase } } }}>
-              <RevealWords text={heroCopy.intro} />
+              <p>
+                Hey, I'm <span className="hand-link">{profile.name}</span>, a software engineer who finds beauty in clarity, the art of simplifying complexity, and the intersection of <em className="text-app-heading">design</em> and <em className="text-app-heading">code</em>.
+              </p>
             </motion.div>
             <motion.p variants={{ hidden: { opacity: 0, y: 14 }, visible: { opacity: 1, y: 0, transition: { duration: 0.3, ease: smoothEase } } }}>
-              {heroCopy.body1}
+              I've worked across product, UI, and systems as a <em className="text-app-heading">full-stack engineer</em>, and I'm currently building <span className="hand-link">Avenire</span>. I'm a gym rat, a <em className="text-app-heading">Next.js</em> lover, and a search systems nerd.
             </motion.p>
             <motion.p variants={{ hidden: { opacity: 0, y: 14 }, visible: { opacity: 1, y: 0, transition: { duration: 0.3, ease: smoothEase } } }}>
-              {heroCopy.body2}
+              You can reach me at <a className="hand-link" href={socialLinks[1]?.href}>@thedamod</a> and via <a className="hand-link" href="mailto:abhiram@damod.space">email</a> or see my code on <a className="hand-link" href={socialLinks[0]?.href}>GitHub</a>.
             </motion.p>
-            <motion.a
-              href={heroCopy.liveUrl}
-              className="inline-flex w-fit items-center gap-2 text-xs uppercase tracking-[0.22em] text-app-text-muted hover:text-app-heading transition-colors"
+            <motion.p
+              className="-mt-2 text-sm"
               variants={{ hidden: { opacity: 0, y: 14 }, visible: { opacity: 1, y: 0, transition: { duration: 0.3, ease: smoothEase } } }}
             >
-              {heroCopy.liveLabel} <span aria-hidden="true">↗</span>
-            </motion.a>
-            <motion.div
-              variants={{ hidden: { opacity: 0, y: 14 }, visible: { opacity: 1, y: 0, transition: { duration: 0.3, ease: smoothEase } } }}
-            >
-              <Link
-                to="/stories/draft"
-                viewTransition={{ types: ['route-forward'] }}
-                className="inline-flex w-fit items-center gap-2 text-xs uppercase tracking-[0.2em] text-app-text-muted hover:text-app-heading transition-colors"
-              >
-                While you are at it check out my story <span aria-hidden="true">↗</span>
-              </Link>
-            </motion.div>
-          </motion.div>
-
-          <motion.div
-            className="pb-2"
-            initial="hidden"
-            animate="visible"
-            variants={{
-              hidden: { opacity: 1 },
-              visible: { transition: { staggerChildren: 0.1, delayChildren: 0.42 } },
-            }}
-          >
-            <motion.h2 className="text-sm font-semibold mb-3" variants={{ hidden: { opacity: 0, y: 10 }, visible: { opacity: 1, y: 0, transition: { duration: 0.28, ease: smoothEase } } }}>
-              Here are my socials
-            </motion.h2>
-            <motion.div className="flex flex-wrap items-center gap-2" variants={{ hidden: { opacity: 1 }, visible: { transition: { staggerChildren: 0.08 } } }}>
-              {socialLinks.map((link) => (
-                <StaggerItem key={link.href}>
-                  <a href={link.href} className="pill">
-                    {link.label === 'Github' ? <Github className="w-3.5 h-3.5" /> : <Twitter className="w-3.5 h-3.5" />} {link.label}
-                  </a>
-                </StaggerItem>
-              ))}
-            </motion.div>
+              While you are here, read <Link to="/stories/draft" viewTransition={{ types: ['route-forward'] }} className="hand-link">The weight of the soul</Link>.
+            </motion.p>
           </motion.div>
         </div>
       </MotionSection>
 
-      <MotionSection className="flex flex-col pt-6">
+      <div className="w-full h-8 md:h-10 dot-bg shrink-0" />
+
+      <MotionSection id="crafts" className="flex flex-col pt-6">
         <div className="dashed-h" />
         <h2 className="text-xl font-bold py-6">Projects</h2>
         <div className="dashed-h" />
@@ -251,7 +213,7 @@ function Index() {
         />
       </motion.footer>
 
-      <div className="w-full h-32 md:h-48 dot-bg shrink-0" />
+      <div className="w-full h-10 md:h-14 dot-bg shrink-0" />
 
       <AnimatePresence>
         {selectedProject ? (
@@ -406,7 +368,7 @@ function ProjectRow({
 function ProjectIcon({ icon, title }: { icon: string, title: string }) {
   return (
     <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-app-border/80 bg-app-surface-2 text-app-text-muted">
-      <img src={icon} alt={`${title} icon`} className="h-4 w-4 object-contain" />
+      <img src={icon} alt={`${title} icon`} className="project-icon-img h-4 w-4 object-contain" />
     </div>
   )
 }
@@ -446,7 +408,6 @@ function ProjectModal({ project, onClose }: { project: Project, onClose: () => v
           <motion.div layout className="flex max-h-[88vh] flex-col gap-6 overflow-y-auto p-6 sm:p-8 lg:p-8 lg:col-span-2">
             <motion.div layout className="flex items-start justify-between gap-4">
               <div className="min-w-0">
-                <p className="text-[10px] uppercase tracking-[0.24em] text-app-text-subtle">Selected project</p>
                 <motion.div layout className="mt-3 flex items-center gap-3">
                   <ProjectIcon icon={project.icon} title={project.title} />
                   <motion.h3 layout className="text-3xl font-bold tracking-tight text-app-heading">
