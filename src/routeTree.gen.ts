@@ -14,6 +14,10 @@ import { Route as ProjectsIndexRouteImport } from './routes/projects/index'
 import { Route as BlogIndexRouteImport } from './routes/blog/index'
 import { Route as StoriesDraftRouteImport } from './routes/stories/draft'
 import { Route as BlogSlugRouteImport } from './routes/blog/$slug'
+import { Route as ProjectsIndexLazyRouteImport } from './routes/projects/index.lazy'
+import { Route as BlogIndexLazyRouteImport } from './routes/blog/index.lazy'
+import { Route as StoriesDraftLazyRouteImport } from './routes/stories/draft.lazy'
+import { Route as BlogSlugLazyRouteImport } from './routes/blog/$slug.lazy'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -24,24 +28,26 @@ const ProjectsIndexRoute = ProjectsIndexRouteImport.update({
   id: '/projects/',
   path: '/projects/',
   getParentRoute: () => rootRouteImport,
-} as any).lazy(() =>
-  import('./routes/projects/index.lazy').then((d) => d.Route),
-)
+  ...ProjectsIndexLazyRouteImport.options,
+} as any)
 const BlogIndexRoute = BlogIndexRouteImport.update({
   id: '/blog/',
   path: '/blog/',
   getParentRoute: () => rootRouteImport,
-} as any).lazy(() => import('./routes/blog/index.lazy').then((d) => d.Route))
+  ...BlogIndexLazyRouteImport.options,
+} as any)
 const StoriesDraftRoute = StoriesDraftRouteImport.update({
   id: '/stories/draft',
   path: '/stories/draft',
   getParentRoute: () => rootRouteImport,
-} as any).lazy(() => import('./routes/stories/draft.lazy').then((d) => d.Route))
+  ...StoriesDraftLazyRouteImport.options,
+} as any)
 const BlogSlugRoute = BlogSlugRouteImport.update({
   id: '/blog/$slug',
   path: '/blog/$slug',
   getParentRoute: () => rootRouteImport,
-} as any).lazy(() => import('./routes/blog/$slug.lazy').then((d) => d.Route))
+  ...BlogSlugLazyRouteImport.options,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute

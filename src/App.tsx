@@ -3,10 +3,25 @@ import { useEffect, useState } from 'react'
 import { RouterProvider } from '@tanstack/react-router'
 import { SpeedInsights } from '@vercel/speed-insights/react'
 import { inject } from '@vercel/analytics'
-import { createAppRouter, type AppRouter } from './router'
+import { createAppRouter, createServerRouter, type AppRouter } from './router'
 
-export function App() {
-  const [router] = useState<AppRouter>(() => createAppRouter())
+type AppProps = {
+  initialUrl?: string
+  router?: AppRouter
+}
+
+export function App({ initialUrl = '/', router: providedRouter }: AppProps) {
+  const [router] = useState<AppRouter>(() => {
+    if (providedRouter) {
+      return providedRouter
+    }
+
+    if (typeof window === 'undefined') {
+      return createServerRouter(initialUrl)
+    }
+
+    return createAppRouter()
+  })
 
   useEffect(() => {
     inject()

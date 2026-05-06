@@ -1,8 +1,18 @@
 ---
 import '../index.css'
+import React from 'react'
+import { renderToString } from 'react-dom/server'
 import { App } from '../App'
+import { createServerRouter } from '../router'
 
-const { title = 'Abhiram | Student | Founder', description = 'Student, physics enthusiast, and full-stack engineer building Avenire.space.' } = Astro.props
+const {
+  title = 'Abhiram | Student | Founder',
+  description = 'Student, physics enthusiast, and full-stack engineer building Avenire.space.',
+  initialUrl = `${Astro.url.pathname}${Astro.url.search}${Astro.url.hash}`,
+} = Astro.props
+const router = createServerRouter(initialUrl)
+await router.load()
+const appHtml = renderToString(React.createElement(App, { router }))
 ---
 
 <!doctype html>
@@ -23,6 +33,9 @@ const { title = 'Abhiram | Student | Founder', description = 'Student, physics e
     </script>
   </head>
   <body class="dark">
-    <App client:only="react" />
+    <div id="root" set:html={appHtml} />
+    <script>
+      import '../main'
+    </script>
   </body>
 </html>
