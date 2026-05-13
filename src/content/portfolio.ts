@@ -10,7 +10,7 @@ export type Project = {
 
 export const profile = {
   name: 'Abhiram Damodara',
-  role: 'Founder and Student',
+  role: 'Student · Founder',
   image: 'https://github.com/thedamod.png?size=256',
 }
 

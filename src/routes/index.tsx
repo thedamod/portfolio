@@ -63,7 +63,7 @@ function Index() {
       <MotionSection className="home-intro-shell flex flex-col justify-start">
         <div className="flex flex-col gap-9">
           <motion.header
-            className="flex items-start justify-between gap-6"
+            className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between sm:gap-6"
             initial="hidden"
             animate="visible"
             variants={{
@@ -71,7 +71,7 @@ function Index() {
               visible: { transition: { staggerChildren: 0.12, delayChildren: 0.08 } },
             }}
           >
-            <motion.div className="flex items-center gap-4" variants={{ hidden: { opacity: 0, y: 14 }, visible: { opacity: 1, y: 0, transition: { duration: 0.3, ease: smoothEase } } }}>
+            <motion.div className="flex min-w-0 items-center gap-4" variants={{ hidden: { opacity: 0, y: 14 }, visible: { opacity: 1, y: 0, transition: { duration: 0.3, ease: smoothEase } } }}>
               <img
                 src={profile.image}
                 alt={profile.name}
@@ -81,18 +81,18 @@ function Index() {
                 decoding="async"
                 className="h-12 w-12 rounded-lg border border-app-border object-cover object-center shadow-app-image"
               />
-              <div>
-                <h1 className="text-base font-semibold leading-tight text-app-heading">{profile.name}</h1>
-                <p className="mt-1 text-sm text-app-text-muted">{profile.role}</p>
+              <div className="min-w-0">
+                <h1 className="truncate text-base font-semibold leading-tight text-app-heading">{profile.name}</h1>
+                <p className="mt-1 whitespace-nowrap text-sm text-app-text-muted">{profile.role}</p>
               </div>
             </motion.div>
-            <motion.nav className="flex items-center gap-5 text-sm font-semibold text-app-heading" variants={{ hidden: { opacity: 0, y: 12 }, visible: { opacity: 1, y: 0, transition: { duration: 0.3, ease: smoothEase } } }}>
-              <Link to="/" className="hover:text-app-text transition-colors">Home</Link>
-              <a href="#crafts" className="hover:text-app-text transition-colors">Crafts</a>
-              <Link to="/blog" viewTransition={{ types: ['route-forward'] }} className="hover:text-app-text transition-colors">Writing</Link>
+            <motion.nav className="flex w-full items-center gap-5 border-y border-app-border py-3 text-sm font-semibold text-app-heading sm:w-auto sm:border-0 sm:py-0" variants={{ hidden: { opacity: 0, y: 12 }, visible: { opacity: 1, y: 0, transition: { duration: 0.3, ease: smoothEase } } }}>
+              <Link to="/" className="transition-colors hover:text-app-text">Home</Link>
+              <a href="#crafts" className="transition-colors hover:text-app-text">Crafts</a>
+              <Link to="/blog" viewTransition={{ types: ['route-forward'] }} className="transition-colors hover:text-app-text">Writing</Link>
               <button
                 onClick={toggleTheme}
-                className="rounded-full p-1.5 text-app-text-muted hover:bg-app-surface-2 hover:text-app-heading transition-colors"
+                className="ml-auto grid h-7 w-7 shrink-0 place-items-center rounded-md text-app-text-muted transition-colors hover:bg-app-surface-2 hover:text-app-heading sm:ml-0 sm:-my-1.5"
                 aria-label="Toggle theme"
               >
                 {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
