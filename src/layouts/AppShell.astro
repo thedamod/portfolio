@@ -14,6 +14,7 @@ const router = createServerRouter(initialUrl)
 await router.load()
 const appHtml = renderToString(React.createElement(App, { router }))
 const canonicalUrl = new URL(Astro.url.pathname, 'https://damod.space').toString()
+
 const personJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Person',
@@ -22,6 +23,37 @@ const personJsonLd = {
   image: 'https://github.com/thedamod.png?size=256',
   jobTitle: ['Student', 'Founder', 'Full-stack engineer'],
   description,
+  birthDate: '2008-12-03', // schema.org expects ISO 8601
+  brand: {
+    '@type': 'Brand',
+    name: 'Avenire',
+  },
+  worksFor: {
+    '@type': 'Organization',
+    name: 'Avenire',
+    url: 'https://avenire.space',
+  },
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'Hyderabad',
+    addressCountry: 'IN',
+  },
+  knowsLanguage: [  // was an object with object literals inside — invalid
+    {
+      '@type': 'Language',
+      name: 'JavaScript',
+    },
+    {
+      '@type': 'Language',
+      name: 'TypeScript',
+    },
+  ],
+  hasCredential: {
+    '@type': 'EducationalOccupationalCredential',
+    name: 'Patent Inventor',
+    credentialCategory: 'Patent',
+    identifier: 'AU2021105194A4',
+  },
   knowsAbout: [
     'Physics',
     'Machine learning',
@@ -51,7 +83,7 @@ const personJsonLd = {
         'Access-card-detected autonomous robot for smart security and automated navigation systems, awarded first prize at Scientia 2022.',
     },
   ],
-}
+};
 ---
 
 <!doctype html>
