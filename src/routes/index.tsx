@@ -5,7 +5,7 @@ import { useContext, useEffect, useRef, useState } from 'react'
 import { AnimatedQuote, MotionSection, StaggerGroup, StaggerItem } from '../components/portfolio-motion'
 import { smoothEase } from '../components/motion-utils'
 import { getRecentBlogs } from '../content/blog-metadata'
-import { profile, projects, skillGroups, socialLinks, type Project } from '../content/portfolio'
+import { earlyWork, profile, projects, siteDescription, skillGroups, socialLinks, type Project } from '../content/portfolio'
 import { ThemeContext } from '../context/theme'
 import { getOgImageUrl } from '../lib/og'
 
@@ -15,12 +15,12 @@ export const Route = createFileRoute('/')({
       { title: 'Abhiram | Student | Founder' },
       {
         name: 'description',
-        content: 'Student, physics enthusiast, and full-stack engineer building Avenire.space. Currently exploring ML, crypto puzzles, and building rovers.',
+        content: siteDescription,
       },
       { property: 'og:title', content: 'Abhiram | Student | Founder' },
       {
         property: 'og:description',
-        content: 'Student, physics enthusiast, and full-stack engineer building Avenire.space. Currently exploring ML, crypto puzzles, and building rovers.',
+        content: siteDescription,
       },
       { property: 'og:type', content: 'website' },
       { property: 'og:image', content: getOgImageUrl('Abhiram | Student | Founder', ['Portfolio', 'Avenire']) },
@@ -28,7 +28,7 @@ export const Route = createFileRoute('/')({
       { name: 'twitter:title', content: 'Abhiram | Student | Founder' },
       {
         name: 'twitter:description',
-        content: 'Student, physics enthusiast, and full-stack engineer building Avenire.space. Currently exploring ML, crypto puzzles, and building rovers.',
+        content: siteDescription,
       },
       { name: 'twitter:image', content: getOgImageUrl('Abhiram | Student | Founder', ['Portfolio', 'Avenire']) },
     ],
@@ -185,6 +185,42 @@ function Index() {
           <Link to="/projects" viewTransition={{ types: ['route-forward'] }} className="btn-secondary rounded-full">
             View all ↗
           </Link>
+        </div>
+      </MotionSection>
+
+      <MotionSection className="flex flex-col pt-12">
+        <div className="dashed-h" />
+        <div className="flex flex-col gap-5 py-6">
+          <div>
+            <h2 className="mt-2 text-xl font-bold text-app-heading">Building before the portfolio</h2>
+          </div>
+        </div>
+        <div className="dashed-h" />
+        <div className="flex flex-col gap-5 pt-6">
+          <p className="max-w-[38rem] text-sm leading-7 text-app-text-muted">
+            Before this portfolio, I was already building technical systems: robotics prototypes,
+            autonomous security hardware, and the software foundations that eventually led into
+            the systems I work on now.
+          </p>
+          <div className="grid gap-3 md:grid-cols-2">
+            {earlyWork.map((item) => (
+              <article key={item.title} className="flex min-h-48 flex-col rounded-lg border border-app-border bg-app-surface/40 p-4 text-sm leading-7 text-app-text-muted">
+                <div className="flex flex-col gap-1">
+                  <span className="text-[10px] uppercase tracking-[0.22em] text-app-text-subtle">{item.meta}</span>
+                  <h3 className="text-base font-semibold text-app-heading">{item.title}</h3>
+                </div>
+                <p className="mt-3 flex-1">{item.body}</p>
+                {item.href ? (
+                  <a
+                    href={item.href}
+                    className="mt-4 inline-flex w-fit text-xs font-semibold uppercase tracking-[0.18em] text-app-heading transition-colors hover:text-app-text"
+                  >
+                    View patent record ↗
+                  </a>
+                ) : null}
+              </article>
+            ))}
+          </div>
         </div>
       </MotionSection>
 

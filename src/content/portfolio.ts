@@ -14,6 +14,25 @@ export const profile = {
   image: 'https://github.com/thedamod.png?size=256',
 }
 
+export const siteDescription =
+  'Abhiram Damodara is a student, founder, physics enthusiast, and full-stack engineer building Avenire.space, with early work in robotics, autonomous security prototypes, and an inventor listing.'
+
+export const earlyWork = [
+  {
+    title: 'Night Rider',
+    meta: 'Scientia 2022 · First Prize',
+    body:
+      'An access-card-detected autonomous robot built for smart security and automated navigation systems. The project won first prize at Scientia 2022, held by Youth Cross, NSS, and Care University.',
+  },
+  {
+    title: 'Inventor listing',
+    meta: 'AU2021105194A4',
+    body:
+      'I am listed as an inventor on AU2021105194A4. It sits in the same thread as the rest of my work: building things first, then learning how to make the systems around them more serious.',
+    href: 'https://patents.google.com/patent/AU2021105194A4/en',
+  },
+]
+
 export const heroCopy = {
   intro: 'I’m Abhiram, a full stack developer focused on building precise, high impact products.',
   body1: 'I enjoy working at the intersection of systems, UI, and intelligent tooling, where complex ideas become interactive and usable.',

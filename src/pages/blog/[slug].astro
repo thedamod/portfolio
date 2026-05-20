@@ -12,4 +12,8 @@ export function getStaticPaths() {
 const blog = Astro.props.blog ?? getBlogBySlug(Astro.params.slug ?? '')
 ---
 
-<AppShell title={`${blog?.title ?? 'Blog Post'} | Abhiram`} description={blog?.description ?? `Read ${blog?.title ?? 'Blog Post'} by Abhiram.`} />
+<AppShell
+  title={`${blog?.title ?? 'Blog Post'} | Abhiram`}
+  description={blog?.description ?? `Read ${blog?.title ?? 'Blog Post'} by Abhiram.`}
+  initialUrl={`/blog/${Astro.params.slug ?? ''}`}
+/>

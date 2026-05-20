@@ -7,12 +7,51 @@ import { createServerRouter } from '../router'
 
 const {
   title = 'Abhiram | Student | Founder',
-  description = 'Student, physics enthusiast, and full-stack engineer building Avenire.space.',
+  description = 'Abhiram Damodara is a student, founder, physics enthusiast, and full-stack engineer building Avenire.space, with early work in robotics, autonomous security prototypes, and an inventor listing.',
   initialUrl = `${Astro.url.pathname}${Astro.url.search}${Astro.url.hash}`,
 } = Astro.props
 const router = createServerRouter(initialUrl)
 await router.load()
 const appHtml = renderToString(React.createElement(App, { router }))
+const canonicalUrl = new URL(Astro.url.pathname, 'https://damod.space').toString()
+const personJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Abhiram Damodara',
+  url: 'https://damod.space/',
+  image: 'https://github.com/thedamod.png?size=256',
+  jobTitle: ['Student', 'Founder', 'Full-stack engineer'],
+  description,
+  knowsAbout: [
+    'Physics',
+    'Machine learning',
+    'Full-stack engineering',
+    'Robotics',
+    'Autonomous navigation',
+    'AI learning systems',
+    'Cryptography',
+  ],
+  award: 'First Prize at Scientia 2022 for Night Rider, an access-card-detected autonomous security robot',
+  sameAs: [
+    'https://github.com/thedamod',
+    'https://x.com/thedamod',
+    'https://avenire.space',
+    'https://patents.google.com/patent/AU2021105194A4/en',
+  ],
+  subjectOf: [
+    {
+      '@type': 'CreativeWork',
+      name: 'AU2021105194A4',
+      url: 'https://patents.google.com/patent/AU2021105194A4/en',
+    },
+    {
+      '@type': 'CreativeWork',
+      name: 'Night Rider autonomous security robot',
+      description:
+        'Access-card-detected autonomous robot for smart security and automated navigation systems, awarded first prize at Scientia 2022.',
+    },
+  ],
+}
 ---
 
 <!doctype html>
@@ -21,10 +60,19 @@ const appHtml = renderToString(React.createElement(App, { router }))
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
     <title>{title}</title>
     <link rel="icon" href="/projects/icons/avenire.svg" sizes="any" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
+    <script type="application/ld+json" set:html={JSON.stringify(personJsonLd)} />
     <script is:inline>
       const storedTheme = window.localStorage.getItem('theme')
       const theme = storedTheme === 'light' || storedTheme === 'dark' ? storedTheme : 'dark'
