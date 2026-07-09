@@ -102,11 +102,13 @@ export const Route = createRootRoute({
 
 function RootShell({ children }: { children: React.ReactNode }) {
   const { pathname } = useLocation()
-  const shellWidthClass = pathname.startsWith('/stories/') ? 'max-w-4xl' : pathname.startsWith('/blog/') ? 'max-w-6xl' : 'max-w-2xl'
-  const railClass = pathname.startsWith('/blog/') ? '' : 'dashed-v-container'
+  const isBlogRoute = pathname.startsWith('/blog/')
+  const shellWidthClass = pathname.startsWith('/stories/') ? 'max-w-4xl' : isBlogRoute ? 'max-w-6xl' : 'max-w-2xl'
+  const railClass = isBlogRoute ? '' : 'dashed-v-container'
+  const shellPaddingClass = isBlogRoute ? 'px-3 sm:px-6' : 'px-6'
 
   return (
-    <div className={`min-h-screen selection:bg-app-accent/30 selection:text-brand mx-auto px-6 relative isolate ${railClass} ${shellWidthClass}`}>
+    <div className={`min-h-screen selection:bg-app-accent/30 selection:text-brand mx-auto relative isolate ${shellPaddingClass} ${railClass} ${shellWidthClass}`}>
       {children}
     </div>
   )

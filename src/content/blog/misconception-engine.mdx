@@ -49,7 +49,9 @@ A few things worth noting across sources:
 
 All four sources write through the same upsert path, keyed on:
 
-$$(\text{workspaceId},\ \text{userId},\ \text{subject},\ \text{topic},\ \text{concept})$$
+<div className="my-4 overflow-x-auto rounded-lg border border-app-border bg-app-surface-2 px-4 py-3 text-xs text-app-text-muted">
+  <code className="whitespace-normal break-words text-app-heading">(workspaceId, userId, subject, topic, concept)</code>
+</div>
 
 | Field | On conflict |
 |---|---|

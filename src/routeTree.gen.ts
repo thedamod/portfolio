@@ -17,7 +17,6 @@ import { Route as BlogSlugRouteImport } from './routes/blog/$slug'
 import { Route as ProjectsIndexLazyRouteImport } from './routes/projects/index.lazy'
 import { Route as BlogIndexLazyRouteImport } from './routes/blog/index.lazy'
 import { Route as StoriesDraftLazyRouteImport } from './routes/stories/draft.lazy'
-import { Route as BlogSlugLazyRouteImport } from './routes/blog/$slug.lazy'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -46,7 +45,6 @@ const BlogSlugRoute = BlogSlugRouteImport.update({
   id: '/blog/$slug',
   path: '/blog/$slug',
   getParentRoute: () => rootRouteImport,
-  ...BlogSlugLazyRouteImport.options,
 } as any)
 
 export interface FileRoutesByFullPath {

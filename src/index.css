@@ -621,17 +621,55 @@ figure[data-rehype-pretty-code-figure] pre {
   --tw-prose-table-row-bg: var(--color-app-surface);
   --tw-prose-table-row-odd-bg: var(--color-app-surface);
   min-width: 0;
-  overflow-x: visible;
+  overflow-x: clip;
+  overflow-wrap: break-word;
+}
+
+.blog-content :where(p, li, blockquote, td) {
+  overflow-wrap: break-word;
+}
+
+.blog-content :where(pre, code, table, figure) {
+  max-width: 100%;
 }
 
 .blog-content .katex-display {
+  display: block;
+  width: 100%;
+  max-width: 100%;
   overflow-x: auto;
   overflow-y: hidden;
   padding: 0.5rem 0;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-app-border-strong) transparent;
+}
+
+.blog-content .katex-display > .katex {
+  display: inline-block;
+  width: max-content;
+  min-width: 0;
+  max-width: none;
 }
 
 .blog-content .katex {
+  max-width: 100%;
   font-size: 1.1em;
+}
+
+@media (max-width: 1023px) {
+  main:has(.blog-content) {
+    overflow-x: clip;
+  }
+
+  .blog-content {
+    font-size: 0.94rem;
+  }
+
+  .blog-content .katex-display,
+  figure[data-rehype-pretty-code-figure] pre {
+    max-width: calc(100vw - 2rem);
+  }
 }
 
 figure[data-rehype-pretty-code-figure] code {

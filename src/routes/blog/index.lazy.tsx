@@ -11,16 +11,16 @@ function BlogList() {
     ...blog,
     readTime: blog.readTime || Math.ceil((blog.slug.length / 100) + 3),
   }))
-  const blogCardClass = 'group flex flex-col gap-2 p-4 -mx-4 rounded-xl hover:bg-app-surface-hover transition-colors interact-hover'
+  const blogCardClass = 'group flex flex-col gap-2 rounded-xl p-3 -mx-2 transition-colors hover:bg-app-surface-hover sm:p-4 sm:-mx-4 interact-hover'
   const blogTagClass = 'pill px-2 py-0.5 text-[10px]'
 
   return (
     <main className="flex flex-col text-sm leading-relaxed pb-12 scroll-top-mask">
-      <div className="w-full h-10 md:h-14 dot-bg shrink-0" />
+      <div className="w-full h-6 md:h-14 dot-bg shrink-0" />
 
       <section className="flex flex-col">
         <div className="dashed-h" />
-        <div className="flex items-center gap-4 py-6">
+        <div className="flex items-center gap-3 py-4 md:gap-4 md:py-6">
           <Link
             to="/"
             viewTransition={{ types: ['route-back'] }}
@@ -32,7 +32,7 @@ function BlogList() {
         </div>
         <div className="dashed-h" />
 
-        <div className="flex flex-col gap-4 pt-6">
+        <div className="flex flex-col gap-3 pt-4 md:gap-4 md:pt-6">
           {sortedBlogs.map((blog) => (
             <Link
               key={blog.slug}
@@ -56,7 +56,7 @@ function BlogList() {
         </div>
       </section>
 
-      <div className="w-full h-10 md:h-14 dot-bg shrink-0 mt-10" />
+      <div className="w-full h-6 md:h-14 dot-bg shrink-0 mt-6 md:mt-10" />
     </main>
   )
 }
