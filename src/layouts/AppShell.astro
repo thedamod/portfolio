@@ -7,7 +7,7 @@ import { createServerRouter } from '../router'
 
 const {
   title = 'Abhiram | Student | Founder',
-  description = 'Abhiram Damodara is a student, founder, physics enthusiast, and full-stack engineer building Avenire.space, with early work in robotics, autonomous security prototypes, and an inventor listing.',
+  description = 'Abhiram Damodara is a student, founder, physics enthusiast, and full-stack engineer building Avenire.space, with early work in robotics, product engineering, and an inventor listing.',
   initialUrl = `${Astro.url.pathname}${Astro.url.search}${Astro.url.hash}`,
 } = Astro.props
 const router = createServerRouter(initialUrl)
@@ -63,10 +63,8 @@ const personJsonLd = {
     'AI learning systems',
     'Cryptography',
   ],
-  award: 'First Prize at Scientia 2022 for Night Rider, an access-card-detected autonomous security robot',
+  email: 'mailto:damodara.abhiram@gmail.com',
   sameAs: [
-    'https://github.com/thedamod',
-    'https://x.com/thedamod',
     'https://avenire.space',
     'https://patents.google.com/patent/AU2021105194A4/en',
   ],
@@ -75,12 +73,6 @@ const personJsonLd = {
       '@type': 'CreativeWork',
       name: 'AU2021105194A4',
       url: 'https://patents.google.com/patent/AU2021105194A4/en',
-    },
-    {
-      '@type': 'CreativeWork',
-      name: 'Night Rider autonomous security robot',
-      description:
-        'Access-card-detected autonomous robot for smart security and automated navigation systems, awarded first prize at Scientia 2022.',
     },
   ],
 };

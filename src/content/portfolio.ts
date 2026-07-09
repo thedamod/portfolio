@@ -15,23 +15,15 @@ export const profile = {
 }
 
 export const siteDescription =
-  'Abhiram Damodara is a student, founder, physics enthusiast, and full-stack engineer building Avenire.space, with early work in robotics, autonomous security prototypes, and an inventor listing.'
+  'Abhiram Damodara is a student, founder, physics enthusiast, and full-stack engineer building Avenire.space, with early work in robotics, product engineering, and an inventor listing.'
 
-export const earlyWork = [
-  {
-    title: 'Night Rider',
-    meta: 'Scientia 2022 · First Prize',
-    body:
-      'An access-card-detected autonomous robot built for smart security and automated navigation systems. The project won first prize at Scientia 2022, held by Youth Cross, NSS, and Care University.',
-  },
-  {
-    title: 'Inventor listing',
-    meta: 'AU2021105194A4',
-    body:
-      'I am listed as an inventor on AU2021105194A4. It sits in the same thread as the rest of my work: building things first, then learning how to make the systems around them more serious.',
-    href: 'https://patents.google.com/patent/AU2021105194A4/en',
-  },
-]
+export const patentWork = {
+  title: 'Patent inventor listing',
+  meta: 'AU2021105194A4',
+  body:
+    'I am listed as an inventor on AU2021105194A4. It was one of my first brushes with taking an idea beyond a prototype and into something formal enough to be documented. That thread still shows up in how I work now: build first, then keep making the system more rigorous.',
+  href: 'https://patents.google.com/patent/AU2021105194A4/en',
+}
 
 export const heroCopy = {
   intro: 'I’m Abhiram, a full stack developer focused on building precise, high impact products.',
@@ -42,8 +34,7 @@ export const heroCopy = {
 }
 
 export const socialLinks = [
-  { label: 'Github', href: 'https://github.com/thedamod' },
-  { label: 'Twitter', href: 'https://x.com/thedamod' },
+  { label: 'Email', href: 'mailto:damodara.abhiram@gmail.com', value: 'damodara.abhiram@gmail.com' },
 ]
 
 export const skillGroups = {

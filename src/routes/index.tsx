@@ -5,7 +5,7 @@ import { useContext, useEffect, useRef, useState } from 'react'
 import { AnimatedQuote, MotionSection, StaggerGroup, StaggerItem } from '../components/portfolio-motion'
 import { smoothEase } from '../components/motion-utils'
 import { getRecentBlogs } from '../content/blog-metadata'
-import { earlyWork, profile, projects, siteDescription, skillGroups, socialLinks, type Project } from '../content/portfolio'
+import { patentWork, profile, projects, siteDescription, skillGroups, socialLinks, type Project } from '../content/portfolio'
 import { ThemeContext } from '../context/theme'
 import { getOgImageUrl } from '../lib/og'
 
@@ -141,21 +141,7 @@ function Index() {
             <motion.p variants={{ hidden: { opacity: 0, y: 14 }, visible: { opacity: 1, y: 0, transition: { duration: 0.3, ease: smoothEase } } }}>
               You can reach me at{' '}
               <span className="hand-link group/link relative">
-                <a href={socialLinks[1]?.href} className="text-app-heading font-semibold">@thedamod</a>
-                <svg className="hand-link-svg" viewBox="0 0 140 9" aria-hidden="true">
-                  <path d="M.426 1.973C4.144 1.567 17.77-.514 21.443 1.48 24.296 3.026 24.844 4.627 27.5 7c3.075 2.748 6.642-4.141 10.066-4.688 7.517-1.2 13.237 5.425 17.59 2.745C58.5 3 60.464-1.786 66 2c1.996 1.365 3.174 3.737 5.286 4.41 5.423 1.727 25.34-7.981 29.14-1.294c5.5 2.5 12.5 3.0 18.5 1.5c6.5-1.5 15.5-3.0 22.5-1.0" pathLength="1" />
-                </svg>
-              </span>{' '}
-              and via{' '}
-              <span className="hand-link group/link relative">
-                <a href="mailto:abhiram@damod.space" className="text-app-heading font-semibold">email</a>
-                <svg className="hand-link-svg" viewBox="0 0 140 9" aria-hidden="true">
-                  <path d="M.426 1.973C4.144 1.567 17.77-.514 21.443 1.48 24.296 3.026 24.844 4.627 27.5 7c3.075 2.748 6.642-4.141 10.066-4.688 7.517-1.2 13.237 5.425 17.59 2.745C58.5 3 60.464-1.786 66 2c1.996 1.365 3.174 3.737 5.286 4.41 5.423 1.727 25.34-7.981 29.14-1.294c5.5 2.5 12.5 3.0 18.5 1.5c6.5-1.5 15.5-3.0 22.5-1.0" pathLength="1" />
-                </svg>
-              </span>{' '}
-              or see my code on{' '}
-              <span className="hand-link group/link relative">
-                <a href={socialLinks[0]?.href} className="text-app-heading font-semibold">GitHub</a>
+                <a href={socialLinks[0]?.href} className="text-app-heading font-semibold">{socialLinks[0]?.value}</a>
                 <svg className="hand-link-svg" viewBox="0 0 140 9" aria-hidden="true">
                   <path d="M.426 1.973C4.144 1.567 17.77-.514 21.443 1.48 24.296 3.026 24.844 4.627 27.5 7c3.075 2.748 6.642-4.141 10.066-4.688 7.517-1.2 13.237 5.425 17.59 2.745C58.5 3 60.464-1.786 66 2c1.996 1.365 3.174 3.737 5.286 4.41 5.423 1.727 25.34-7.981 29.14-1.294c5.5 2.5 12.5 3.0 18.5 1.5c6.5-1.5 15.5-3.0 22.5-1.0" pathLength="1" />
                 </svg>
@@ -192,35 +178,19 @@ function Index() {
         <div className="dashed-h" />
         <div className="flex flex-col gap-5 py-6">
           <div>
-            <h2 className="mt-2 text-xl font-bold text-app-heading">Building before the portfolio</h2>
+            <span className="text-[10px] uppercase tracking-[0.22em] text-app-text-subtle">{patentWork.meta}</span>
+            <h2 className="mt-2 text-xl font-bold text-app-heading">{patentWork.title}</h2>
           </div>
         </div>
         <div className="dashed-h" />
-        <div className="flex flex-col gap-5 pt-6">
-          <p className="max-w-[38rem] text-sm leading-7 text-app-text-muted">
-            Before this portfolio, I was already building technical systems: robotics prototypes,
-            autonomous security hardware, and the software foundations that eventually led into
-            the systems I work on now.
-          </p>
-          <div className="grid gap-3 md:grid-cols-2">
-            {earlyWork.map((item) => (
-              <article key={item.title} className="flex min-h-48 flex-col rounded-lg border border-app-border bg-app-surface/40 p-4 text-sm leading-7 text-app-text-muted">
-                <div className="flex flex-col gap-1">
-                  <span className="text-[10px] uppercase tracking-[0.22em] text-app-text-subtle">{item.meta}</span>
-                  <h3 className="text-base font-semibold text-app-heading">{item.title}</h3>
-                </div>
-                <p className="mt-3 flex-1">{item.body}</p>
-                {item.href ? (
-                  <a
-                    href={item.href}
-                    className="mt-4 inline-flex w-fit text-xs font-semibold uppercase tracking-[0.18em] text-app-heading transition-colors hover:text-app-text"
-                  >
-                    View patent record ↗
-                  </a>
-                ) : null}
-              </article>
-            ))}
-          </div>
+        <div className="flex max-w-[38rem] flex-col gap-4 pt-6 text-sm leading-7 text-app-text-muted">
+          <p>{patentWork.body}</p>
+          <a
+            href={patentWork.href}
+            className="inline-flex w-fit text-xs font-semibold uppercase tracking-[0.18em] text-app-heading transition-colors hover:text-app-text"
+          >
+            View patent record ↗
+          </a>
         </div>
       </MotionSection>
 

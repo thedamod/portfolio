@@ -11,14 +11,14 @@ export const blogMetadata: BlogMetadata[] = [
   {
     slug: 'misconception-engine',
     title: "How Avenire Knows When You're Wrong Before You Do",
-    date: '2026-06-22',
+    date: '2026-07-04',
     tags: ['engineering', 'ai', 'learning-science'],
     description: "A deep dive into the misconception detection engine powering Apollo — from passive session inference to real-time signal interception.",
   },
   {
     slug: 'algorithm-that-never-forgets',
     title: 'The Algorithm That Never Forgets',
-    date: '2026-06-21',
+    date: '2026-07-01',
     tags: ['engineering', 'memory', 'spaced-repetition', 'learning-science'],
     description:
       "A deep dive into the spaced repetition engine powering Avenire's memory infrastructure — from the mathematics of forgetting to a living, closed-loop study system.",
@@ -26,25 +26,25 @@ export const blogMetadata: BlogMetadata[] = [
   {
     slug: 'retrieval-infrastructure',
     title: 'How Apollo Searches Your Mind',
-    date: '2026-06-20',
+    date: '2026-06-28',
     tags: ['engineering', 'avenire', 'retrieval', 'postgres'],
   },
   {
     slug: 'ai-visualization-layer',
     title: 'Building an AI Visualization Layer from Scratch (and What I Stole from Claude)',
-    date: '2026-06-19',
+    date: '2026-06-25',
     tags: ['Avenire', 'AI', 'Visualization', 'Engineering', 'Design'],
   },
   {
     slug: 'search-retrieval-system',
     title: "How I Built Avenire's Search Retrieval System (Multimodal Embeddings, PDF Pipelines, Video Ingestion)",
-    date: '2026-06-18',
+    date: '2026-06-22',
     tags: ['Avenire', 'RAG', 'AI', 'Engineering', 'Search'],
   },
   {
     slug: 'learning-itself',
     title: 'What Building Avenire Taught Me About Learning Itself',
-    date: '2026-06-17',
+    date: '2026-06-19',
     tags: ['Avenire', 'Learning', 'AI', 'Education'],
   },
   {
