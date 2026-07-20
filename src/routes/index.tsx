@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { Calendar, Moon, Sun, ArrowRight } from 'lucide-react'
 import { useContext, useEffect, useRef, useState } from 'react'
 import { AnimatedQuote, MotionSection, StaggerGroup, StaggerItem } from '../components/portfolio-motion'
+import { ProjectGallery } from '../components/project-gallery'
 import { smoothEase } from '../components/motion-utils'
 import { getRecentBlogs } from '../content/blog-metadata'
 import { patentWork, profile, projects, siteDescription, skillGroups, socialLinks, type Project } from '../content/portfolio'
@@ -468,22 +469,17 @@ function ProjectModal({ project, onClose }: { project: Project, onClose: () => v
               </button>
             </motion.div>
 
-            {project.liveUrl ? (
+            {project.screenshots?.length ? (
               <div className="space-y-3">
-                <div className="relative w-full max-w-4xl aspect-[16/10] overflow-hidden rounded-lg bg-app-surface-2 project-modal-item">
-                  <iframe
-                    src={project.liveUrl}
-                    title={`${project.title} preview`}
-                    className="absolute inset-0 h-full w-full border-0"
-                    loading="lazy"
-                  />
-                </div>
-                <a
-                  href={project.liveUrl}
-                  className="inline-flex w-fit items-center gap-2 text-xs uppercase tracking-[0.22em] text-app-text-muted hover:text-app-heading transition-colors"
-                >
-                  Open preview <span aria-hidden="true">↗</span>
-                </a>
+                <ProjectGallery screenshots={project.screenshots} projectTitle={project.title} />
+                {project.liveUrl ? (
+                  <a
+                    href={project.liveUrl}
+                    className="inline-flex w-fit items-center gap-2 text-xs uppercase tracking-[0.22em] text-app-text-muted hover:text-app-heading transition-colors"
+                  >
+                    Visit site <span aria-hidden="true">↗</span>
+                  </a>
+                ) : null}
               </div>
             ) : (
               <div className="relative aspect-[16/10] overflow-hidden rounded-lg bg-app-surface-2 project-modal-item">

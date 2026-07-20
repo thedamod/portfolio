@@ -1,3 +1,9 @@
+export type ProjectScreenshot = {
+  src: string
+  alt: string
+  label: string
+}
+
 export type Project = {
   title: string
   icon: string
@@ -5,6 +11,7 @@ export type Project = {
   summary: string
   details: string[]
   tags: string[]
+  screenshots?: ProjectScreenshot[]
   liveUrl?: string
 }
 
@@ -56,6 +63,14 @@ export const projects: Project[] = [
       'Built to make learning exploratory instead of passive.',
     ],
     tags: ['AI', 'Learning', 'Interaction'],
+    screenshots: [
+      { src: '/projects/screenshots/avenire/visual-explanations.webp', alt: 'Avenire visualizing a double pendulum', label: 'Interactive visual explanations' },
+      { src: '/projects/screenshots/avenire/guided-exploration.webp', alt: 'Avenire guiding a fine-tuning explanation', label: 'Guided exploration' },
+      { src: '/projects/screenshots/avenire/source-aware-learning.webp', alt: 'Avenire combining notes, a paper, and a diagram', label: 'Source-aware learning' },
+      { src: '/projects/screenshots/avenire/review-and-retention.webp', alt: 'Avenire review dashboard with retention metrics', label: 'Review and retention' },
+      { src: '/projects/screenshots/avenire/misconception-checks.webp', alt: 'Avenire surfacing and correcting a misconception', label: 'Misconception checks' },
+      { src: '/projects/screenshots/avenire/workspace-library.webp', alt: 'Avenire workspace with a document library', label: 'Workspace library' },
+    ],
     liveUrl: 'https://avenire.space',
   },
   {
@@ -71,6 +86,9 @@ export const projects: Project[] = [
       'Image converter, compressor, and regex DSL tools.',
     ],
     tags: ['Browser', 'Utilities', 'Transforms'],
+    screenshots: [
+      { src: '/projects/screenshots/tools/image-compression.webp', alt: 'Chromium Tools image compression interface', label: 'Image compression workflow' },
+    ],
     liveUrl: 'https://tools.damod.space',
   },
   {
@@ -90,13 +108,18 @@ export const projects: Project[] = [
     title: 'Arcaine',
     icon: '/projects/icons/arcaine.svg',
     image: '/projects/backgrounds/banner1.png',
-    summary: 'Arcaine is an AI model I am fine-tuning and running RL on, trained on curated and generated datasets of famous ciphers and their solutions.',
+    summary: 'A tool-using cryptanalysis agent that investigates ciphertexts, tests plausible transformations, and verifies candidate plaintexts instead of settling for a plausible guess.',
     details: [
-      'Focused on puzzle solving and cryptographic challenge reasoning.',
-      'Fine-tuning plus RL on curated datasets and synthetic generated datasets.',
-      'Primary model tracks are Gemma 4 and Qwen 3.5.',
-      'Training workflow is being built on Unsloth with an accompanying research paper.',
+      'Built as a Qwen3.5-4B LoRA fine-tune on agentic, multi-turn cryptanalysis traces.',
+      'Pairs model reasoning with bounded Python analysis and a compact cryptography reference search tool.',
+      'Uses deterministic probes for signatures such as alphabet shifts, transposition, hexadecimal, Base64, and single-byte XOR.',
+      'Run 2 reached a training loss of 0.007 at 1,000 steps; the accompanying comparison contrasts the base and post-trained models on the same cipher-solving prompt.',
     ],
-    tags: ['ML', 'Research', 'Cryptography'],
+    tags: ['Qwen3.5', 'LoRA', 'Tool Use', 'Cryptanalysis'],
+    screenshots: [
+      { src: '/projects/screenshots/arcaine/base-vs-post-trained.webp', alt: 'Terminal comparison of the base and post-trained Arcaine models', label: 'Base vs. post-trained model' },
+      { src: '/projects/screenshots/arcaine/run-2-metrics.webp', alt: 'Arcaine Run 2 training metrics', label: 'Run 2 training metrics' },
+      { src: '/projects/screenshots/arcaine/training-loss.webp', alt: 'Arcaine training loss overview', label: 'Training loss overview' },
+    ],
   },
 ]
