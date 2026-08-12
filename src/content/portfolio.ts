@@ -22,7 +22,7 @@ export const profile = {
 }
 
 export const siteDescription =
-  'Abhiram Damodara is a student, founder, physics enthusiast, and full-stack engineer building Avenire.space, with early work in robotics, product engineering, and an inventor listing.'
+  'Abhiram Damodara is a student at the BITS Pilani Hyderabad campus, pursuing a dual degree course in MSc Economics, and a founder and full-stack engineer building Avenire.space, with early work in robotics, product engineering, and an inventor listing.'
 
 export const patentWork = {
   title: 'Patent inventor listing',
@@ -42,6 +42,8 @@ export const heroCopy = {
 
 export const socialLinks = [
   { label: 'Email', href: 'mailto:damodara.abhiram@gmail.com', value: 'damodara.abhiram@gmail.com' },
+  { label: 'GitHub', href: 'https://github.com/thedamod', value: 'GitHub' },
+  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/abhiram-damodara-699031426/', value: 'LinkedIn' },
 ]
 
 export const skillGroups = {

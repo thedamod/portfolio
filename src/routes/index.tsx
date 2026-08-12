@@ -126,6 +126,9 @@ function Index() {
               </p>
             </motion.div>
             <motion.p variants={{ hidden: { opacity: 0, y: 14 }, visible: { opacity: 1, y: 0, transition: { duration: 0.3, ease: smoothEase } } }}>
+              I'm currently studying at the <em className="text-app-heading">BITS Pilani Hyderabad campus</em>, pursuing a dual degree course in <em className="text-app-heading">MSc Economics</em>.
+            </motion.p>
+            <motion.p variants={{ hidden: { opacity: 0, y: 14 }, visible: { opacity: 1, y: 0, transition: { duration: 0.3, ease: smoothEase } } }}>
               I'm a <em className="text-app-heading">full-stack engineer</em> and founder building{' '}
               <span className="hand-link group/link relative">
                 <a href="https://avenire.space" className="text-app-heading font-semibold">Avenire</a>
@@ -143,6 +146,20 @@ function Index() {
               You can reach me at{' '}
               <span className="hand-link group/link relative">
                 <a href={socialLinks[0]?.href} className="text-app-heading font-semibold">{socialLinks[0]?.value}</a>
+                <svg className="hand-link-svg" viewBox="0 0 140 9" aria-hidden="true">
+                  <path d="M.426 1.973C4.144 1.567 17.77-.514 21.443 1.48 24.296 3.026 24.844 4.627 27.5 7c3.075 2.748 6.642-4.141 10.066-4.688 7.517-1.2 13.237 5.425 17.59 2.745C58.5 3 60.464-1.786 66 2c1.996 1.365 3.174 3.737 5.286 4.41 5.423 1.727 25.34-7.981 29.14-1.294c5.5 2.5 12.5 3.0 18.5 1.5c6.5-1.5 15.5-3.0 22.5-1.0" pathLength="1" />
+                </svg>
+              </span>{' '}
+              or see my code on{' '}
+              <span className="hand-link group/link relative">
+                <a href={socialLinks[1]?.href} className="text-app-heading font-semibold">{socialLinks[1]?.value}</a>
+                <svg className="hand-link-svg" viewBox="0 0 140 9" aria-hidden="true">
+                  <path d="M.426 1.973C4.144 1.567 17.77-.514 21.443 1.48 24.296 3.026 24.844 4.627 27.5 7c3.075 2.748 6.642-4.141 10.066-4.688 7.517-1.2 13.237 5.425 17.59 2.745C58.5 3 60.464-1.786 66 2c1.996 1.365 3.174 3.737 5.286 4.41 5.423 1.727 25.34-7.981 29.14-1.294c5.5 2.5 12.5 3.0 18.5 1.5c6.5-1.5 15.5-3.0 22.5-1.0" pathLength="1" />
+                </svg>
+              </span>{' '}
+              or connect with me on{' '}
+              <span className="hand-link group/link relative">
+                <a href={socialLinks[2]?.href} className="text-app-heading font-semibold">{socialLinks[2]?.value}</a>
                 <svg className="hand-link-svg" viewBox="0 0 140 9" aria-hidden="true">
                   <path d="M.426 1.973C4.144 1.567 17.77-.514 21.443 1.48 24.296 3.026 24.844 4.627 27.5 7c3.075 2.748 6.642-4.141 10.066-4.688 7.517-1.2 13.237 5.425 17.59 2.745C58.5 3 60.464-1.786 66 2c1.996 1.365 3.174 3.737 5.286 4.41 5.423 1.727 25.34-7.981 29.14-1.294c5.5 2.5 12.5 3.0 18.5 1.5c6.5-1.5 15.5-3.0 22.5-1.0" pathLength="1" />
                 </svg>
