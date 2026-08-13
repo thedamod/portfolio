@@ -342,50 +342,67 @@
 @layer components {
   .hand-link {
     position: relative;
-    color: var(--color-app-heading);
-    font-weight: 600;
-    text-decoration: none;
-    white-space: nowrap;
-  }
-
-  .hand-link {
-    position: relative;
-    color: var(--color-app-heading);
-    font-weight: 600;
-    text-decoration: none;
-    white-space: nowrap;
     display: inline-block;
+    color: var(--color-app-heading);
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
   }
 
-  .hand-link-svg {
+  .hand-link::after {
+    content: "";
     position: absolute;
     left: 0;
-    top: 88%;
-    width: 100%;
+    right: 0;
+    bottom: -0.28em;
     height: 9px;
+    background-color: var(--color-app-text-muted);
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9' viewBox='0 0 14 9'%3E%3Cpath d='M0 4.5 Q3.5 1.6 7 4.5 T14 4.5' fill='none' stroke='%23000' stroke-width='1.1' stroke-linecap='round'/%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9' viewBox='0 0 14 9'%3E%3Cpath d='M0 4.5 Q3.5 1.6 7 4.5 T14 4.5' fill='none' stroke='%23000' stroke-width='1.1' stroke-linecap='round'/%3E%3C/svg%3E");
+    -webkit-mask-repeat: repeat-x;
+    mask-repeat: repeat-x;
+    -webkit-mask-size: 14px 9px;
+    mask-size: 14px 9px;
     pointer-events: none;
-    stroke: var(--color-app-text-muted);
-    stroke-width: 0.6;
-    fill: none;
-    stroke-dasharray: 1;
-    stroke-dashoffset: 1;
-    transition: all 600ms cubic-bezier(0.7, 0, 0.3, 1);
-    animation: scribble 600ms cubic-bezier(0.8, 1, 0.7, 1) forwards;
+    transform-origin: left center;
+    transform: scaleX(0);
+    animation: hand-underline-in 650ms cubic-bezier(0.65, 0, 0.35, 1) forwards;
   }
 
-  .hand-link:hover .hand-link-svg {
-    stroke: var(--color-app-heading);
-    stroke-width: 0.8;
-    stroke-dashoffset: 0;
-    transition: all 300ms cubic-bezier(0.8, 1, 0.7, 1);
+  .hand-link:hover::after {
+    background-color: var(--color-app-heading);
+    transition: background-color 200ms ease;
   }
 
-  @keyframes scribble {
-    from { stroke-dashoffset: 1; }
-    to { stroke-dashoffset: 0; }
+  @keyframes hand-underline-in {
+    from { transform: scaleX(0); }
+    to { transform: scaleX(1); }
   }
 
-  /* Word animations removed */
+  ::view-transition-old(root) {
+    animation: theme-wipe-old 600ms cubic-bezier(0.76, 0, 0.24, 1) both;
+  }
+
+  ::view-transition-new(root) {
+    animation: theme-wipe-new 600ms cubic-bezier(0.76, 0, 0.24, 1) both;
+  }
+
+  @keyframes theme-wipe-new {
+    from { clip-path: inset(0 0 100% 0); }
+    to { clip-path: inset(0 0 0% 0); }
+  }
+
+  @keyframes theme-wipe-old {
+    from { opacity: 1; }
+    to { opacity: 0; }
+  }
+
+  html.theme-transition,
+  html.theme-transition *,
+  html.theme-transition *::before,
+  html.theme-transition *::after {
+    transition: background-color 520ms ease, border-color 520ms ease, color 520ms ease, fill 520ms ease, stroke 520ms ease, box-shadow 520ms ease !important;
+  }
 
   .home-intro-shell {
     padding-top: clamp(2rem, 6vh, 3.5rem);

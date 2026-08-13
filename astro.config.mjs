@@ -12,6 +12,9 @@ import rehypePrettyCode from 'rehype-pretty-code'
 
 export default defineConfig({
   integrations: [react()],
+  server: {
+    allowedHosts: ['damodpc.tail95caa2.ts.net'],
+  },
   vite: {
     plugins: [
       tailwindcss(),

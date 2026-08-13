@@ -1,5 +1,5 @@
 import { createRootRoute, Outlet, Link, useLocation } from '@tanstack/react-router'
-import React, { Suspense, lazy, useEffect, useState } from 'react'
+import React, { Suspense, lazy, useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
 import { Calendar } from 'lucide-react'
 import { getSortedBlogs } from '../content/blog-metadata'
@@ -142,6 +142,16 @@ function ClientEnhancements() {
   )
 }
 
+function fallbackWipe({ apply }: { apply: () => boolean }) {
+  const root = document.documentElement
+  root.classList.add('theme-transition')
+  void root.offsetWidth
+  apply()
+  window.setTimeout(() => {
+    root.classList.remove('theme-transition')
+  }, 560)
+}
+
 function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setTheme] = useState<'dark' | 'light'>(() => {
     if (typeof window === 'undefined') {
@@ -151,6 +161,11 @@ function ThemeProvider({ children }: { children: React.ReactNode }) {
     const storedTheme = window.localStorage.getItem('theme')
     return storedTheme === 'light' || storedTheme === 'dark' ? storedTheme : 'dark'
   })
+  const themeRef = useRef(theme)
+
+  useEffect(() => {
+    themeRef.current = theme
+  }, [theme])
 
   useEffect(() => {
     const isDark = theme === 'dark'
@@ -160,15 +175,27 @@ function ThemeProvider({ children }: { children: React.ReactNode }) {
   }, [theme])
 
   const toggleTheme = () => {
-    const isDark = theme === 'dark'
-    setTheme(isDark ? 'light' : 'dark')
-    if (isDark) {
-      document.documentElement.classList.remove('dark')
-      document.body.classList.remove('dark')
-    } else {
-      document.documentElement.classList.add('dark')
-      document.body.classList.add('dark')
+    const isDark = themeRef.current === 'dark'
+    const next = isDark ? 'light' : 'dark'
+    const dark = next === 'dark'
+
+    const apply = () => {
+      const wasDark = document.documentElement.classList.contains('dark')
+      document.documentElement.classList.toggle('dark', dark)
+      document.body.classList.toggle('dark', dark)
+      window.localStorage.setItem('theme', next)
+      return wasDark !== dark
     }
+
+    if (typeof document !== 'undefined' && 'startViewTransition' in document) {
+      document.startViewTransition(() => {
+        apply()
+      })
+    } else {
+      fallbackWipe({ apply })
+    }
+
+    setTheme(next)
   }
 
   return (
