@@ -380,7 +380,7 @@
   }
 
   ::view-transition-old(root) {
-    animation: theme-wipe-old 600ms cubic-bezier(0.76, 0, 0.24, 1) both;
+    animation: none;
   }
 
   ::view-transition-new(root) {
@@ -390,11 +390,6 @@
   @keyframes theme-wipe-new {
     from { clip-path: inset(0 0 100% 0); }
     to { clip-path: inset(0 0 0% 0); }
-  }
-
-  @keyframes theme-wipe-old {
-    from { opacity: 1; }
-    to { opacity: 0; }
   }
 
   html.theme-transition,
