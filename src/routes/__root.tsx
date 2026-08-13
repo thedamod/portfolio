@@ -142,13 +142,14 @@ function ClientEnhancements() {
   )
 }
 
-function fallbackWipe({ apply }: { apply: () => boolean }) {
+function fallbackWipe({ apply, onDone }: { apply: () => void; onDone?: () => void }) {
   const root = document.documentElement
   root.classList.add('theme-transition')
   void root.offsetWidth
   apply()
   window.setTimeout(() => {
     root.classList.remove('theme-transition')
+    onDone?.()
   }, 560)
 }
 
@@ -162,12 +163,14 @@ function ThemeProvider({ children }: { children: React.ReactNode }) {
     return storedTheme === 'light' || storedTheme === 'dark' ? storedTheme : 'dark'
   })
   const themeRef = useRef(theme)
+  const transitioningRef = useRef(false)
 
   useEffect(() => {
     themeRef.current = theme
   }, [theme])
 
   useEffect(() => {
+    if (transitioningRef.current) return
     const isDark = theme === 'dark'
     document.documentElement.classList.toggle('dark', isDark)
     document.body.classList.toggle('dark', isDark)
@@ -180,19 +183,22 @@ function ThemeProvider({ children }: { children: React.ReactNode }) {
     const dark = next === 'dark'
 
     const apply = () => {
-      const wasDark = document.documentElement.classList.contains('dark')
       document.documentElement.classList.toggle('dark', dark)
       document.body.classList.toggle('dark', dark)
-      window.localStorage.setItem('theme', next)
-      return wasDark !== dark
     }
 
+    transitioningRef.current = true
+    window.localStorage.setItem('theme', next)
+
     if (typeof document !== 'undefined' && 'startViewTransition' in document) {
-      document.startViewTransition(() => {
+      const vt = document.startViewTransition(() => {
         apply()
       })
+      vt.finished.finally(() => {
+        transitioningRef.current = false
+      })
     } else {
-      fallbackWipe({ apply })
+      fallbackWipe({ apply, onDone: () => { transitioningRef.current = false } })
     }
 
     setTheme(next)
