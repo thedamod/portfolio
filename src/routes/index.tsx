@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { Calendar, Moon, Sun, ArrowRight } from 'lucide-react'
 import { useContext, useEffect, useRef, useState } from 'react'
 import { AnimatedQuote, MotionSection, StaggerGroup, StaggerItem } from '../components/portfolio-motion'
+import { GitHubHeatmap } from '../components/github-heatmap'
 import { ProjectGallery } from '../components/project-gallery'
 import { smoothEase } from '../components/motion-utils'
 import { getRecentBlogs } from '../content/blog-metadata'
@@ -175,6 +176,15 @@ function Index() {
           <Link to="/projects" viewTransition={{ types: ['route-forward'] }} className="btn-secondary rounded-full">
             View all ↗
           </Link>
+        </div>
+      </MotionSection>
+
+      <MotionSection className="flex flex-col pt-12">
+        <div className="dashed-h" />
+        <h2 className="text-xl font-bold py-6">GitHub Activity</h2>
+        <div className="dashed-h" />
+        <div className="pt-6">
+          <GitHubHeatmap username="thedamod" />
         </div>
       </MotionSection>
 
