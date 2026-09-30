@@ -7,7 +7,7 @@ import { GitHubHeatmap } from '../components/github-heatmap'
 import { ProjectGallery } from '../components/project-gallery'
 import { smoothEase } from '../components/motion-utils'
 import { getRecentBlogs } from '../content/blog-metadata'
-import { patentWork, profile, projects, siteDescription, skillGroups, socialLinks, type Project } from '../content/portfolio'
+import { patentWork, profile, homepageProjects, siteDescription, skillGroups, socialLinks, type Project } from '../content/portfolio'
 import { ThemeContext } from '../context/theme'
 import { getOgImageUrl } from '../lib/og'
 
@@ -163,7 +163,7 @@ function Index() {
         <h2 className="text-xl font-bold py-6">Projects</h2>
         <div className="dashed-h" />
         <StaggerGroup className="flex flex-col gap-1 pt-6">
-          {projects.map((project) => (
+          {homepageProjects.map((project) => (
             <ProjectRow
               key={project.title}
               project={project}
@@ -485,14 +485,24 @@ function ProjectModal({ project, onClose }: { project: Project, onClose: () => v
             {project.screenshots?.length ? (
               <div className="space-y-3">
                 <ProjectGallery screenshots={project.screenshots} projectTitle={project.title} />
-                {project.liveUrl ? (
-                  <a
-                    href={project.liveUrl}
-                    className="inline-flex w-fit items-center gap-2 text-xs uppercase tracking-[0.22em] text-app-text-muted hover:text-app-heading transition-colors"
-                  >
-                    Visit site <span aria-hidden="true">↗</span>
-                  </a>
-                ) : null}
+                <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
+                  {project.liveUrl ? (
+                    <a
+                      href={project.liveUrl}
+                      className="inline-flex w-fit items-center gap-2 text-xs uppercase tracking-[0.22em] text-app-text-muted hover:text-app-heading transition-colors"
+                    >
+                      Visit site <span aria-hidden="true">↗</span>
+                    </a>
+                  ) : null}
+                  {project.sourceUrl ? (
+                    <a
+                      href={project.sourceUrl}
+                      className="inline-flex w-fit items-center gap-2 text-xs uppercase tracking-[0.22em] text-app-text-muted hover:text-app-heading transition-colors"
+                    >
+                      Source <span aria-hidden="true">↗</span>
+                    </a>
+                  ) : null}
+                </div>
               </div>
             ) : (
               <div className="relative aspect-[16/10] overflow-hidden rounded-lg bg-app-surface-2 project-modal-item">

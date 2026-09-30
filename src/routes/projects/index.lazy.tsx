@@ -44,14 +44,24 @@ function ProjectsList() {
                   <ProjectIcon icon={project.icon} title={project.title} />
                   <h3 className="text-base font-semibold text-app-heading">{project.title}</h3>
                 </div>
-                {project.liveUrl ? (
-                  <a
-                    href={project.liveUrl}
-                    className="inline-flex items-center gap-1 text-xs uppercase tracking-[0.2em] text-app-text-muted hover:text-app-heading transition-colors"
-                  >
-                    Open <ArrowUpRight className="w-3 h-3" />
-                  </a>
-                ) : null}
+                <div className="flex shrink-0 items-center gap-4">
+                  {project.sourceUrl ? (
+                    <a
+                      href={project.sourceUrl}
+                      className="inline-flex items-center gap-1 text-xs uppercase tracking-[0.2em] text-app-text-muted hover:text-app-heading transition-colors"
+                    >
+                      Source <ArrowUpRight className="w-3 h-3" />
+                    </a>
+                  ) : null}
+                  {project.liveUrl ? (
+                    <a
+                      href={project.liveUrl}
+                      className="inline-flex items-center gap-1 text-xs uppercase tracking-[0.2em] text-app-text-muted hover:text-app-heading transition-colors"
+                    >
+                      Open <ArrowUpRight className="w-3 h-3" />
+                    </a>
+                  ) : null}
+                </div>
               </div>
 
               <p className="text-sm text-app-text-muted leading-relaxed">{project.summary}</p>

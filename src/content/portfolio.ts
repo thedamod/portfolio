@@ -13,6 +13,8 @@ export type Project = {
   tags: string[]
   screenshots?: ProjectScreenshot[]
   liveUrl?: string
+  sourceUrl?: string
+  featured?: boolean
 }
 
 export const profile = {
@@ -94,17 +96,45 @@ export const projects: Project[] = [
     liveUrl: 'https://tools.damod.space',
   },
   {
-    title: 'Autonomous Rover',
-    icon: '/projects/icons/rover.svg',
+    title: 'Ruth',
+    icon: '/projects/icons/ruth.svg',
     image: '/projects/backgrounds/banner1.png',
-    summary: 'A custom smart rover designed to operate independently with environmental awareness, telemetry, and live obstacle detection.',
+    summary: 'Mobile entry point to your home server — a daemon + Expo app for files, terminal, scripts, and services over a Tailscale link to your PC.',
     details: [
-      'Internet connected control and telemetry.',
-      'Temperature sensing and live monitoring.',
-      'Obstacle collision detection system.',
-      'Custom frontend dashboard for live interaction.',
+      'Expo mobile dashboard with live CPU, RAM, disk, and uptime stats plus sparklines.',
+      'Browse, preview, upload, and manage files on your home machine from your phone.',
+      'Real PTY terminal with multi-session support over a shared Zod-typed WebSocket contract.',
+      'Run short-lived scripts and supervise long-running services with health checks and auto-restart.',
+      'Connects over Tailscale Serve, tailnet IP, or LAN with token auth and pairing-URL onboarding.',
     ],
-    tags: ['Hardware', 'Control', 'Systems'],
+    tags: ['React Native', 'Expo', 'Tailscale', 'Home Server'],
+    screenshots: [
+      { src: '/projects/screenshots/ruth/home-dashboard.webp', alt: 'Ruth home dashboard with system stats', label: 'Home dashboard with live stats' },
+      { src: '/projects/screenshots/ruth/files.webp', alt: 'Ruth file browser', label: 'File browser on your home machine' },
+      { src: '/projects/screenshots/ruth/terminal.webp', alt: 'Ruth remote terminal session', label: 'Remote terminal session' },
+      { src: '/projects/screenshots/ruth/scripts-lighting.webp', alt: 'Ruth script run with room lighting controls', label: 'Scripts with parameters and history' },
+      { src: '/projects/screenshots/ruth/file-preview.webp', alt: 'Ruth file preview', label: 'File preview' },
+    ],
+    sourceUrl: 'https://github.com/thedamod/Ruth',
+  },
+  {
+    title: 'Postbox',
+    icon: '/projects/icons/postbox.svg',
+    image: '/projects/backgrounds/banner1.png',
+    summary: 'My own full-stack email client — a Next.js web app plus an Expo mobile app sharing one email engine, with Gmail OAuth and IMAP/SMTP sync.',
+    details: [
+      'Next.js web client plus Expo mobile app sharing one email engine.',
+      'Gmail OAuth with IMAP/SMTP sync — threads, folders, compose, reply, forward, and attachments.',
+      'Tagging engine with rules and auto-tag plus inbox search.',
+      'Dark mobile UI with searchable inbox list and focused reading view.',
+      'Monorepo with shared email-client and UI packages (pnpm + Turborepo).',
+    ],
+    tags: ['Email', 'React Native', 'Next.js', 'IMAP/SMTP'],
+    screenshots: [
+      { src: '/projects/screenshots/postbox/inbox.webp', alt: 'Postbox searchable inbox list', label: 'Searchable inbox list' },
+      { src: '/projects/screenshots/postbox/reading-view.webp', alt: 'Postbox email reading view', label: 'Focused reading view' },
+    ],
+    sourceUrl: 'https://github.com/thedamod/postbox',
   },
   {
     title: 'Arcaine',
@@ -124,4 +154,20 @@ export const projects: Project[] = [
       { src: '/projects/screenshots/arcaine/training-loss.webp', alt: 'Arcaine training loss overview', label: 'Training loss overview' },
     ],
   },
+  {
+    title: 'Autonomous Rover',
+    icon: '/projects/icons/rover.svg',
+    image: '/projects/backgrounds/banner1.png',
+    summary: 'A custom smart rover designed to operate independently with environmental awareness, telemetry, and live obstacle detection.',
+    details: [
+      'Internet connected control and telemetry.',
+      'Temperature sensing and live monitoring.',
+      'Obstacle collision detection system.',
+      'Custom frontend dashboard for live interaction.',
+    ],
+    tags: ['Hardware', 'Control', 'Systems'],
+    featured: false,
+  },
 ]
+
+export const homepageProjects: Project[] = projects.filter((project) => project.featured !== false)
