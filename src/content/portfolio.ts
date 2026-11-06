@@ -118,6 +118,26 @@ export const projects: Project[] = [
     sourceUrl: 'https://github.com/thedamod/Ruth',
   },
   {
+    title: 'Rivet',
+    icon: '/projects/icons/rivet.svg',
+    image: '/projects/backgrounds/banner1.png',
+    summary: 'A focused GitHub client for desktop and mobile, bringing repositories, pull requests, issues, and profiles together in one app.',
+    details: [
+      'Browse repository READMEs, expand folders in place, and open files beside the tree.',
+      'Review pull requests and changes without leaving the app.',
+      'Explore GitHub issues and profiles across desktop and mobile.',
+      'Built with Electron and React Native, with shared GitHub and theme packages.',
+    ],
+    tags: ['GitHub', 'Electron', 'React Native', 'TypeScript'],
+    screenshots: [
+      { src: '/projects/screenshots/rivet/desktop-arcaine.png', alt: 'Arcaine repository README in Rivet on desktop', label: 'Repository README on desktop' },
+      { src: '/projects/screenshots/rivet/desktop-avenire-pr.png', alt: 'Avenire pull request in Rivet on desktop', label: 'Pull request on desktop' },
+      { src: '/projects/screenshots/rivet/mobile-arcaine.png', alt: 'Arcaine repository README in Rivet on Android', label: 'Repository README on Android' },
+      { src: '/projects/screenshots/rivet/mobile-avenire-pr.png', alt: 'Avenire pull request in Rivet on Android', label: 'Pull request on Android' },
+    ],
+    sourceUrl: 'https://github.com/thedamod/rivet',
+  },
+  {
     title: 'Postbox',
     icon: '/projects/icons/postbox.svg',
     image: '/projects/backgrounds/banner1.png',
@@ -135,6 +155,7 @@ export const projects: Project[] = [
       { src: '/projects/screenshots/postbox/reading-view.webp', alt: 'Postbox email reading view', label: 'Focused reading view' },
     ],
     sourceUrl: 'https://github.com/thedamod/postbox',
+    featured: false,
   },
   {
     title: 'Arcaine',
