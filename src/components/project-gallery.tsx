@@ -47,8 +47,8 @@ export function ProjectGallery({ screenshots, projectTitle }: { screenshots: Pro
             </CarouselItem>
           ))}
         </CarouselContent>
-        <CarouselPrevious className="left-3 border-app-border bg-app-bg/90 text-app-heading hover:bg-app-surface-hover hover:text-app-heading" />
-        <CarouselNext className="right-3 border-app-border bg-app-bg/90 text-app-heading hover:bg-app-surface-hover hover:text-app-heading" />
+        <CarouselPrevious className="dither-control left-3 overflow-hidden border-app-border bg-app-modal-surface/90 text-app-accent hover:bg-app-surface-hover hover:text-app-heading" />
+        <CarouselNext className="dither-control right-3 overflow-hidden border-app-border bg-app-modal-surface/90 text-app-accent hover:bg-app-surface-hover hover:text-app-heading" />
       </Carousel>
 
       <div className="flex items-center justify-between gap-4 text-xs text-app-text-muted">
@@ -59,7 +59,7 @@ export function ProjectGallery({ screenshots, projectTitle }: { screenshots: Pro
               key={screenshot.src}
               type="button"
               onClick={() => api?.scrollTo(index)}
-              className={`h-1.5 w-1.5 rounded-full transition-colors ${index === current ? 'bg-app-heading' : 'bg-app-border-strong hover:bg-app-text-muted'}`}
+              className={`h-1.5 w-1.5 rounded-full transition-colors ${index === current ? 'bg-site-highlight' : 'bg-app-border-strong hover:bg-app-text-muted'}`}
               aria-label={`Show ${screenshot.label}`}
               aria-current={index === current ? 'true' : undefined}
             />

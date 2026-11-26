@@ -4,6 +4,8 @@ import { motion } from 'framer-motion'
 import { Calendar } from 'lucide-react'
 import { getSortedBlogs } from '../content/blog-metadata'
 import { ThemeContext } from '../context/theme'
+import { SiteMasthead } from '../components/site-masthead'
+import { ditherMaskStyle } from '../lib/dither/pattern'
 import { smoothEase } from '../components/motion-utils'
 
 const allBlogs = getSortedBlogs()
@@ -13,7 +15,7 @@ const DeferredToaster = lazy(async () => {
 })
 
 function NotFoundComponent() {
-  const blogCardClass = 'group flex flex-col gap-2 p-4 -mx-4 rounded-xl hover:bg-app-surface-hover transition-colors interact-hover'
+  const blogCardClass = 'group flex flex-col gap-2 p-4 -mx-4 dither-card'
   const blogTagClass = 'pill px-2 py-0.5 text-[10px]'
 
   return (
@@ -45,10 +47,10 @@ function NotFoundComponent() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4, duration: 0.3, ease: smoothEase }}
       >
-        <Link to="/" className="btn-secondary rounded-full">
+        <Link to="/" className="btn-secondary">
           Go home
         </Link>
-        <Link to="/blog" className="btn-secondary rounded-full">
+        <Link to="/blog" className="btn-secondary">
           View blogs
         </Link>
       </motion.div>
@@ -100,15 +102,21 @@ export const Route = createRootRoute({
   ),
 })
 
+const frameMask = ditherMaskStyle(0.34, { matrix: 'bayer8', cell: 2 })
+const frameStyle = {
+  '--site-dither-mask': frameMask.maskImage,
+  '--site-dither-size': frameMask.maskSize,
+} as React.CSSProperties
+
 function RootShell({ children }: { children: React.ReactNode }) {
   const { pathname } = useLocation()
-  const isBlogRoute = pathname.startsWith('/blog/')
+  const isBlogRoute = pathname.replace(/\/$/, '').startsWith('/blog/')
   const shellWidthClass = pathname.startsWith('/stories/') ? 'max-w-4xl' : isBlogRoute ? 'max-w-6xl' : 'max-w-2xl'
-  const railClass = isBlogRoute ? '' : 'dashed-v-container'
   const shellPaddingClass = isBlogRoute ? 'px-3 sm:px-6' : 'px-6'
 
   return (
-    <div className={`min-h-screen selection:bg-app-accent/30 selection:text-brand mx-auto relative isolate ${shellPaddingClass} ${railClass} ${shellWidthClass}`}>
+    <div className={`min-h-screen selection:bg-app-accent/30 selection:text-brand mx-auto relative isolate ${shellPaddingClass} ${shellWidthClass}`} style={frameStyle}>
+      {pathname !== '/' && <SiteMasthead />}
       {children}
     </div>
   )
@@ -154,14 +162,13 @@ function fallbackWipe({ apply, onDone }: { apply: () => void; onDone?: () => voi
 }
 
 function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setTheme] = useState<'dark' | 'light'>(() => {
-    if (typeof window === 'undefined') {
-      return 'dark'
-    }
+  const [savedTheme, setTheme] = useState<'dark' | 'light' | null>(null)
+  const theme = savedTheme ?? 'dark'
 
-    const storedTheme = window.localStorage.getItem('theme')
-    return storedTheme === 'light' || storedTheme === 'dark' ? storedTheme : 'dark'
-  })
+  useEffect(() => {
+    setTheme(window.localStorage.getItem('theme') === 'light' ? 'light' : 'dark')
+  }, [])
+
   const themeRef = useRef(theme)
   const transitioningRef = useRef(false)
 
@@ -170,12 +177,11 @@ function ThemeProvider({ children }: { children: React.ReactNode }) {
   }, [theme])
 
   useEffect(() => {
-    if (transitioningRef.current) return
-    const isDark = theme === 'dark'
+    if (savedTheme === null || transitioningRef.current) return
+    const isDark = savedTheme === 'dark'
     document.documentElement.classList.toggle('dark', isDark)
-    document.body.classList.toggle('dark', isDark)
-    window.localStorage.setItem('theme', theme)
-  }, [theme])
+    window.localStorage.setItem('theme', savedTheme)
+  }, [savedTheme])
 
   const toggleTheme = () => {
     const isDark = themeRef.current === 'dark'
@@ -184,7 +190,6 @@ function ThemeProvider({ children }: { children: React.ReactNode }) {
 
     const apply = () => {
       document.documentElement.classList.toggle('dark', dark)
-      document.body.classList.toggle('dark', dark)
     }
 
     transitioningRef.current = true

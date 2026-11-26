@@ -12,30 +12,6 @@ import 'katex/dist/katex.min.css'
 type BlogFrontmatter = { title?: string; date?: string; tags?: string[]; description?: string }
 type BlogModule = { default: ComponentType; frontmatter?: BlogFrontmatter }
 
-const katexFonts = `
-/* Match KaTeX to blog's monospace typography */
-.katex {
-  font-family: var(--font-mono) !important;
-  font-weight: inherit !important;
-  font-size: 1em !important;
-  line-height: inherit !important;
-  color: inherit !important;
-}
-.katex * {
-  font-family: var(--font-mono) !important;
-  font-weight: inherit !important;
-}
-.katex .mord,
-.katex .mbin,
-.katex .mrel,
-.katex .mopen,
-.katex .mclose,
-.katex .mpunct,
-.katex .minner {
-  font-weight: inherit !important;
-}
-`
-
 const mdxModules = import.meta.glob('../../content/blog/*.mdx', { eager: true }) as Record<string, BlogModule>
 
 type TocItem = {
@@ -281,14 +257,13 @@ function BlogPost() {
 
   return (
     <main className="flex flex-col text-sm leading-relaxed pb-12 scroll-top-mask">
-      <style>{katexFonts}</style>
       <div className="w-full h-6 md:h-14 dot-bg shrink-0" />
 
       <section className="mx-auto flex w-full max-w-6xl flex-col lg:grid lg:grid-cols-[minmax(0,1fr)_12rem_minmax(0,39rem)_12rem_minmax(0,1fr)]">
-        <div className="dashed-v-container mx-auto w-full max-w-[39rem] px-4 sm:px-6 lg:col-start-3 lg:row-start-1">
+        <div className="mx-auto w-full max-w-[39rem] px-4 sm:px-6 lg:col-start-3 lg:row-start-1">
           <div className="dashed-h-local" />
           <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
-            <Link to="/blog" viewTransition={{ types: ['route-back'] }} className="btn-secondary rounded-full self-start">
+            <Link to="/blog" viewTransition={{ types: ['route-back'] }} className="btn-secondary self-start">
               <ArrowLeft className="w-4 h-4" />
               <span>Back to blogs</span>
             </Link>
@@ -302,7 +277,7 @@ function BlogPost() {
           </div>
           <div className="dashed-h-local" />
 
-          <article ref={articleRef} className="blog-content prose max-w-none rounded-xl prose-p:leading-relaxed prose-headings:scroll-mt-20 prose-headings:font-bold prose-headings:tracking-tight pt-5 pb-10 md:pt-6 md:pb-12">
+          <article ref={articleRef} className="blog-content prose max-w-none prose-p:leading-relaxed prose-headings:scroll-mt-20 prose-headings:font-bold prose-headings:tracking-tight pt-5 pb-10 md:pt-6 md:pb-12">
             <MDXProvider components={mdxComponents}>
               <Post />
             </MDXProvider>

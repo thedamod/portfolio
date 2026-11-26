@@ -11,7 +11,7 @@ function BlogList() {
     ...blog,
     readTime: blog.readTime || Math.ceil((blog.slug.length / 100) + 3),
   }))
-  const blogCardClass = 'group flex flex-col gap-2 rounded-xl p-3 -mx-2 transition-colors hover:bg-app-surface-hover sm:p-4 sm:-mx-4 interact-hover'
+  const blogCardClass = 'group flex flex-col gap-2 dither-card p-3 -mx-2 sm:p-4 sm:-mx-4'
   const blogTagClass = 'pill px-2 py-0.5 text-[10px]'
 
   return (
@@ -24,7 +24,7 @@ function BlogList() {
           <Link
             to="/"
             viewTransition={{ types: ['route-back'] }}
-            className="p-2 -ml-2 rounded-full hover:bg-app-surface-2 transition-colors interact-hover"
+            className="p-2 -ml-2 rounded-sm hover:bg-app-surface-2 transition-colors interact-hover"
           >
             <ArrowLeft className="w-4 h-4" />
           </Link>

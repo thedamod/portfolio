@@ -8,14 +8,14 @@ export const Route = createLazyFileRoute('/projects/')({
 
 function ProjectIcon({ icon, title }: { icon: string, title: string }) {
   return (
-    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-app-border/80 bg-app-surface-2 text-app-text-muted">
+    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-sm border border-app-border/80 bg-app-surface-2 text-app-text-muted">
       <img src={icon} alt={`${title} icon`} className="h-4 w-4 object-contain" />
     </div>
   )
 }
 
 function ProjectsList() {
-  const projectCardClass = 'group flex flex-col gap-3 p-4 -mx-4 rounded-xl hover:bg-app-surface-hover transition-colors interact-hover'
+  const projectCardClass = 'group flex flex-col gap-3 p-4 -mx-4 dither-card'
   const projectTagClass = 'pill px-2 py-0.5 text-[10px]'
 
   return (
@@ -28,7 +28,7 @@ function ProjectsList() {
           <Link
             to="/"
             viewTransition={{ types: ['route-back'] }}
-            className="p-2 -ml-2 rounded-full hover:bg-app-surface-2 transition-colors interact-hover"
+            className="p-2 -ml-2 rounded-sm hover:bg-app-surface-2 transition-colors interact-hover"
           >
             <ArrowLeft className="w-4 h-4" />
           </Link>

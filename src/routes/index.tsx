@@ -1,14 +1,15 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { AnimatePresence, motion } from 'framer-motion'
-import { Calendar, Moon, Sun, ArrowRight } from 'lucide-react'
-import { useContext, useEffect, useRef, useState } from 'react'
+import { Calendar, ArrowRight } from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
 import { AnimatedQuote, MotionSection, StaggerGroup, StaggerItem } from '../components/portfolio-motion'
 import { GitHubHeatmap } from '../components/github-heatmap'
+import { DitherSky } from '../components/dither-sky'
+import { SiteMasthead } from '../components/site-masthead'
 import { ProjectGallery } from '../components/project-gallery'
 import { smoothEase } from '../components/motion-utils'
 import { getRecentBlogs } from '../content/blog-metadata'
 import { patentWork, profile, homepageProjects, siteDescription, skillGroups, socialLinks, type Project } from '../content/portfolio'
-import { ThemeContext } from '../context/theme'
 import { getOgImageUrl } from '../lib/og'
 
 export const Route = createFileRoute('/')({
@@ -38,10 +39,17 @@ export const Route = createFileRoute('/')({
   component: Index,
 })
 
+function DitherRule() {
+  return <div aria-hidden="true" className="home-dither-rule" />
+}
+
+function MarginNote({ children }: { children: string }) {
+  return <p className="home-margin-note">{children}<span aria-hidden="true" /></p>
+}
+
 function Index() {
-  const { theme, toggleTheme } = useContext(ThemeContext)
   const [selectedProject, setSelectedProject] = useState<Project | null>(null)
-  const blogCardClass = 'group flex flex-col gap-2 p-4 -mx-4 rounded-xl hover:bg-app-surface-hover transition-colors interact-hover'
+  const blogCardClass = 'group flex flex-col gap-2 p-4 -mx-4 dither-card'
   const blogTagClass = 'pill px-2 py-0.5 text-[10px]'
   const recentBlogs = getRecentBlogs(3)
 
@@ -60,48 +68,27 @@ function Index() {
 
   return (
     <main className="flex flex-col text-sm leading-relaxed">
-      <div className="w-full h-10 md:h-14 dot-bg shrink-0" />
+      <div className="home-hero">
+        <DitherSky />
+        <SiteMasthead home />
+        <div className="home-identity">
+          <img
+            src={profile.image}
+            alt=""
+            width="48"
+            height="48"
+            decoding="async"
+            className="h-12 w-12 rounded-md border border-app-border object-cover"
+          />
+          <div>
+            <h1>{profile.name}</h1>
+            <p>{profile.role}</p>
+          </div>
+        </div>
+      </div>
 
-      <MotionSection className="home-intro-shell flex flex-col justify-start">
-        <div className="flex flex-col gap-9">
-          <motion.header
-            className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between sm:gap-6"
-            initial="hidden"
-            animate="visible"
-            variants={{
-              hidden: { opacity: 1 },
-              visible: { transition: { staggerChildren: 0.12, delayChildren: 0.08 } },
-            }}
-          >
-            <motion.div className="flex min-w-0 items-center gap-4" variants={{ hidden: { opacity: 0, y: 14 }, visible: { opacity: 1, y: 0, transition: { duration: 0.3, ease: smoothEase } } }}>
-              <img
-                src={profile.image}
-                alt={profile.name}
-                width="48"
-                height="48"
-                loading="eager"
-                decoding="async"
-                className="h-12 w-12 rounded-lg border border-app-border object-cover object-center shadow-app-image"
-              />
-              <div className="min-w-0">
-                <h1 className="truncate text-base font-semibold leading-tight text-app-heading">{profile.name}</h1>
-                <p className="mt-1 whitespace-nowrap text-sm text-app-text-muted">{profile.role}</p>
-              </div>
-            </motion.div>
-            <motion.nav className="flex w-full items-center gap-5 border-y border-app-border py-3 text-sm font-semibold text-app-heading sm:w-auto sm:border-0 sm:py-0" variants={{ hidden: { opacity: 0, y: 12 }, visible: { opacity: 1, y: 0, transition: { duration: 0.3, ease: smoothEase } } }}>
-              <Link to="/" className="transition-colors hover:text-app-text">Home</Link>
-              <a href="#crafts" className="transition-colors hover:text-app-text">Crafts</a>
-              <Link to="/blog" viewTransition={{ types: ['route-forward'] }} className="transition-colors hover:text-app-text">Writing</Link>
-              <button
-                onClick={toggleTheme}
-                className="ml-auto grid h-7 w-7 shrink-0 place-items-center rounded-md text-app-text-muted transition-colors hover:bg-app-surface-2 hover:text-app-heading sm:ml-0 sm:-my-1.5"
-                aria-label="Toggle theme"
-              >
-                {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-              </button>
-            </motion.nav>
-          </motion.header>
-
+      <MotionSection className="home-intro-shell">
+        <div>
           <motion.div
             className="flex max-w-[38rem] flex-col gap-6 text-[0.95rem] leading-7 text-app-text-muted"
             initial="hidden"
@@ -113,11 +100,7 @@ function Index() {
           >
             <motion.div variants={{ hidden: { opacity: 0, y: 14 }, visible: { opacity: 1, y: 0, transition: { duration: 0.3, ease: smoothEase } } }}>
               <p>
-                Hey, I'm{' '}
-                <span className="hand-link group/link relative">
-                  {profile.name}
-                </span>
-                {' '}— a student who loves <em className="text-app-heading">physics</em> and builds at the intersection of{' '}
+                I’m a student who loves <em className="text-app-heading">physics</em> and builds at the intersection of{' '}
                 <em className="text-app-heading">machine learning</em> and{' '}
                 <em className="text-app-heading">engineering</em>.
               </p>
@@ -126,42 +109,35 @@ function Index() {
               I'm studying <em className="text-app-heading">MSc Economics</em> at the{' '}
               <em className="text-app-heading">BITS Pilani Hyderabad campus</em>, and I'm a{' '}
               <em className="text-app-heading">full-stack engineer</em> and founder building{' '}
-              <span className="hand-link group/link relative">
-                <a href="https://avenire.space" className="text-app-heading font-semibold">Avenire</a>
-              </span>
+              <a href="https://avenire.space" className="site-text-link">Avenire</a>
               .
             </motion.p>
-            <motion.p variants={{ hidden: { opacity: 0, y: 14 }, visible: { opacity: 1, y: 0, transition: { duration: 0.3, ease: smoothEase } } }}>
-              Right now: the <em className="text-app-heading">Deep Residual Learning</em> paper, and a model for{' '}
-              <em className="text-app-heading">crypto puzzles</em>.
-            </motion.p>
+            <motion.div className="home-annotated" variants={{ hidden: { opacity: 0, y: 14 }, visible: { opacity: 1, y: 0, transition: { duration: 0.3, ease: smoothEase } } }}>
+              <p>
+                I’m reading the <em className="text-app-heading">Deep Residual Learning</em> paper and working on a model for{' '}
+                <em className="text-app-heading">crypto puzzles</em>.
+              </p>
+              <MarginNote>On my desk right now</MarginNote>
+            </motion.div>
             <motion.p variants={{ hidden: { opacity: 0, y: 14 }, visible: { opacity: 1, y: 0, transition: { duration: 0.3, ease: smoothEase } } }}>
               Off the clock: a <em className="text-app-heading">rover</em>, Koenigseggs, and the{' '}
-              <span className="word-guitar inline-block" style={{ animationDelay: '3.1s' }}>guitar</span>.
+              guitar.
             </motion.p>
             <motion.p variants={{ hidden: { opacity: 0, y: 14 }, visible: { opacity: 1, y: 0, transition: { duration: 0.3, ease: smoothEase } } }}>
-              <span className="hand-link group/link relative">
-                <a href={socialLinks[0]?.href} className="text-app-heading font-semibold">{socialLinks[0]?.value}</a>
-              </span>{' '}
+              <a href={socialLinks[0]?.href} className="site-text-link">{socialLinks[0]?.value}</a>{' '}
               ·{' '}
-              <span className="hand-link group/link relative">
-                <a href={socialLinks[1]?.href} className="text-app-heading font-semibold">{socialLinks[1]?.value}</a>
-              </span>{' '}
+              <a href={socialLinks[1]?.href} className="site-text-link">{socialLinks[1]?.value}</a>{' '}
               ·{' '}
-              <span className="hand-link group/link relative">
-                <a href={socialLinks[2]?.href} className="text-app-heading font-semibold">{socialLinks[2]?.value}</a>
-              </span>
+              <a href={socialLinks[2]?.href} className="site-text-link">{socialLinks[2]?.value}</a>
             </motion.p>
           </motion.div>
         </div>
       </MotionSection>
 
-      <div className="w-full h-8 md:h-10 dot-bg shrink-0" />
-
       <MotionSection id="crafts" className="flex flex-col pt-6">
-        <div className="dashed-h" />
+        <DitherRule />
         <h2 className="text-xl font-bold py-6">Projects</h2>
-        <div className="dashed-h" />
+        <DitherRule />
         <StaggerGroup className="flex flex-col gap-1 pt-6">
           {homepageProjects.map((project) => (
             <ProjectRow
@@ -173,30 +149,31 @@ function Index() {
           ))}
         </StaggerGroup>
         <div className="flex justify-center mt-6">
-          <Link to="/projects" viewTransition={{ types: ['route-forward'] }} className="btn-secondary rounded-full">
+          <Link to="/projects" viewTransition={{ types: ['route-forward'] }} className="btn-secondary">
             View all ↗
           </Link>
         </div>
       </MotionSection>
 
       <MotionSection className="flex flex-col pt-12">
-        <div className="dashed-h" />
+        <DitherRule />
         <h2 className="text-xl font-bold py-6">GitHub Activity</h2>
-        <div className="dashed-h" />
-        <div className="pt-6">
+        <DitherRule />
+        <div className="home-annotated pt-6">
           <GitHubHeatmap username="thedamod" />
+          <MarginNote>Each square is a day</MarginNote>
         </div>
       </MotionSection>
 
       <MotionSection className="flex flex-col pt-12">
-        <div className="dashed-h" />
+        <DitherRule />
         <div className="flex flex-col gap-5 py-6">
           <div>
             <span className="text-[10px] uppercase tracking-[0.22em] text-app-text-subtle">{patentWork.meta}</span>
             <h2 className="mt-2 text-xl font-bold text-app-heading">{patentWork.title}</h2>
           </div>
         </div>
-        <div className="dashed-h" />
+        <DitherRule />
         <div className="flex max-w-[38rem] flex-col gap-4 pt-6 text-sm leading-7 text-app-text-muted">
           <p>{patentWork.body}</p>
           <a
@@ -209,9 +186,9 @@ function Index() {
       </MotionSection>
 
       <MotionSection className="flex flex-col pt-12">
-        <div className="dashed-h" />
+        <DitherRule />
         <h2 className="text-xl font-bold py-6">Skills & Technology</h2>
-        <div className="dashed-h" />
+        <DitherRule />
         <StaggerGroup className="flex flex-col gap-4 pt-6">
           {Object.entries(skillGroups).map(([group, skills]) => (
             <TickerRow key={group} label={group} skills={skills} reverse={group === 'Backend'} />
@@ -220,18 +197,18 @@ function Index() {
       </MotionSection>
 
       <MotionSection className="flex flex-col pt-12">
-        <div className="dashed-h" />
+        <DitherRule />
         <div className="flex items-center justify-between py-6">
           <h2 className="text-xl font-bold">Blogs</h2>
           <Link
             to="/blog"
             viewTransition={{ types: ['route-forward'] }}
-            className="p-2 -mr-2 rounded-full hover:bg-app-surface-2 transition-colors interact-hover"
+            className="p-2 -mr-2 rounded-sm hover:bg-app-surface-2 transition-colors interact-hover"
           >
             <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
-        <div className="dashed-h" />
+        <DitherRule />
         <StaggerGroup className="flex flex-col gap-4 pt-6">
           {recentBlogs.map((blog) => (
             <StaggerItem key={blog.slug}>
@@ -268,7 +245,7 @@ function Index() {
         />
       </motion.footer>
 
-      <div className="w-full h-10 md:h-14 dot-bg shrink-0" />
+      <DitherRule />
 
       <AnimatePresence>
         {selectedProject ? (
@@ -390,9 +367,10 @@ function ProjectRow({
         onClick={onSelect}
         layoutId={!isSelected ? `project-trigger-${project.title}` : undefined}
         layout
+        aria-haspopup="dialog"
         disabled={isSelected}
         aria-hidden={isSelected}
-        className="relative z-10 group flex w-full items-start sm:items-center gap-4 rounded-xl p-3 text-left transition-colors hover:bg-app-surface-hover disabled:pointer-events-none disabled:opacity-0"
+        className="relative z-10 group flex w-full items-start sm:items-center gap-4 dither-card p-3 text-left disabled:pointer-events-none disabled:opacity-0"
       >
         <div className="flex min-w-0 flex-1 flex-col gap-1">
           <motion.div layout className="flex items-center gap-2">
@@ -422,7 +400,7 @@ function ProjectRow({
 
 function ProjectIcon({ icon, title }: { icon: string, title: string }) {
   return (
-    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-app-border/80 bg-app-surface-2 text-app-text-muted">
+    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-sm border border-app-border/80 bg-app-surface-2 text-app-text-muted">
       <img src={icon} alt={`${title} icon`} className="project-icon-img h-4 w-4 object-contain" />
     </div>
   )
@@ -454,7 +432,10 @@ function ProjectModal({ project, onClose }: { project: Project, onClose: () => v
         onClick={onClose}
       />
       <motion.div
-        className="relative z-[80] w-full max-w-6xl max-h-[88vh] overflow-hidden rounded-lg bg-app-bg shadow-2xl project-modal-surface"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="project-modal-title"
+        className="relative z-[80] w-full max-w-6xl max-h-[88vh] overflow-hidden rounded-lg bg-app-modal-surface shadow-2xl project-modal-surface"
         layoutId={`project-trigger-${project.title}`}
         layout
         transition={{ layout: { duration: 0.22, ease: smoothEase } }}
@@ -465,7 +446,7 @@ function ProjectModal({ project, onClose }: { project: Project, onClose: () => v
               <div className="min-w-0">
                 <motion.div layout className="mt-3 flex items-center gap-3">
                   <ProjectIcon icon={project.icon} title={project.title} />
-                  <motion.h3 layout className="text-3xl font-bold tracking-tight text-app-heading">
+                  <motion.h3 id="project-modal-title" layout className="text-3xl font-bold tracking-tight text-app-heading">
                     {project.title}
                   </motion.h3>
                 </motion.div>
@@ -476,7 +457,7 @@ function ProjectModal({ project, onClose }: { project: Project, onClose: () => v
               <button
                 type="button"
                 onClick={onClose}
-                className="rounded-full border border-app-modal-border bg-app-surface-2 px-3 py-2 text-xs text-app-text-muted transition-colors hover:bg-app-surface-hover hover:text-app-heading"
+                className="dither-control relative overflow-hidden rounded-full border border-app-modal-border bg-app-surface-2 px-3 py-2 text-xs text-app-text-muted transition-colors hover:bg-app-surface-hover hover:text-app-heading"
               >
                 Close
               </button>
@@ -489,7 +470,7 @@ function ProjectModal({ project, onClose }: { project: Project, onClose: () => v
                   {project.liveUrl ? (
                     <a
                       href={project.liveUrl}
-                      className="inline-flex w-fit items-center gap-2 text-xs uppercase tracking-[0.22em] text-app-text-muted hover:text-app-heading transition-colors"
+                      className="inline-flex w-fit items-center gap-2 text-xs uppercase tracking-[0.22em] text-app-accent hover:text-app-heading transition-colors"
                     >
                       Visit site <span aria-hidden="true">↗</span>
                     </a>
@@ -497,7 +478,7 @@ function ProjectModal({ project, onClose }: { project: Project, onClose: () => v
                   {project.sourceUrl ? (
                     <a
                       href={project.sourceUrl}
-                      className="inline-flex w-fit items-center gap-2 text-xs uppercase tracking-[0.22em] text-app-text-muted hover:text-app-heading transition-colors"
+                      className="inline-flex w-fit items-center gap-2 text-xs uppercase tracking-[0.22em] text-app-accent hover:text-app-heading transition-colors"
                     >
                       Source <span aria-hidden="true">↗</span>
                     </a>
@@ -511,7 +492,7 @@ function ProjectModal({ project, onClose }: { project: Project, onClose: () => v
               </div>
             )}
 
-            <ol className="list-decimal space-y-3 border-t border-app-border pl-5 pt-5 text-sm leading-6 text-app-text-muted marker:text-app-accent-soft">
+            <ol className="project-modal-divider relative list-decimal space-y-3 pl-5 pt-5 text-sm leading-6 text-app-text-muted marker:text-app-accent-soft">
               {project.details.map((item) => (
                 <li key={item} className="pl-2">
                   <span>{item}</span>
@@ -519,9 +500,9 @@ function ProjectModal({ project, onClose }: { project: Project, onClose: () => v
               ))}
             </ol>
 
-            <motion.div layout className="flex flex-wrap gap-2 border-t border-app-border pt-5">
+            <motion.div layout className="project-modal-divider relative flex flex-wrap gap-2 pt-5">
               {project.tags.map((tag) => (
-                <motion.span layout key={tag} className="pill rounded-full border border-app-accent-soft/25 bg-app-surface-2 text-app-accent-soft">
+                <motion.span layout key={tag} className="pill border border-app-accent-soft/25 bg-app-surface-2 text-app-accent-soft">
                   {tag}
                 </motion.span>
               ))}
