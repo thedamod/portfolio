@@ -12,7 +12,7 @@ export function CSSVarDemo() {
   const t = THEMES[theme];
 
   return (
-    <div className="my-8 rounded-xl border border-app-border/60 bg-app-surface-2 p-6">
+    <div className="blog-widget my-8 p-4 sm:p-6">
       <p className="mb-1 text-xs uppercase tracking-widest text-app-text-subtle">
         CSS Variable Inheritance — live demo
       </p>
@@ -26,7 +26,7 @@ export function CSSVarDemo() {
           <button
             key={k}
             onClick={() => setTheme(k)}
-            className={`rounded-md border px-3 py-1.5 text-sm transition-all duration-150 ${
+            className={`rounded-[2px] border px-3 py-1.5 text-sm transition-all duration-150 ${
               theme === k
                 ? "border-app-heading bg-app-heading text-app-bg"
                 : "border-app-border bg-app-surface text-app-heading hover:bg-app-heading hover:text-app-bg hover:border-app-heading"
@@ -38,7 +38,7 @@ export function CSSVarDemo() {
       </div>
 
       <div
-        className="rounded-lg p-6 transition-colors duration-300"
+        className="rounded-[2px] p-6 transition-colors duration-300"
         style={{ backgroundColor: t.bg }}
       >
         <svg viewBox="0 0 300 120" className="w-full">

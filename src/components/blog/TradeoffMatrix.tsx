@@ -20,7 +20,7 @@ export function TradeoffMatrix() {
   const s = WEEK_SCENARIOS[selected];
 
   return (
-    <div className="my-8 rounded-xl border border-app-border/60 bg-app-surface-2 p-6">
+    <div className="blog-widget my-8 p-4 sm:p-6">
       <p className="mb-1 text-xs uppercase tracking-widest text-app-text-subtle">
         The honest tradeoff
       </p>
@@ -32,7 +32,7 @@ export function TradeoffMatrix() {
       <div className="mb-5 flex flex-wrap gap-2">
         {WEEK_SCENARIOS.map((w, i) => (
           <button key={i} onClick={() => setSelected(i)}
-            className={`rounded-md border px-3 py-1.5 text-sm transition-all duration-150 ${
+            className={`rounded-[2px] border px-3 py-1.5 text-sm transition-all duration-150 ${
               selected === i
                 ? "border-app-heading bg-app-heading text-app-bg"
                 : "border-app-border bg-app-surface text-app-heading hover:bg-app-heading hover:text-app-bg hover:border-app-heading"
@@ -53,7 +53,7 @@ export function TradeoffMatrix() {
                 <span className="font-mono text-app-heading">{val}%</span>
               </div>
               <div className="h-2.5 w-full overflow-hidden rounded-full bg-app-border">
-                <motion.div className="h-full rounded-full"
+                <motion.div className="blog-dither-meter h-full"
                   style={{ backgroundColor: BAR_COLORS[key] }}
                   animate={{ width: `${val}%` }}
                   transition={{ duration: 0.35, ease: "easeOut" }} />

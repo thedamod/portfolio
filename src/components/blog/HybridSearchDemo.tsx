@@ -53,7 +53,7 @@ export function HybridSearchDemo() {
   const results = s[tab];
 
   return (
-    <div className="my-8 rounded-xl border border-app-border/60 bg-app-surface-2 p-6">
+    <div className="blog-widget my-8 p-4 sm:p-6">
       <p className="mb-1 text-xs uppercase tracking-widest text-app-text-subtle">
         Hybrid search — compare methods
       </p>
@@ -64,7 +64,7 @@ export function HybridSearchDemo() {
       <div className="mb-4 flex gap-2">
         {SCENARIOS.map((sc, i) => (
           <button key={i} onClick={() => { setScenario(i); setTab("vector"); }}
-            className={`rounded-md border px-3 py-1.5 text-sm transition-all duration-150 ${
+            className={`rounded-[2px] border px-3 py-1.5 text-sm transition-all duration-150 ${
               scenario === i
                 ? "border-app-heading bg-app-heading text-app-bg"
                 : "border-app-border bg-app-surface text-app-heading hover:bg-app-heading hover:text-app-bg hover:border-app-heading"
@@ -74,14 +74,14 @@ export function HybridSearchDemo() {
         ))}
       </div>
 
-      <div className="mb-3 rounded-md border border-app-border/40 bg-app-surface/60 px-3 py-2 font-mono text-sm text-app-heading">
+      <div className="mb-3 rounded-[2px] border border-app-border/40 bg-app-surface/60 px-3 py-2 font-mono text-sm text-app-heading">
         &ldquo;{s.query}&rdquo;
       </div>
 
       <div className="mb-4 flex gap-1">
         {(["vector", "bm25", "hybrid"] as const).map((t) => (
-          <button key={t} onClick={() => setTab(t)}
-            className={`rounded-md border px-3 py-1 text-xs font-mono transition-all duration-150 ${
+          <button key={t} onClick={() => setTab(t)} aria-pressed={tab === t}
+            className={`blog-dither-option rounded-[2px] border px-3 py-1 text-xs font-mono transition-all duration-150 ${
               tab === t
                 ? "border-app-heading bg-app-heading text-app-bg"
                 : "border-app-border bg-app-surface text-app-text-muted hover:bg-app-heading hover:text-app-bg hover:border-app-heading"
@@ -100,7 +100,7 @@ export function HybridSearchDemo() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -4 }}
               transition={{ duration: 0.15, delay: i * 0.05 }}
-              className="rounded-md border border-app-border bg-app-surface/70 px-3 py-2">
+              className="dither-card border border-app-border bg-app-surface/70 px-3 py-2">
               <div className="mb-1 flex items-center justify-between">
                 <span className="text-xs text-app-text-muted font-mono">{r.source}</span>
                 <span

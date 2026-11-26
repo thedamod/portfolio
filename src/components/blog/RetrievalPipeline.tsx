@@ -72,7 +72,7 @@ export function RetrievalPipeline() {
   };
 
   return (
-    <div className="my-8 rounded-xl border border-app-border/60 bg-app-surface-2 p-6">
+    <div className="blog-widget my-8 p-4 sm:p-6">
       <p className="mb-4 text-xs uppercase tracking-widest text-app-text-subtle">
         Retrieval pipeline — step through
       </p>
@@ -95,7 +95,7 @@ export function RetrievalPipeline() {
 
       {/* Progress bar */}
       <div className="mb-5 h-0.5 w-full rounded-full bg-app-border">
-        <motion.div className="h-full rounded-full bg-app-heading"
+        <motion.div className="blog-dither-meter h-full bg-app-heading"
           animate={{ width: `${((active + 1) / PIPELINE_STEPS.length) * 100}%` }}
           transition={{ duration: 0.25 }} />
       </div>

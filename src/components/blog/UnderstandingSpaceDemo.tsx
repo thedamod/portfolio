@@ -22,7 +22,7 @@ export function UnderstandingSpaceDemo() {
   const nodes = mode === "dense" ? DENSE : SPARSE;
 
   return (
-    <div className="my-8 rounded-xl border border-app-border/60 bg-app-surface-2 p-6">
+    <div className="blog-widget my-8 p-4 sm:p-6">
       <p className="mb-1 text-xs uppercase tracking-widest text-app-text-subtle">
         Understanding as a vector space
       </p>
@@ -34,7 +34,7 @@ export function UnderstandingSpaceDemo() {
       <div className="mb-4 flex gap-2">
         {(["dense", "sparse"] as const).map((m) => (
           <button key={m} onClick={() => setMode(m)}
-            className={`rounded-md border px-3 py-1.5 text-sm transition-all duration-150 ${
+            className={`rounded-[2px] border px-3 py-1.5 text-sm transition-all duration-150 ${
               mode === m
                 ? "border-app-heading bg-app-heading text-app-bg"
                 : "border-app-border bg-app-surface text-app-heading hover:bg-app-heading hover:text-app-bg hover:border-app-heading"
@@ -44,7 +44,7 @@ export function UnderstandingSpaceDemo() {
         ))}
       </div>
 
-      <svg viewBox="0 0 340 220" className="w-full rounded-md border border-app-border bg-app-surface p-2">
+      <svg viewBox="0 0 340 220" className="w-full rounded-[2px] border border-app-border bg-app-surface p-2">
         <rect x="0" y="0" width="340" height="220" fill="var(--color-app-surface)" />
         {/* Edges */}
         {nodes.flatMap((node, i) =>

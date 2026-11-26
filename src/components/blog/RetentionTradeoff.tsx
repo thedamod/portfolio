@@ -36,7 +36,7 @@ export function RetentionTradeoff() {
   const highlighted = rows.find(r => r.retention === highlightRow)!;
 
   return (
-    <div className="my-8 rounded-xl border border-app-border bg-app-surface-2 p-6 font-mono text-sm">
+    <div className="blog-widget my-8 p-4 sm:p-6 font-mono text-sm">
       <p className="mb-4 text-xs uppercase tracking-widest text-app-text-subtle">
         Interactive — Retention vs. Load Tradeoff
       </p>
@@ -70,7 +70,7 @@ export function RetentionTradeoff() {
                 {Math.round(row.retention * 100)}%
               </span>
               <div className="flex-1 h-3 bg-app-border rounded overflow-hidden">
-                <div className="h-full transition-all duration-300 ease-out"
+                <div className="blog-dither-meter h-full transition-all duration-300 ease-out"
                   style={{
                     width: `${barWidth}%`,
                     backgroundColor: isSelected ? "var(--color-app-heading)" : "var(--color-app-border-strong)",

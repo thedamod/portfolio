@@ -94,6 +94,7 @@ export const projects: Project[] = [
       { src: '/projects/screenshots/tools/image-compression.webp', alt: 'Chromium Tools image compression interface', label: 'Image compression workflow' },
     ],
     liveUrl: 'https://tools.damod.space',
+    featured: false,
   },
   {
     title: 'Ruth',

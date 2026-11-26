@@ -1,40 +1,14 @@
 import { createFileRoute, Link, notFound } from '@tanstack/react-router'
 import { ArrowLeft, Calendar, Menu } from 'lucide-react'
 import { MDXProvider } from '@mdx-js/react'
-import { motion } from 'framer-motion'
 import { useEffect, useRef, useState, type ComponentPropsWithoutRef, type ComponentType, type CSSProperties, type ReactNode } from 'react'
 import { MermaidDiagram } from '../../components/mdx/MermaidDiagram'
-import { smoothEase } from '../../components/motion-utils'
 import { formatDate, getBlogBySlug } from '../../content/blog-metadata'
 import { getOgImageUrl } from '../../lib/og'
 import 'katex/dist/katex.min.css'
 
 type BlogFrontmatter = { title?: string; date?: string; tags?: string[]; description?: string }
 type BlogModule = { default: ComponentType; frontmatter?: BlogFrontmatter }
-
-const katexFonts = `
-/* Match KaTeX to blog's monospace typography */
-.katex {
-  font-family: var(--font-mono) !important;
-  font-weight: inherit !important;
-  font-size: 1em !important;
-  line-height: inherit !important;
-  color: inherit !important;
-}
-.katex * {
-  font-family: var(--font-mono) !important;
-  font-weight: inherit !important;
-}
-.katex .mord,
-.katex .mbin,
-.katex .mrel,
-.katex .mopen,
-.katex .mclose,
-.katex .mpunct,
-.katex .minner {
-  font-weight: inherit !important;
-}
-`
 
 const mdxModules = import.meta.glob('../../content/blog/*.mdx', { eager: true }) as Record<string, BlogModule>
 
@@ -281,14 +255,13 @@ function BlogPost() {
 
   return (
     <main className="flex flex-col text-sm leading-relaxed pb-12 scroll-top-mask">
-      <style>{katexFonts}</style>
       <div className="w-full h-6 md:h-14 dot-bg shrink-0" />
 
       <section className="mx-auto flex w-full max-w-6xl flex-col lg:grid lg:grid-cols-[minmax(0,1fr)_12rem_minmax(0,39rem)_12rem_minmax(0,1fr)]">
-        <div className="dashed-v-container mx-auto w-full max-w-[39rem] px-4 sm:px-6 lg:col-start-3 lg:row-start-1">
+        <div className="mx-auto w-full max-w-[39rem] px-4 sm:px-6 lg:col-start-3 lg:row-start-1">
           <div className="dashed-h-local" />
           <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
-            <Link to="/blog" viewTransition={{ types: ['route-back'] }} className="btn-secondary rounded-full self-start">
+            <Link to="/blog" className="btn-secondary self-start">
               <ArrowLeft className="w-4 h-4" />
               <span>Back to blogs</span>
             </Link>
@@ -302,7 +275,7 @@ function BlogPost() {
           </div>
           <div className="dashed-h-local" />
 
-          <article ref={articleRef} className="blog-content prose max-w-none rounded-xl prose-p:leading-relaxed prose-headings:scroll-mt-20 prose-headings:font-bold prose-headings:tracking-tight pt-5 pb-10 md:pt-6 md:pb-12">
+          <article ref={articleRef} className="blog-content prose max-w-none prose-p:leading-relaxed prose-headings:scroll-mt-20 prose-headings:font-bold prose-headings:tracking-tight pt-5 pb-10 md:pt-6 md:pb-12">
             <MDXProvider components={mdxComponents}>
               <Post />
             </MDXProvider>
@@ -327,32 +300,25 @@ function TableOfContents({ items, activeHeadingId }: { items: TocItem[], activeH
   }
 
   return (
-    <motion.aside
-      className="toc-rail hidden lg:sticky lg:top-8 lg:col-start-4 lg:row-start-1 lg:block lg:h-fit lg:w-48 lg:pl-8 lg:pt-7"
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.24, ease: smoothEase }}
-    >
-      <motion.div className="mb-4 flex items-center gap-3 text-xs font-semibold text-app-heading" layout>
-        <Menu className="h-4 w-4" />
+    <aside className="toc-rail hidden lg:sticky lg:top-8 lg:col-start-4 lg:row-start-1 lg:block lg:self-start lg:pl-4 lg:pt-7">
+      <div className="mb-3 flex items-center gap-3 text-xs font-semibold text-app-heading">
+        <Menu className="h-4 w-4" aria-hidden="true" />
         <span>On this page</span>
-      </motion.div>
-      <nav aria-label="On this page" className="flex flex-col">
-        {items.map((item, index) => (
-          <motion.a
+      </div>
+      <nav aria-label="On this page" className="toc-scroll flex flex-col">
+        {items.map((item) => (
+          <a
             key={item.id}
             href={`#${item.id}`}
-            className={`toc-link ${item.level === 3 ? 'ml-4 text-app-text-subtle' : ''}`}
+            className={`toc-link ${item.level === 3 ? 'ml-3 text-app-text-subtle' : ''}`}
             data-active={activeHeadingId === item.id}
-            style={{ '--toc-line-width': item.level === 3 ? '0.82rem' : '1.35rem' } as CSSProperties}
-            initial={{ opacity: 0, x: -8 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.2, delay: index * 0.025, ease: smoothEase }}
+            aria-current={activeHeadingId === item.id ? 'location' : undefined}
+            style={{ '--toc-line-width': item.level === 3 ? '0.6rem' : '0.9rem' } as CSSProperties}
           >
             {item.text}
-          </motion.a>
+          </a>
         ))}
       </nav>
-    </motion.aside>
+    </aside>
   )
 }

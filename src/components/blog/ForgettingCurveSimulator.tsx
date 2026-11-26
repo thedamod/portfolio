@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useId, useState, useMemo } from "react";
+import { ditherPath } from "@/lib/dither/pattern";
 
 const DECAY = -0.5;
 const FACTOR = 19 / 81;
@@ -18,6 +19,7 @@ const HEIGHT = 220;
 const PAD = { top: 16, right: 20, bottom: 36, left: 44 };
 
 export function ForgettingCurveSimulator() {
+  const fillId = useId();
   const [stability, setStability] = useState(5);
   const [targetRetention, setTargetRetention] = useState(0.9);
   const [reviews, setReviews] = useState<number[]>([]);
@@ -71,7 +73,7 @@ export function ForgettingCurveSimulator() {
   const handleReset = () => setReviews([]);
 
   return (
-    <div className="my-8 rounded-xl border border-app-border bg-app-surface-2 p-6 font-mono text-sm">
+    <div className="blog-widget my-8 p-4 sm:p-6 font-mono text-sm">
       <p className="mb-3 text-xs uppercase tracking-widest text-app-text-subtle">
         Interactive — Forgetting Curve Simulator
       </p>
@@ -80,6 +82,11 @@ export function ForgettingCurveSimulator() {
         viewBox={`0 0 ${WIDTH} ${HEIGHT}`}
         className="w-full max-w-[520px] block overflow-visible"
       >
+        <defs>
+          <pattern id={fillId} width="8" height="8" patternUnits="userSpaceOnUse" shapeRendering="crispEdges">
+            <path d={ditherPath(0.3)} transform="scale(2)" fill="var(--color-app-text-subtle)" />
+          </pattern>
+        </defs>
         {[0, 0.25, 0.5, 0.75, 1].map((r) => (
           <line
             key={r}
@@ -137,6 +144,7 @@ export function ForgettingCurveSimulator() {
           </g>
         ))}
 
+        <path d={`${curve} L${toX(maxDays)},${toY(0)} L${toX(0)},${toY(0)} Z`} fill={`url(#${fillId})`} opacity={0.5} />
         <path d={curve} fill="none" stroke="var(--color-app-heading)" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" />
 
         <line x1={PAD.left} y1={PAD.top} x2={PAD.left} y2={PAD.top + innerH} stroke="var(--color-app-border-strong)" strokeWidth={1.5} />
@@ -166,13 +174,13 @@ export function ForgettingCurveSimulator() {
       <div className="flex gap-3 mt-4 flex-wrap">
         <button
           onClick={handleAddReview}
-          className="px-4 py-2 text-xs uppercase tracking-widest bg-app-heading text-app-bg border-none rounded-md cursor-pointer font-mono hover:opacity-90 transition-opacity"
+          className="px-4 py-2 text-xs uppercase tracking-widest bg-app-heading text-app-bg border-none rounded-[2px] cursor-pointer font-mono hover:opacity-90 transition-opacity"
         >
           + Add Review
         </button>
         <button
           onClick={handleReset}
-          className="px-4 py-2 text-xs uppercase tracking-widest bg-transparent text-app-text-subtle border border-app-border rounded-md cursor-pointer font-mono hover:bg-app-surface-hover transition-colors"
+          className="px-4 py-2 text-xs uppercase tracking-widest bg-transparent text-app-text-subtle border border-app-border rounded-[2px] cursor-pointer font-mono hover:bg-app-surface-hover transition-colors"
         >
           Reset
         </button>

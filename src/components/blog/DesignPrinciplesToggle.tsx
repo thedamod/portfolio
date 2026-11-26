@@ -106,7 +106,7 @@ export function DesignPrinciplesToggle() {
   const current = PRINCIPLES.find((p) => p.id === active)!;
 
   return (
-    <div className="my-8 rounded-xl border border-app-border/60 bg-app-surface-2 p-6">
+    <div className="blog-widget my-8 p-4 sm:p-6">
       <p className="mb-4 text-xs uppercase tracking-widest text-app-text-subtle">
         Three design rules — select one
       </p>
@@ -115,7 +115,7 @@ export function DesignPrinciplesToggle() {
           <button
             key={p.id}
             onClick={() => setActive(p.id)}
-            className={`rounded-md border px-3 py-1.5 text-sm transition-all duration-150 ${
+            className={`rounded-[2px] border px-3 py-1.5 text-sm transition-all duration-150 ${
               active === p.id
                 ? "border-app-heading bg-app-heading text-app-bg"
                 : "border-app-border bg-app-surface text-app-heading hover:bg-app-heading hover:text-app-bg hover:border-app-heading"
@@ -141,13 +141,13 @@ export function DesignPrinciplesToggle() {
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
               <p className="mb-2 text-xs text-app-text-muted">✗ wrong</p>
-              <div className="rounded-md border border-app-border bg-app-surface p-3">
+              <div className="rounded-[2px] border border-app-border bg-app-surface p-3">
                 {current.wrong}
               </div>
             </div>
             <div>
               <p className="mb-2 text-xs text-app-heading">✓ right</p>
-              <div className="rounded-md border border-app-heading/20 bg-app-surface p-3">
+              <div className="rounded-[2px] border border-app-heading/20 bg-app-surface p-3">
                 {current.right}
               </div>
             </div>

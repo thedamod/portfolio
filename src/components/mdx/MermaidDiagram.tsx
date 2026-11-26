@@ -6,8 +6,8 @@ export function MermaidDiagram({ code }: { code: string }) {
     try {
       return {
         svg: renderMermaidSVG(code, {
-          bg: 'var(--background, transparent)',
-          fg: 'var(--foreground, currentColor)',
+          bg: 'var(--color-app-surface)',
+          fg: 'var(--color-app-text)',
           transparent: true,
         }),
         error: null,
@@ -17,7 +17,7 @@ export function MermaidDiagram({ code }: { code: string }) {
     }
   }, [code])
 
-  if (error) return <pre className="text-red-500 overflow-x-auto text-xs p-4 bg-red-500/10 rounded-md">Error compiling mermaid: {error.message}</pre>
+  if (error) return <pre className="text-red-500 overflow-x-auto text-xs p-4 bg-red-500/10 rounded-[2px]">Error compiling mermaid: {error.message}</pre>
 
-  return <div dangerouslySetInnerHTML={{ __html: svg! }} className="flex justify-center my-8 overflow-x-auto" />
+  return <div dangerouslySetInnerHTML={{ __html: svg! }} className="blog-widget my-8 flex justify-center overflow-x-auto p-4" />
 }

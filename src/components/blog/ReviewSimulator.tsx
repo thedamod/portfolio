@@ -170,12 +170,12 @@ export function ReviewSimulator() {
   }
 
   return (
-    <div className="my-8 rounded-xl border border-app-border bg-app-surface-2 p-6 font-mono text-sm">
+    <div className="blog-widget my-8 p-4 sm:p-6 font-mono text-sm">
       <p className="mb-4 text-xs uppercase tracking-widest text-app-text-subtle">
         Interactive — Card State Simulator
       </p>
 
-      <div className="bg-app-surface border border-app-border rounded-lg p-5 mb-5 min-h-[80px] shadow-sm">
+      <div className="bg-app-surface border border-app-border rounded-[2px] p-5 mb-5 min-h-[80px] shadow-sm">
         <div className="text-[10px] uppercase tracking-widest text-app-text-subtle mb-1.5">
           {card.state} · {card.reps} rep{card.reps !== 1 ? "s" : ""} · {card.lapses} lapse{card.lapses !== 1 ? "s" : ""}
         </div>
@@ -189,7 +189,7 @@ export function ReviewSimulator() {
             <div className="flex-1 min-w-[100px]">
               <div className="text-[10px] text-app-text-subtle mb-1">Stability</div>
               <div className="h-1.5 bg-app-border rounded-full overflow-hidden">
-                <div className="h-full transition-all duration-300 ease-out"
+                <div className="blog-dither-meter h-full transition-all duration-300 ease-out"
                   style={{
                     width: `${Math.min(100, (card.stability / 365) * 100)}%`,
                     backgroundColor: "var(--color-app-heading)",
@@ -200,7 +200,7 @@ export function ReviewSimulator() {
             <div className="flex-1 min-w-[100px]">
               <div className="text-[10px] text-app-text-subtle mb-1">Difficulty</div>
               <div className="h-1.5 bg-app-border rounded-full overflow-hidden">
-                <div className="h-full transition-all duration-300 ease-out"
+                <div className="blog-dither-meter h-full transition-all duration-300 ease-out"
                   style={{
                     width: `${(card.difficulty / 10) * 100}%`,
                     backgroundColor: RATING_COLORS[1],
