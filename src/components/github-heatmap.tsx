@@ -24,7 +24,7 @@ function ContributionCalendar({ report }: { report: ContributionsYear }) {
     .map(({ date, count }) => ({ date, value: count }))
   if (data[data.length - 1]?.date !== end) data.push({ date: end, value: 0 })
 
-  return <Heatmap data={data} weeks={weeks} cell={3} weekStart={1} unit={contributionUnit} color="--dither-chart" />
+  return <Heatmap data={data} weeks={weeks} cell={2} animate={false} weekStart={1} unit={contributionUnit} color="--dither-chart" />
 }
 
 export function GitHubHeatmap({ username = 'thedamod', year, className }: Props) {
@@ -50,7 +50,7 @@ export function GitHubHeatmap({ username = 'thedamod', year, className }: Props)
 
   return (
     <div className={cn('flex min-w-0 flex-col gap-3', className)}>
-      <div className="flex flex-wrap items-baseline justify-between gap-2">
+      <div className="grid min-h-10 grid-cols-[minmax(0,1fr)_auto] items-baseline gap-2 sm:min-h-5">
         <p className="text-sm text-app-text-muted" role="status">
           {report ? (
             <>
@@ -63,13 +63,15 @@ export function GitHubHeatmap({ username = 'thedamod', year, className }: Props)
         </a>
       </div>
 
-      {report ? <ContributionCalendar report={report} /> : error ? (
-        <button type="button" className="btn-secondary self-start text-xs" onClick={() => setRetryKey((key) => key + 1)}>
-          Retry
-        </button>
-      ) : (
-        <div className="heatmap-placeholder h-28" aria-hidden="true" />
-      )}
+      <div className="min-h-32">
+        {report ? <ContributionCalendar report={report} /> : error ? (
+          <button type="button" className="btn-secondary self-start text-xs" onClick={() => setRetryKey((key) => key + 1)}>
+            Retry
+          </button>
+        ) : (
+          <div className="heatmap-placeholder h-32" aria-hidden="true" />
+        )}
+      </div>
     </div>
   )
 }

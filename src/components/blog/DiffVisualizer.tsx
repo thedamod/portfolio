@@ -84,7 +84,7 @@ export function DiffVisualizer({
     current.after.length > 0 ? current.after : current.before;
  
   return (
-    <div className="my-8 rounded-xl border border-app-border bg-app-surface-2/50 p-6">
+    <div className="blog-widget my-8 p-4 sm:p-6">
       <p className="mb-1 text-xs uppercase tracking-widest text-app-text-subtle">
         Dirty Tracking — Step-through
       </p>
@@ -120,7 +120,7 @@ export function DiffVisualizer({
             {allChunks.map((chunk) => (
               <div
                 key={chunk.id}
-                className={`flex items-start gap-3 rounded-md border px-3 py-2 text-sm transition-all duration-200 ${
+                className={`flex items-start gap-3 rounded-[2px] border px-3 py-2 text-sm transition-all duration-200 ${
                   statusStyles[chunk.status]
                 }`}
               >

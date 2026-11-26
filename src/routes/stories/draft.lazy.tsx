@@ -24,7 +24,7 @@ function StoryDraftPage() {
       <section className="flex flex-col">
         <div className="dashed-h" />
         <div className="flex flex-col gap-6 py-6">
-          <Link to="/" viewTransition={{ types: ['route-back'] }} className="btn-secondary self-start">
+          <Link to="/" className="btn-secondary self-start">
             <ArrowLeft className="w-4 h-4" />
             <span>Back home</span>
           </Link>

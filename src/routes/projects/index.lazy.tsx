@@ -27,7 +27,6 @@ function ProjectsList() {
         <div className="flex items-center gap-4 py-6">
           <Link
             to="/"
-            viewTransition={{ types: ['route-back'] }}
             className="p-2 -ml-2 rounded-sm hover:bg-app-surface-2 transition-colors interact-hover"
           >
             <ArrowLeft className="w-4 h-4" />

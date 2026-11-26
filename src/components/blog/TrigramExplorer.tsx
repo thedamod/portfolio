@@ -22,13 +22,13 @@ export function TrigramExplorer({
   const trigrams = useMemo(() => getTrigrams(text), [text]);
  
   return (
-    <div className="my-8 rounded-xl border border-app-border bg-app-surface-2/50 p-6">
+    <div className="blog-widget my-8 p-4 sm:p-6">
       <p className="mb-3 text-xs uppercase tracking-widest text-app-text-subtle">
         Trigram Explorer
       </p>
       <p className="mb-4 text-sm text-app-text-muted">{description}</p>
       <input
-        className="w-full rounded-md border border-app-border bg-app-surface-2 px-3 py-2 font-mono text-sm text-app-heading placeholder:text-app-text-subtle focus:outline-none focus:ring-1 focus:ring-app-heading/30"
+        className="w-full rounded-[2px] border border-app-border bg-app-surface-2 px-3 py-2 font-mono text-sm text-app-heading placeholder:text-app-text-subtle focus:outline-none focus:ring-1 focus:ring-app-heading/30"
         value={text}
         onChange={(e) => setText(e.target.value)}
         placeholder="Type a formula or phrase…"

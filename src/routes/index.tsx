@@ -1,8 +1,7 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Calendar, ArrowRight } from 'lucide-react'
-import { useEffect, useRef, useState } from 'react'
-import { AnimatedQuote, MotionSection, StaggerGroup, StaggerItem } from '../components/portfolio-motion'
+import { useEffect, useState } from 'react'
 import { GitHubHeatmap } from '../components/github-heatmap'
 import { DitherSky } from '../components/dither-sky'
 import { SiteMasthead } from '../components/site-masthead'
@@ -87,58 +86,48 @@ function Index() {
         </div>
       </div>
 
-      <MotionSection className="home-intro-shell">
-        <div>
-          <motion.div
-            className="flex max-w-[38rem] flex-col gap-6 text-[0.95rem] leading-7 text-app-text-muted"
-            initial="hidden"
-            animate="visible"
-            variants={{
-              hidden: { opacity: 1 },
-              visible: { transition: { staggerChildren: 0.12, delayChildren: 0.26 } },
-            }}
-          >
-            <motion.div variants={{ hidden: { opacity: 0, y: 14 }, visible: { opacity: 1, y: 0, transition: { duration: 0.3, ease: smoothEase } } }}>
-              <p>
-                I’m a student who loves <em className="text-app-heading">physics</em> and builds at the intersection of{' '}
-                <em className="text-app-heading">machine learning</em> and{' '}
-                <em className="text-app-heading">engineering</em>.
-              </p>
-            </motion.div>
-            <motion.p variants={{ hidden: { opacity: 0, y: 14 }, visible: { opacity: 1, y: 0, transition: { duration: 0.3, ease: smoothEase } } }}>
-              I'm studying <em className="text-app-heading">MSc Economics</em> at the{' '}
-              <em className="text-app-heading">BITS Pilani Hyderabad campus</em>, and I'm a{' '}
-              <em className="text-app-heading">full-stack engineer</em> and founder building{' '}
-              <a href="https://avenire.space" className="site-text-link">Avenire</a>
-              .
-            </motion.p>
-            <motion.div className="home-annotated" variants={{ hidden: { opacity: 0, y: 14 }, visible: { opacity: 1, y: 0, transition: { duration: 0.3, ease: smoothEase } } }}>
-              <p>
-                I’m reading the <em className="text-app-heading">Deep Residual Learning</em> paper and working on a model for{' '}
-                <em className="text-app-heading">crypto puzzles</em>.
-              </p>
-              <MarginNote>On my desk right now</MarginNote>
-            </motion.div>
-            <motion.p variants={{ hidden: { opacity: 0, y: 14 }, visible: { opacity: 1, y: 0, transition: { duration: 0.3, ease: smoothEase } } }}>
-              Off the clock: a <em className="text-app-heading">rover</em>, Koenigseggs, and the{' '}
-              guitar.
-            </motion.p>
-            <motion.p variants={{ hidden: { opacity: 0, y: 14 }, visible: { opacity: 1, y: 0, transition: { duration: 0.3, ease: smoothEase } } }}>
-              <a href={socialLinks[0]?.href} className="site-text-link">{socialLinks[0]?.value}</a>{' '}
-              ·{' '}
-              <a href={socialLinks[1]?.href} className="site-text-link">{socialLinks[1]?.value}</a>{' '}
-              ·{' '}
-              <a href={socialLinks[2]?.href} className="site-text-link">{socialLinks[2]?.value}</a>
-            </motion.p>
-          </motion.div>
+      <section className="home-intro-shell">
+        <div className="flex max-w-[38rem] flex-col gap-6 text-[0.95rem] leading-7 text-app-text-muted">
+          <div>
+            <p>
+              I’m a student who loves <em className="text-app-heading">physics</em> and builds at the intersection of{' '}
+              <em className="text-app-heading">machine learning</em> and{' '}
+              <em className="text-app-heading">engineering</em>.
+            </p>
+          </div>
+          <p>
+            I'm studying <em className="text-app-heading">MSc Economics</em> at the{' '}
+            <em className="text-app-heading">BITS Pilani Hyderabad campus</em>, and I'm a{' '}
+            <em className="text-app-heading">full-stack engineer</em> and founder building{' '}
+            <a href="https://avenire.space" className="site-text-link">Avenire</a>
+            .
+          </p>
+          <div className="home-annotated">
+            <p>
+              I’m reading the <em className="text-app-heading">Deep Residual Learning</em> paper and working on a model for{' '}
+              <em className="text-app-heading">crypto puzzles</em>.
+            </p>
+            <MarginNote>On my desk right now</MarginNote>
+          </div>
+          <p>
+            Off the clock: a <em className="text-app-heading">rover</em>, Koenigseggs, and the{' '}
+            guitar.
+          </p>
+          <p>
+            <a href={socialLinks[0]?.href} className="site-text-link">{socialLinks[0]?.value}</a>{' '}
+            ·{' '}
+            <a href={socialLinks[1]?.href} className="site-text-link">{socialLinks[1]?.value}</a>{' '}
+            ·{' '}
+            <a href={socialLinks[2]?.href} className="site-text-link">{socialLinks[2]?.value}</a>
+          </p>
         </div>
-      </MotionSection>
+      </section>
 
-      <MotionSection id="crafts" className="flex flex-col pt-6">
+      <section id="crafts" className="flex flex-col pt-6">
         <DitherRule />
         <h2 className="text-xl font-bold py-6">Projects</h2>
         <DitherRule />
-        <StaggerGroup className="flex flex-col gap-1 pt-6">
+        <div className="flex flex-col gap-1 pt-6">
           {homepageProjects.map((project) => (
             <ProjectRow
               key={project.title}
@@ -147,15 +136,15 @@ function Index() {
               onSelect={() => setSelectedProject(project)}
             />
           ))}
-        </StaggerGroup>
+        </div>
         <div className="flex justify-center mt-6">
-          <Link to="/projects" viewTransition={{ types: ['route-forward'] }} className="btn-secondary">
+          <Link to="/projects" className="btn-secondary">
             View all ↗
           </Link>
         </div>
-      </MotionSection>
+      </section>
 
-      <MotionSection className="flex flex-col pt-12">
+      <section className="flex flex-col pt-12">
         <DitherRule />
         <h2 className="text-xl font-bold py-6">GitHub Activity</h2>
         <DitherRule />
@@ -163,9 +152,9 @@ function Index() {
           <GitHubHeatmap username="thedamod" />
           <MarginNote>Each square is a day</MarginNote>
         </div>
-      </MotionSection>
+      </section>
 
-      <MotionSection className="flex flex-col pt-12">
+      <section className="flex flex-col pt-12">
         <DitherRule />
         <div className="flex flex-col gap-5 py-6">
           <div>
@@ -183,36 +172,35 @@ function Index() {
             View patent record ↗
           </a>
         </div>
-      </MotionSection>
+      </section>
 
-      <MotionSection className="flex flex-col pt-12">
+      <section className="flex flex-col pt-12">
         <DitherRule />
         <h2 className="text-xl font-bold py-6">Skills & Technology</h2>
         <DitherRule />
-        <StaggerGroup className="flex flex-col gap-4 pt-6">
+        <div className="flex flex-col gap-4 pt-6">
           {Object.entries(skillGroups).map(([group, skills]) => (
-            <TickerRow key={group} label={group} skills={skills} reverse={group === 'Backend'} />
+            <SkillRow key={group} label={group} skills={skills} />
           ))}
-        </StaggerGroup>
-      </MotionSection>
+        </div>
+      </section>
 
-      <MotionSection className="flex flex-col pt-12">
+      <section className="flex flex-col pt-12">
         <DitherRule />
         <div className="flex items-center justify-between py-6">
           <h2 className="text-xl font-bold">Blogs</h2>
           <Link
             to="/blog"
-            viewTransition={{ types: ['route-forward'] }}
             className="p-2 -mr-2 rounded-sm hover:bg-app-surface-2 transition-colors interact-hover"
           >
             <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
         <DitherRule />
-        <StaggerGroup className="flex flex-col gap-4 pt-6">
+        <div className="flex flex-col gap-4 pt-6">
           {recentBlogs.map((blog) => (
-            <StaggerItem key={blog.slug}>
-              <Link key={blog.slug} to="/blog/$slug" params={{ slug: blog.slug }} className={blogCardClass}>
+            <div key={blog.slug}>
+              <Link to="/blog/$slug" params={{ slug: blog.slug }} className={blogCardClass}>
                 <h3 className="text-base font-semibold group-hover:underline line-clamp-2">{blog.title || blog.slug}</h3>
                 <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-app-text-subtle">
                   <span className="flex items-center gap-1">
@@ -227,23 +215,18 @@ function Index() {
                   </div>
                 </div>
               </Link>
-            </StaggerItem>
+            </div>
           ))}
-        </StaggerGroup>
-      </MotionSection>
+        </div>
+      </section>
 
-      <motion.footer
-        className="pt-24 pb-24 text-center flex flex-col items-center justify-center text-app-text-muted gap-6"
-        initial={{ opacity: 0, y: 24 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3, ease: smoothEase }}
-        viewport={{ once: true, amount: 0.45 }}
-      >
-        <AnimatedQuote
-          quote="Doubt is a fog of your own making; the path becomes clear the moment you take the first step."
-          author="Abhiram Damodara"
-        />
-      </motion.footer>
+      <footer className="flex flex-col items-center gap-6 py-24 text-center text-app-text-muted">
+        <span className="quote-mark text-4xl text-app-text-subtle" aria-hidden="true">“</span>
+        <blockquote className="max-w-md text-lg italic leading-relaxed">
+          Doubt is a fog of your own making; the path becomes clear the moment you take the first step.
+        </blockquote>
+        <p className="text-sm">Abhiram Damodara</p>
+      </footer>
 
       <DitherRule />
 
@@ -256,98 +239,14 @@ function Index() {
   )
 }
 
-function TickerRow({ label, skills, reverse }: { label: string, skills: string[], reverse?: boolean }) {
-  const [contentWidth, setContentWidth] = useState(0)
-  const [setCount, setSetCount] = useState(6)
-  const [offset, setOffset] = useState(0)
-  const [initialized, setInitialized] = useState(false)
-  const contentRef = useRef<HTMLDivElement>(null)
-  const animationRef = useRef<number | null>(null)
-  const lastTimeRef = useRef<number>(0)
-
-  useEffect(() => {
-    if (contentRef.current) {
-      const firstSet = contentRef.current.querySelector('[data-set="0"]')
-      if (firstSet) {
-        const width = firstSet.getBoundingClientRect().width
-        setContentWidth(width)
-        const viewportWidth = window.innerWidth
-        const neededSets = Math.ceil(viewportWidth / width) + 2
-        setSetCount(Math.max(neededSets, 4))
-        if (reverse) {
-          setOffset(-width)
-        }
-        setInitialized(true)
-      }
-    }
-  }, [skills, reverse])
-
-  useEffect(() => {
-    if (contentWidth === 0 || !initialized) return
-
-    const speed = 50
-    const animate = (timestamp: number) => {
-      if (lastTimeRef.current === 0) {
-        lastTimeRef.current = timestamp
-      }
-      const delta = timestamp - lastTimeRef.current
-      lastTimeRef.current = timestamp
-
-      const distance = (speed * delta) / 1000
-      setOffset((prev) => {
-        if (reverse) {
-          const next = prev + distance
-          if (next >= 0) {
-            return next - contentWidth
-          }
-          return next
-        } else {
-          const next = prev - distance
-          if (next <= -contentWidth) {
-            return next + contentWidth
-          }
-          return next
-        }
-      })
-
-      animationRef.current = requestAnimationFrame(animate)
-    }
-
-    animationRef.current = requestAnimationFrame(animate)
-
-    return () => {
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current)
-      }
-    }
-  }, [contentWidth, reverse, initialized])
-
+function SkillRow({ label, skills }: { label: string; skills: string[] }) {
   return (
-    <StaggerItem>
-      <div className="flex flex-col gap-2">
-        <div className="flex items-center gap-3">
-          <h3 className="text-[10px] uppercase tracking-[0.28em] text-app-text-subtle">{label}</h3>
-          <span className="h-px flex-1 bg-app-border" />
-        </div>
-        <div className="ticker-track py-1">
-          <div
-            ref={contentRef}
-            className="ticker-row"
-            style={{ transform: `translate3d(${offset}px, 0, 0)` }}
-          >
-            {Array.from({ length: setCount }, (_, setIndex) => (
-              <span key={setIndex} data-set={setIndex} className="ticker-set">
-                {skills.map((skill, index) => (
-                  <span key={`${setIndex}-${index}`} className="ticker-item text-sm whitespace-nowrap tracking-tight text-app-text-muted">
-                    {skill}
-                  </span>
-                ))}
-              </span>
-            ))}
-          </div>
-        </div>
-      </div>
-    </StaggerItem>
+    <div className="flex flex-col gap-2">
+      <h3 className="text-[10px] uppercase tracking-[0.28em] text-app-text-subtle">{label}</h3>
+      <ul className="flex flex-wrap gap-x-5 gap-y-2 text-sm text-app-text-muted">
+        {skills.map((skill) => <li key={skill}>{skill}</li>)}
+      </ul>
+    </div>
   )
 }
 
@@ -361,7 +260,7 @@ function ProjectRow({
   onSelect: () => void
 }) {
   return (
-    <StaggerItem>
+    <div>
       <motion.button
         type="button"
         onClick={onSelect}
@@ -394,7 +293,7 @@ function ProjectRow({
           ))}
         </motion.div>
       </motion.button>
-    </StaggerItem>
+    </div>
   )
 }
 

@@ -64,7 +64,7 @@ export function SignalSources() {
   const c = COLOR_MAP[selected.color];
 
   return (
-    <div className="my-8 rounded-xl border border-app-border bg-app-surface-2 p-6 font-mono text-sm">
+    <div className="blog-widget my-8 p-4 sm:p-6 font-mono text-sm">
       <p className="mb-4 text-xs uppercase tracking-widest text-app-text-subtle">
         Interactive — Signal Sources
       </p>
@@ -78,7 +78,7 @@ export function SignalSources() {
             <button
               key={s.id}
               onClick={() => setActive(s.id)}
-              className={`flex-1 px-2 py-1.5 rounded-lg text-[11px] font-mono transition-all duration-150 cursor-pointer border ${
+              className={`flex-1 px-2 py-1.5 rounded-[2px] text-[11px] font-mono transition-all duration-150 cursor-pointer border ${
                 isActive
                   ? `${sc.badge} ${sc.border}`
                   : "text-app-text-subtle border-transparent hover:text-app-heading hover:bg-app-surface-hover"
@@ -114,7 +114,7 @@ export function SignalSources() {
         </div>
 
         {/* Tradeoff */}
-        <div className={`rounded-lg border px-3.5 py-2.5 text-xs text-app-text-muted leading-relaxed ${c.border} bg-app-surface`}>
+        <div className={`rounded-[2px] border px-3.5 py-2.5 text-xs text-app-text-muted leading-relaxed ${c.border} bg-app-surface`}>
           <span className={`font-mono text-[9px] uppercase tracking-wider ${c.text} block mb-1`}>tradeoff</span>
           {selected.tradeoff}
         </div>
@@ -203,7 +203,7 @@ export function MasteryCalculator() {
   ];
 
   return (
-    <div className="my-8 rounded-xl border border-app-border bg-app-surface-2 p-6 font-mono text-sm">
+    <div className="blog-widget my-8 p-4 sm:p-6 font-mono text-sm">
       <p className="mb-4 text-xs uppercase tracking-widest text-app-text-subtle">
         Interactive — Mastery Score Calculator
       </p>
@@ -260,7 +260,7 @@ export function MasteryCalculator() {
         <div className="flex flex-col gap-3">
           {/* Big number */}
           <div
-            className="rounded-xl border bg-app-surface p-4 flex flex-col items-center justify-center gap-1 transition-colors duration-300"
+            className="rounded-[2px] border bg-app-surface p-4 flex flex-col items-center justify-center gap-1 transition-colors duration-300"
             style={{ borderColor: `${color}33` }}
           >
             <span className="font-mono text-[10px] uppercase tracking-widest text-app-text-subtle">mastery score</span>
@@ -276,10 +276,10 @@ export function MasteryCalculator() {
           </div>
 
           {/* Arc bar */}
-          <div className="rounded-xl border border-app-border bg-app-surface p-4">
+          <div className="rounded-[2px] border border-app-border bg-app-surface p-4">
             <div className="h-1.5 rounded-full bg-app-border overflow-hidden mb-3">
               <div
-                className="h-full rounded-full transition-all duration-500 ease-out"
+                className="blog-dither-meter h-full transition-all duration-500 ease-out"
                 style={{ width: `${score * 100}%`, background: color }}
               />
             </div>
@@ -356,7 +356,7 @@ export function DecayVisualizer() {
   const activeCount = state.filter((m) => !m.resolved).length;
 
   return (
-    <div className="my-8 rounded-xl border border-app-border bg-app-surface-2 p-6 font-mono text-sm">
+    <div className="blog-widget my-8 p-4 sm:p-6 font-mono text-sm">
       <p className="mb-4 text-xs uppercase tracking-widest text-app-text-subtle">
         Interactive — Confidence Decay
       </p>
@@ -404,7 +404,7 @@ export function DecayVisualizer() {
                 />
                 {/* Fill */}
                 <div
-                  className="h-full rounded-full transition-all duration-500 ease-out"
+                  className="blog-dither-meter h-full transition-all duration-500 ease-out"
                   style={{ width: `${pct}%`, background: color }}
                 />
               </div>
@@ -426,14 +426,14 @@ export function DecayVisualizer() {
           <button
             onClick={applyDecay}
             disabled={activeCount === 0}
-            className="flex-1 font-mono text-xs px-3 py-2 rounded-lg border border-app-heading/30 text-app-heading bg-app-heading/5
+            className="flex-1 font-mono text-xs px-3 py-2 rounded-[2px] border border-app-heading/30 text-app-heading bg-app-heading/5
               hover:bg-app-heading/10 transition-all duration-150 cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
           >
             Apply positive review (δ = {DELTA})
           </button>
           <button
             onClick={reset}
-            className="font-mono text-xs px-3 py-2 rounded-lg border border-app-border text-app-text-subtle
+            className="font-mono text-xs px-3 py-2 rounded-[2px] border border-app-border text-app-text-subtle
               hover:text-app-heading hover:border-app-heading transition-all duration-150 cursor-pointer"
           >
             Reset
@@ -553,7 +553,7 @@ export function RealTimeDemo() {
   useEffect(() => { run(0); return clearTimers; }, []);
 
   return (
-    <div className="my-8 rounded-xl border border-app-border bg-app-surface-2 p-6 font-mono text-sm">
+    <div className="blog-widget my-8 p-4 sm:p-6 font-mono text-sm">
       <div className="flex items-center justify-between mb-4">
         <p className="text-xs uppercase tracking-widest text-app-text-subtle">
           Interactive — Real-Time Signal Detection
@@ -582,7 +582,7 @@ export function RealTimeDemo() {
           <button
             key={i}
             onClick={() => run(i)}
-            className={`flex-1 flex flex-col items-center px-2 py-1.5 rounded-lg transition-all duration-150 cursor-pointer border text-left ${
+            className={`flex-1 flex flex-col items-center px-2 py-1.5 rounded-[2px] transition-all duration-150 cursor-pointer border text-left ${
               activeScenario === i
                 ? "bg-app-heading/8 border-app-heading/25 text-app-heading"
                 : "border-transparent text-app-text-subtle hover:text-app-heading hover:bg-app-surface-hover"
@@ -598,7 +598,7 @@ export function RealTimeDemo() {
       <div className="flex flex-col gap-2 min-h-48">
         {/* User message */}
         {userMessage && (
-          <div className="self-end max-w-[80%] px-3 py-2 rounded-xl rounded-br-sm bg-app-heading/8 border border-app-heading/15 text-sm text-app-text-muted leading-relaxed">
+          <div className="self-end max-w-[80%] px-3 py-2 rounded-[2px] rounded-br-sm bg-app-heading/8 border border-app-heading/15 text-sm text-app-text-muted leading-relaxed">
             {userMessage}
           </div>
         )}
@@ -609,7 +609,7 @@ export function RealTimeDemo() {
           return (
             <div
               key={ev.id}
-              className="self-start max-w-[90%] px-3 py-2 rounded-xl rounded-bl-sm bg-app-surface border border-app-border"
+              className="self-start max-w-[90%] px-3 py-2 rounded-[2px] rounded-bl-sm bg-app-surface border border-app-border"
             >
               <span className="font-mono text-[9px] uppercase tracking-wider text-app-text-subtle block mb-1">
                 {STAGE_LABELS[ev.stage]}
@@ -698,7 +698,7 @@ export function PipelineStepper() {
   const [active, setActive] = useState(0);
 
   return (
-    <div className="my-8 rounded-xl border border-app-border bg-app-surface-2 p-6 font-mono text-sm">
+    <div className="blog-widget my-8 p-4 sm:p-6 font-mono text-sm">
       <p className="mb-4 text-xs uppercase tracking-widest text-app-text-subtle">
         Interactive — End-to-End Pipeline
       </p>
@@ -742,7 +742,7 @@ export function PipelineStepper() {
           </div>
           <p className="text-xs text-app-text-muted leading-relaxed">{STEPS[active].detail}</p>
           {STEPS[active].code && (
-            <pre className="bg-app-surface border border-app-border rounded-lg p-3 text-[11px] font-mono text-app-text-muted leading-relaxed overflow-x-auto mt-auto">
+            <pre className="bg-app-surface border border-app-border rounded-[2px] p-3 text-[11px] font-mono text-app-text-muted leading-relaxed overflow-x-auto mt-auto">
               {STEPS[active].code}
             </pre>
           )}
@@ -761,7 +761,7 @@ export function PipelineStepper() {
         </div>
         <p className="text-xs text-app-text-muted leading-relaxed">{STEPS[active].detail}</p>
         {STEPS[active].code && (
-          <pre className="bg-app-surface border border-app-border rounded-lg p-3 text-[11px] font-mono text-app-text-muted leading-relaxed overflow-x-auto">
+          <pre className="bg-app-surface border border-app-border rounded-[2px] p-3 text-[11px] font-mono text-app-text-muted leading-relaxed overflow-x-auto">
             {STEPS[active].code}
           </pre>
         )}

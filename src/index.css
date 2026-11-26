@@ -58,7 +58,7 @@
   }
 
   html {
-    scroll-behavior: smooth;
+    scrollbar-gutter: stable;
   }
 
   body {
@@ -123,76 +123,6 @@
 
   :root:active-view-transition {
     overflow: hidden;
-  }
-
-  @keyframes route-forward-old {
-    from {
-      transform: translateX(0);
-      opacity: 1;
-    }
-
-    to {
-      transform: translateX(-4%);
-      opacity: 0;
-    }
-  }
-
-  @keyframes route-forward-new {
-    from {
-      transform: translateX(8%);
-      opacity: 0;
-    }
-
-    to {
-      transform: translateX(0);
-      opacity: 1;
-    }
-  }
-
-  @keyframes route-back-old {
-    from {
-      transform: translateX(0);
-      opacity: 1;
-    }
-
-    to {
-      transform: translateX(4%);
-      opacity: 0;
-    }
-  }
-
-  @keyframes route-back-new {
-    from {
-      transform: translateX(-8%);
-      opacity: 0;
-    }
-
-    to {
-      transform: translateX(0);
-      opacity: 1;
-    }
-  }
-
-  :root:active-view-transition-type(route-forward)::view-transition-old(root) {
-    animation: route-forward-old 360ms cubic-bezier(0.16, 1, 0.3, 1) both;
-  }
-
-  :root:active-view-transition-type(route-forward)::view-transition-new(root) {
-    animation: route-forward-new 420ms cubic-bezier(0.16, 1, 0.3, 1) both;
-  }
-
-  :root:active-view-transition-type(route-back)::view-transition-old(root) {
-    animation: route-back-old 360ms cubic-bezier(0.16, 1, 0.3, 1) both;
-  }
-
-  :root:active-view-transition-type(route-back)::view-transition-new(root) {
-    animation: route-back-new 420ms cubic-bezier(0.16, 1, 0.3, 1) both;
-  }
-
-  :root:active-view-transition-type(route-forward)::view-transition-group(root),
-  :root:active-view-transition-type(route-back)::view-transition-group(root) {
-    animation-duration: 420ms;
-    animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
   }
 }
 
@@ -368,27 +298,6 @@
     font-family: var(--font-display);
     line-height: 0.8;
   }
-
-  .ticker-track {
-    overflow: hidden;
-    mask-image: linear-gradient(to right, transparent, #000000 8%, #000000 92%, transparent);
-    -webkit-mask-image: linear-gradient(to right, transparent, #000000 8%, #000000 92%, transparent);
-  }
-
-  .ticker-row {
-    display: flex;
-    width: max-content;
-    will-change: transform;
-    backface-visibility: hidden;
-  }
-
-  .ticker-set {
-    display: flex;
-  }
-
-  .ticker-item {
-    margin-right: 1.25rem;
-  }
 }
 
 @layer components {
@@ -454,15 +363,27 @@
     color: var(--color-app-text-muted);
   }
 
+  .toc-scroll {
+    max-block-size: min(28rem, calc(100dvh - 8rem));
+    overflow-y: auto;
+    overscroll-behavior-y: contain;
+    padding-block-end: 1.5rem;
+    padding-inline-end: 0.4rem;
+    mask-image: linear-gradient(#000 calc(100% - 1.5rem), transparent);
+  }
+
+  .toc-scroll:focus-within {
+    mask-image: none;
+  }
+
   .toc-link {
     position: relative;
     display: block;
-    padding: 0.28rem 0 0.28rem 1.9rem;
+    padding: 0.22rem 0 0.22rem 1.2rem;
     font-size: 0.78rem;
     font-weight: 650;
     color: var(--color-app-text-muted);
-    transform: translateX(0);
-    transition: color 180ms ease, transform 180ms ease;
+    transition: color 180ms ease;
   }
 
   .toc-link::before {
@@ -482,7 +403,6 @@
   .toc-link:hover,
   .toc-link[data-active="true"] {
     color: var(--color-app-heading);
-    transform: translateX(0.18rem);
   }
 
   .toc-link[data-active="true"]::before {
@@ -639,6 +559,52 @@ figure[data-rehype-pretty-code-figure] pre {
   min-width: 100%;
 }
 
+/* Shared surfaces for interactive figures in articles. */
+.blog-content .blog-widget {
+  position: relative;
+  border: 1px solid var(--color-app-border-strong);
+  border-radius: 2px;
+  background: var(--color-app-surface);
+}
+
+.blog-content .blog-widget::before {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 4px;
+  background: linear-gradient(90deg, var(--color-app-text-subtle), transparent 75%);
+  mask-image: var(--site-dither-mask);
+  mask-size: var(--site-dither-size);
+  pointer-events: none;
+  content: '';
+}
+
+.blog-widget :is(button, input, select):focus-visible {
+  outline: 1px solid var(--color-site-highlight);
+  outline-offset: 2px;
+}
+
+/* A solid leading cell keeps the value legible over the dithered fill. */
+.blog-dither-meter {
+  mask-image: linear-gradient(#000, #000), var(--site-dither-mask);
+  mask-size: 2px 100%, var(--site-dither-size);
+  mask-position: right center, left top;
+  mask-repeat: no-repeat, repeat;
+}
+
+.blog-dither-option {
+  position: relative;
+}
+
+.blog-dither-option[aria-pressed='true']::after {
+  position: absolute;
+  inset: auto 0 0;
+  height: 4px;
+  background: currentColor;
+  mask-image: var(--site-dither-mask);
+  mask-size: var(--site-dither-size);
+  content: '';
+}
+
 /* Widget container styles */
 .blog-content > div[class*="my-"],
 .blog-content > div[class*="mx-auto"] {
@@ -760,15 +726,6 @@ figure[data-rehype-pretty-code-figure] code>[data-line] {
   --shiki-dark-bg: var(--color-app-code-dark-bg);
 }
 
-@keyframes ticker-pan {
-  from {
-    transform: translate3d(0, 0, 0);
-  }
-  to {
-    transform: translate3d(-50%, 0, 0);
-  }
-}
-
 /* Custom scrollbar */
 * {
   scrollbar-width: thin;
@@ -804,6 +761,9 @@ figure[data-rehype-pretty-code-figure] code>[data-line] {
 
 @layer components {
   .site-masthead {
+    width: 100%;
+    max-width: 39rem;
+    margin-inline: auto;
     display: flex;
     align-items: center;
     justify-content: space-between;

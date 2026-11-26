@@ -56,7 +56,7 @@ export function IntervalCalculator() {
   };
 
   return (
-    <div className="my-8 rounded-xl border border-app-border bg-app-surface-2 p-6 font-mono text-sm">
+    <div className="blog-widget my-8 p-4 sm:p-6 font-mono text-sm">
       <p className="mb-4 text-xs uppercase tracking-widest text-app-text-subtle">
         Interactive — Interval Growth Calculator
       </p>

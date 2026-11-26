@@ -43,7 +43,7 @@ export function WordLineage() {
   const current = LINEAGE[step];
 
   return (
-    <div className="my-8 rounded-xl border border-app-border/60 bg-app-surface-2 p-6">
+    <div className="blog-widget my-8 p-4 sm:p-6">
       <p className="mb-4 text-xs uppercase tracking-widest text-app-text-subtle">
         Etymology — trace the lineage
       </p>

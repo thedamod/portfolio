@@ -23,7 +23,6 @@ function BlogList() {
         <div className="flex items-center gap-3 py-4 md:gap-4 md:py-6">
           <Link
             to="/"
-            viewTransition={{ types: ['route-back'] }}
             className="p-2 -ml-2 rounded-sm hover:bg-app-surface-2 transition-colors interact-hover"
           >
             <ArrowLeft className="w-4 h-4" />
@@ -38,7 +37,7 @@ function BlogList() {
               key={blog.slug}
               to="/blog/$slug"
               params={{ slug: blog.slug }}
-              viewTransition={{ types: ['route-forward'] }}
+
               className={blogCardClass}
             >
               <h3 className="text-base font-semibold group-hover:underline line-clamp-2">{blog.title || blog.slug}</h3>

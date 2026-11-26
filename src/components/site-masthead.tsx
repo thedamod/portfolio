@@ -12,7 +12,7 @@ export function SiteMasthead({ home = false }: { home?: boolean }) {
         ad<span aria-hidden="true">.</span>
       </Link>
       <nav aria-label="Main navigation" className="site-nav">
-        {home ? <a href="#crafts">Crafts</a> : <Link to="/projects">Projects</Link>}
+        {home ? <a href="#crafts">Projects</a> : <Link to="/projects">Projects</Link>}
         <Link to="/blog">Writing</Link>
         <button
           type="button"
